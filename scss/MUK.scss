@@ -1,0 +1,24 @@
+// Include custom web fonts
+@import "../css/fonts.css";
+
+// bootstrap over-rides
+$primary:       #3b4063;
+$secondary:     #7d8ca3;
+$success:       #72a98f;
+$warning:       #ffbf00;
+$danger:        #ca4d5e;
+$info:          #8a817c;
+
+// Custom CSS
+
+h1 {
+    font-family: 'League Gothic';
+    color: $primary;
+}
+
+h2 {
+    color: $secondary;
+}
+
+// Include bootstrap last to ensure over-rides work correctly
+@import "../bootstrap/scss/bootstrap";
