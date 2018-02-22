@@ -11,7 +11,9 @@
 				"extensionName": ".css",
 				"savePath": "/css"
 			}
-		]
+		],
+		"liveSassCompile.settings.showOutputWindow": false,
+		"liveServer.settings.fullReload": true
 	}
 
 
