@@ -9,6 +9,9 @@ $warning:       #ffbf00;
 $danger:        #ca4d5e;
 $info:          #8a817c;
 
+// Include bootstrap after overrides to ensure over-rides work correctly
+@import "../bootstrap/scss/bootstrap";
+
 // Custom CSS
 
 h1 {
@@ -19,6 +22,3 @@ h1 {
 h2 {
     color: $secondary;
 }
-
-// Include bootstrap last to ensure over-rides work correctly
-@import "../bootstrap/scss/bootstrap";
