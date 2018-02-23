@@ -118,7 +118,7 @@ template { display: none; }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { margin-bottom: 0.5rem; font-family: inherit; font-weight: 500; line-height: 1.2; color: inherit; }
 
-h1, .h1 { font-size: 2.5rem; }
+h1, .h1 { font-size: 3.5rem; }
 
 h2, .h2 { font-size: 2rem; }
 
@@ -132,9 +132,9 @@ h6, .h6 { font-size: 1rem; }
 
 .lead { font-size: 1.25rem; font-weight: 300; }
 
-.display-1 { font-size: 6rem; font-weight: 300; line-height: 1.2; }
+.display-1, .jumbotron h1 { font-size: 12rem; font-weight: 300; line-height: 1.2; }
 
-.display-2 { font-size: 5.5rem; font-weight: 300; line-height: 1.2; }
+.display-2, .jumbotron h2 { font-size: 5.5rem; font-weight: 300; line-height: 1.2; }
 
 .display-3 { font-size: 4.5rem; font-weight: 300; line-height: 1.2; }
 
@@ -2718,9 +2718,9 @@ a.text-dark:hover, a.text-dark:focus { color: #1d2124 !important; }
   .table td, .table th { background-color: #fff !important; }
   .table-bordered th, .table-bordered td { border: 1px solid #ddd !important; } }
 
-.MUK-title { max-height: 6em; content: url(../img/MarkupUK.svg); position: relative; left: -2%; }
+.MUK-title { height: 1em; width: auto; content: url(../img/MarkupUK.svg); }
 
-.MUK-logo { height: 100%; background-image: url(../img/MUK-logo.svg); }
+.MUK-logo { height: 1em; width: auto; content: url(../img/MUK_Logo.svg); }
 
 html { background-image: url(../img/background.jpg); background-attachment: fixed; background-size: cover; }
 
@@ -2728,7 +2728,7 @@ html body { margin: 2rem; }
 
 strong { color: #ca4d5e; }
 
-h1 { color: #3b4063; font-size: 5rem; }
+h1 { color: #3b4063; }
 
 h2 { color: #7d8ca3; }
 

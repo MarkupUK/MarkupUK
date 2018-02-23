@@ -17,27 +17,32 @@ $font-family-sans-serif:
   // Emoji fonts
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
+// Increase font size for headings in League Gothic:
+//
+$display1-size: 12rem;
+$h1-font-size:  3.5rem;
+
 // Include bootstrap after overrides to ensure over-rides work correctly
 @import "../bootstrap/scss/bootstrap";
 
 // Custom CSS
 
 .MUK-title {
-    max-height: 6em;
+    height: 1em;
+    width: auto;
     content: url(../img/MarkupUK.svg);
-    position: relative;
-    left: -2%;
 }
 
 .MUK-logo {
-    height: 100%;
-    background-image: url(../img/MUK-logo.svg);
+    height: 1em;
+    width: auto;
+    content: url(../img/MUK_Logo.svg);
 }
 
 html {
     background-image: url(../img/background.jpg);
     background-attachment: fixed;
-     background-size: cover;
+    background-size: cover;
     
     body {
         margin: 2rem;
@@ -51,12 +56,12 @@ strong {
 h1 {
     @extend .leagueGothic;
     color: $primary;
-    font-size: 5rem;
 }
 
 h2 {
     color: $secondary;
 }
+
 .leagueGothic {
     font-family: 'League Gothic';
 }
@@ -70,5 +75,11 @@ img {
 .jumbotron {
     h1, h2 {
         @extend .text-center;
+    }
+    h1 {
+        @extend .display-1;
+    }
+    h2 {
+        @extend .display-2;
     }
 }
