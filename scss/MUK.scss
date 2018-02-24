@@ -1,6 +1,9 @@
 // Include custom web fonts
 @import url(../css/fonts.css);
 
+// Include custom svg icons
+@import "IKONS";
+
 // bootstrap over-rides
 $primary:       #3b4063;
 $success:       #72a98f;
@@ -8,6 +11,7 @@ $warning:       #ffbf00;
 $danger:        #ca4d5e;
 $secondary:     #7d8ca3;
 $info:          #8a817c;
+$light:         #e9ecef;
 
 // not sure the default system fonts go well with league gothic...
 
@@ -27,6 +31,8 @@ $h1-font-size:  3.5rem;
 
 // Custom CSS
 
+
+//Image spans
 .MUK-title {
     height: 1em;
     width: auto;
@@ -39,40 +45,91 @@ $h1-font-size:  3.5rem;
     content: url(../img/MUK_Logo.svg);
 }
 
-html {
-    background-image: url(../img/background.jpg);
-    background-attachment: fixed;
-    background-size: cover;
-    
+//html and body
+
+html {   
+    @include make-container();
     body {
-        margin: 2rem;
+        @include make-row();
+        @extend 
+            .justify-content-between,
+            .m-3;
+        background-image: url(../img/background.jpg);
+        background-attachment: fixed;
+        background-size: cover;
     }
 }
 
-strong {
-    color: $danger;
+//header and navigation
+
+header {
+    @extend 
+        .bg-light,
+        .col-12,
+        .rounded;
+    nav{
+        @extend
+            .navbar,
+            .navbar-light, 
+            .navbar-expand-md, 
+            .text-right;
+        ul {
+            @extend 
+                .navbar-collapse,
+                .navbar-nav;
+            li {
+                @extend .nav-item;
+                a {
+                    @extend .nav-link;
+                }
+            }
+        }
+    };
+    .navbar-brand {
+        font-size: $h1-font-size;
+        width: 100%;
+        @extend .text-left;
+    }
 }
 
-h1 {
-    @extend .leagueGothic;
-    color: $primary;
+//contacts & social media
+nav.contact {
+    @extend
+        .nav,
+        .justify-content-center;
+    a {
+        @extend
+            .nav-item,
+            .nav-link;
+        font-size: $h1-font-size;
+    }
 }
 
-h2 {
-    color: $secondary;
+
+//content
+
+article, aside {
+    @extend
+        .bg-light,
+        .p-3,
+        .col,
+        .mb-3,
+        .rounded;
 }
 
-.leagueGothic {
-    font-family: 'League Gothic';
-}
-
-img {
-    max-height: 15rem;
-    position: relative;
-    left: -2%;
+aside {
+    @extend
+        .text-center;
 }
 
 .jumbotron {
+    @extend
+        .mt-4,
+        .mb-0,
+        .col-12;
+    background-image: url(../img/background-frosted.jpg);
+    background-attachment: fixed;
+    background-size: cover;
     h1, h2 {
         @extend .text-center;
     }
@@ -83,3 +140,72 @@ img {
         @extend .display-2;
     }
 }
+
+
+//links
+
+a {
+    &:link{
+        @extend .text-danger;
+    }
+    &:visited {
+        @extend .text-primary;
+    }
+}
+
+a.twitter {
+    content: icon(twitter, $primary);
+    max-height: 1em;
+    &:link{
+        content: icon(twitter, $primary);
+    }
+    &:hover{
+        content: icon(twitter, $danger);
+    }
+}
+
+a.email {
+    content: icon(mail, $danger);
+    max-height: 1em;
+    &:link{
+        content: icon(mail, $primary);
+    }
+    &:hover{
+        content: icon(mail, $danger);
+    }
+}
+
+//.email-text {}      // It would be nice to prepend an inline svg of the mail icon here, but I can't work out how ;(
+
+//typography
+
+strong {
+    @extend .text-danger;
+}
+
+h1 {
+    @extend .leagueGothic, .text-primary;
+}
+
+h2 {
+    @extend .text-secondary;
+}
+
+.leagueGothic {
+    font-family: 'League Gothic';
+}
+
+//grid settings
+
+.affiliates {
+    @extend 
+        .pr-0,
+        .mt-4,
+        .col-4;
+}
+
+.content {
+    @extend 
+        .pl-0,
+        .mt-4,
+        .col-8;}
