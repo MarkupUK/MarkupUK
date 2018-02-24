@@ -188,7 +188,9 @@ h1 {
 }
 
 h2 {
-    @extend .text-secondary;
+    @extend
+        .text-secondary,
+        .mb-4;
 }
 
 .leagueGothic {
@@ -201,11 +203,13 @@ h2 {
     @extend 
         .pr-0,
         .mt-4,
-        .col-4;
+        .col-12,
+        .col-md-4;
 }
 
 .content {
     @extend 
         .pl-0,
         .mt-4,
-        .col-8;}
+        .col-12,
+        .col-md-8;}
