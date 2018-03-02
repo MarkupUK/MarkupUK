@@ -120,6 +120,11 @@ article, aside {
 aside {
     @extend
         .text-center;
+    &.events {
+        h2, p{
+            @extend .mb-5;
+        }
+    }
 }
 
 .jumbotron {
@@ -161,6 +166,28 @@ a.twitter {
     }
     &:hover{
         content: icon(twitter, $danger);
+    }
+}
+
+a.facebook {
+    content: icon(facebook_2, $danger);
+    max-height: 1em;
+    &:link{
+        content: icon(facebook_2, $primary);
+    }
+    &:hover{
+        content: icon(facebook_2, $danger);
+    }
+}
+
+a.linkedin {
+    content: icon(linkedin, $danger);
+    max-height: 1em;
+    &:link{
+        content: icon(linkedin, $primary);
+    }
+    &:hover{
+        content: icon(linkedin, $danger);
     }
 }
 
