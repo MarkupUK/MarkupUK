@@ -127,6 +127,23 @@ aside {
     }
 }
 
+table {
+    @extend
+        .table,
+        .table-striped,
+        .table-responsive,
+        .table-hover;
+    thead {
+        @extend
+            .table-primary;
+    }
+    td:first-child,
+    th:first-child {
+        text-align: right;
+        border-right: 1px solid $info;
+    }
+}
+
 .jumbotron {
     @extend
         .mt-4,
