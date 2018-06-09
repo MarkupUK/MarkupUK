@@ -30,7 +30,8 @@
    &lt;/xs:sequence&gt;
    &lt;xs:attribute name="isbn" type="ISBNType" use="required"/&gt;
    &lt;xs:assert test="if (publisher eq 'McGraw-Hill') then starts-with(@isbn, '007') else 
-                    if (publisher eq 'Academic Press') then starts-with(@isbn, '012') else true()"/&gt;
+                    if (publisher eq 'Academic Press') then starts-with(@isbn, '012') 
+                    else true()"/&gt;
   &lt;/xs:complexType&gt;
  &lt;/xs:element&gt;
  
@@ -293,39 +294,44 @@
     &lt;/book&gt;
 &lt;/books&gt;</pre><p>and the result is the following report:</p><pre class="programlisting" xml:space="preserve">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;validation-report xmlns="http://saxon.sf.net/ns/validation"
-                   system-id="file:/Users/mike/Documents/papers/markupuk2018/books-invalid.xml"&gt;
+                   system-id="file:/Users/mike/Documents/papers/markupuk2018/
+                   books-invalid.xml"&gt;
    &lt;error line="6"
           column="15"
           path="/Q{}books[1]/Q{}book[1]/Q{}date[1]"
           xsd-part="1"
-          constraint="cvc-complex-type.2.4"&gt;In content of element &amp;lt;book&amp;gt;: The content model does not allow 
-            element &amp;lt;Q{}date&amp;gt; to appear immediately after element &amp;lt;publisher&amp;gt;. No further elements 
-            are allowed at this point. &lt;/error&gt;
+          constraint="cvc-complex-type.2.4"&gt;In content of element &amp;lt;book&amp;gt;: The 
+            content model does not allow element &amp;lt;Q{}date&amp;gt; to appear immediately 
+            after element &amp;lt;publisher&amp;gt;. No further elements are allowed at 
+            this point. &lt;/error&gt;
    &lt;error line="7"
           column="31"
           path="/Q{}books[1]/Q{}book[1]/Q{}price[1]/@currency"
           xsd-part="2"
-          constraint="cvc-complex-type.3"&gt;Value "NZD" contravenes the enumeration facet "EUR, USD, CAD, GBP" of 
-            the type Q{}currencyType&lt;/error&gt;
+          constraint="cvc-complex-type.3"&gt;Value "NZD" contravenes the enumeration 
+          facet "EUR, USD, CAD, GBP" of the type Q{}currencyType&lt;/error&gt;
    &lt;error line="11"
           column="17"
           path="/Q{}books[1]/Q{}book[2]/Q{}author[1]"
           xsd-part="1"
-          constraint="cvc-complex-type.2.4"&gt;In content of element &amp;lt;book&amp;gt;: The content model does not allow 
-            element &amp;lt;Q{}author&amp;gt; to appear immediately after element &amp;lt;title&amp;gt;. No further elements 
-            are allowed at this point. &lt;/error&gt;
+          constraint="cvc-complex-type.2.4"&gt;In content of element &amp;lt;book&amp;gt;: 
+            The content model does not allow element &amp;lt;Q{}author&amp;gt; to appear 
+            immediately after element &amp;lt;title&amp;gt;. No further elements are allowed 
+            at this point. &lt;/error&gt;
    &lt;error line="13"
           column="15"
           path="/Q{}books[1]/Q{}book[2]/Q{}date[1]"
           xsd-part="2"
-          constraint="cvc-datatype-valid.1"&gt;The content "1990-04" of element &amp;lt;date&amp;gt; does not match the 
-            required simple type. Cannot convert '1990-04' to a gYear&lt;/error&gt;
+          constraint="cvc-datatype-valid.1"&gt;The content "1990-04" of element &amp;lt;date&amp;gt;
+            does not match the required simple type. Cannot convert '1990-04' to a 
+            gYear&lt;/error&gt;
    &lt;error line="9"
           column="29"
           path="/Q{}books[1]/Q{}book[2]"
           xsd-part="1"
-          constraint="sec-cvc-assertion.0"&gt;Element book does not satisfy assertion if (publisher eq 'McGraw Hill') 
-            then starts-with(@isbn, '007') else if (publisher eq 'Academic Press') then starts-with(@isbn, '012') 
+          constraint="sec-cvc-assertion.0"&gt;Element book does not satisfy assertion 
+            if (publisher eq 'McGraw Hill') then starts-with(@isbn, '007') else 
+            if (publisher eq 'Academic Press') then starts-with(@isbn, '012') 
             else true()&lt;/error&gt;
    &lt;meta-data&gt;
       &lt;validator name="SAXON-EE" version="9.9.0.1"/&gt;

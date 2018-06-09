@@ -6,35 +6,39 @@
           var prefix = "index.html";
           
           --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12s04s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s04s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect2" id="d5e5248"><div class="titlepage"><div><div><h3 class="title">Checking Assertions</h3></div></div></div><p>The code for checking input data against assertions defined in the schema is very straightforward. Here is the actual logic
-                (no simplifications this time):</p><pre class="programlisting" xml:space="preserve">    &lt;xsl:function name="scm:check-assertions" as="map(*)" saxon:as="tuple(error: element(vr:error)*)"&gt;
-        &lt;xsl:param name="type" as="element(scm:complexType)"/&gt;
-        &lt;xsl:param name="node" as="element()"/&gt;
-        &lt;xsl:variable name="copy-sans-comments" as="element()"&gt;
-            &lt;xsl:apply-templates select="$node" mode="copy-sans-comments"/&gt;
-        &lt;/xsl:variable&gt;
-        &lt;xsl:variable name="failures" as="element(vr:error)*"&gt;
-            &lt;xsl:for-each select="$type/scm:assertion"&gt;
-                &lt;xsl:try&gt;
-                    &lt;xsl:variable name="assertion-result" as="item()*"&gt;
-                        &lt;xsl:evaluate xpath="@test" 
-                            context-item="$copy-sans-comments"  
-                            namespace-context="scm:make-namespace-context(.)"
-                            base-uri="{base-uri($scm)}"&gt;
-                            &lt;xsl:with-param name="value" select="$copy-sans-comments"/&gt;
-                        &lt;/xsl:evaluate&gt;
-                    &lt;/xsl:variable&gt;
-                    &lt;xsl:if test="not($assertion-result)"&gt;
-                        &lt;xsl:sequence select="scm:error($node, ' must satisfy assertion ' || @test)"/&gt;
-                    &lt;/xsl:if&gt;
-                    &lt;xsl:catch errors="*"&gt;
-                        &lt;xsl:sequence select="scm:error($node, ' must satisfy assertion ' || @test || '.
-                                Evaluation of the assertion failed with a dynamic error: ' || $err:description)"/&gt;
-                    &lt;/xsl:catch&gt;
-                &lt;/xsl:try&gt;
-            &lt;/xsl:for-each&gt;
-        &lt;/xsl:variable&gt;
-        &lt;xsl:sequence select="map{'errors': $failures}"/&gt;
-    &lt;/xsl:function&gt;</pre><p>Notes relating to this code:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The function returns a map, but the <code class="code">saxon:as</code> declaration reveals that there is only
+                (no simplifications this time):</p><pre class="programlisting" xml:space="preserve">&lt;xsl:function name="scm:check-assertions" as="map(*)" saxon:as="tuple(error:
+            element(vr:error)*)"&gt;
+    &lt;xsl:param name="type" as="element(scm:complexType)"/&gt;
+    &lt;xsl:param name="node" as="element()"/&gt;
+    &lt;xsl:variable name="copy-sans-comments" as="element()"&gt;
+        &lt;xsl:apply-templates select="$node" mode="copy-sans-comments"/&gt;
+    &lt;/xsl:variable&gt;
+    &lt;xsl:variable name="failures" as="element(vr:error)*"&gt;
+        &lt;xsl:for-each select="$type/scm:assertion"&gt;
+            &lt;xsl:try&gt;
+                &lt;xsl:variable name="assertion-result" as="item()*"&gt;
+                    &lt;xsl:evaluate xpath="@test" 
+                        context-item="$copy-sans-comments"  
+                        namespace-context="scm:make-namespace-context(.)"
+                        base-uri="{base-uri($scm)}"&gt;
+                        &lt;xsl:with-param name="value" select="$copy-sans-comments"/&gt;
+                    &lt;/xsl:evaluate&gt;
+                &lt;/xsl:variable&gt;
+                &lt;xsl:if test="not($assertion-result)"&gt;
+                    &lt;xsl:sequence select="scm:error($node, ' must satisfy assertion '
+                    || @test)"/&gt;
+                &lt;/xsl:if&gt;
+                &lt;xsl:catch errors="*"&gt;
+                    &lt;xsl:sequence select="scm:error($node, ' must satisfy assertion ' 
+                    || @test || '.
+                            Evaluation of the assertion failed with a dynamic error: '
+                            || $err:description)"/&gt;
+                &lt;/xsl:catch&gt;
+            &lt;/xsl:try&gt;
+        &lt;/xsl:for-each&gt;
+    &lt;/xsl:variable&gt;
+    &lt;xsl:sequence select="map{'errors': $failures}"/&gt;
+&lt;/xsl:function&gt;</pre><p>Notes relating to this code:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The function returns a map, but the <code class="code">saxon:as</code> declaration reveals that there is only
                     one field defined in this map, namely the <code class="code">errors</code> field. If the constraint is satisfied,
                     an empty map is returned. The reason for defining it this way is that the calling code can use its standard
                     mechanism for combining the results of different validation processes.</p></li><li class="listitem"><p>The function makes a copy of the element being validated, in which comments and processing instructions

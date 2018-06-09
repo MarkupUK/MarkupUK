@@ -12,15 +12,21 @@
             is therefore frustrating that the XSLT 3.0 type system is so poor at validating these maps and reporting type errors. Saxon 
             therefore introduces an extension to XSLT 3.0, called tuple types. Here is a declaration of the returned structure as
             a tuple type:</p><pre class="programlisting" xml:space="preserve">
-              tuple(    valid: xs:boolean?,          (: indicates whether the subtree is valid (default = true) :) 
-                        errors: element(vr:error)*,  (: a list of errors found when validating the subtree :) 
-                        value: xs:anyAtomicType*,    (: the typed value of an element or attribute :)
-                        type: xs:string*,            (: the types of the typed values, as component IDs :)
-                        lexical: xs:string?,         (: the lexical form of a value after whitespace normalization :)
-                        id: xs:string*,              (: any ID values found while validating an element or attribute :) 
-                        id-map: map(xs:string, element())*,  (: a mapping from ID values to elements :)
-                        idrefs: xs:string*)          (: any IDREF values found while validating an element or attribute :)
-                </pre><p>This clearly documents the expected contents of the map much more precisely than the bland declaration 
+  tuple( valid: xs:boolean?,          (: indicates whether the subtree is valid 
+                                         (default = true) :) 
+         errors: element(vr:error)*,  (: a list of errors found when validating the 
+                                         subtree :) 
+         value: xs:anyAtomicType*,    (: the typed value of an element or attribute :)
+         type: xs:string*,            (: the types of the typed values, as component 
+                                         IDs :)
+         lexical: xs:string?,         (: the lexical form of a value after whitespace 
+                                         normalization :)
+         id: xs:string*,              (: any ID values found while validating an 
+                                         element or attribute :) 
+         id-map: map(xs:string, element())*,  (: a mapping from ID values to elements :)
+         idrefs: xs:string*)          (: any IDREF values found while validating an 
+                                         element or attribute :)
+    </pre><p>This clearly documents the expected contents of the map much more precisely than the bland declaration 
                 <code class="code">map(xs:string, item()*)</code>.</p><p>Tuples in Saxon are not a separate data type in the way that maps and arrays are separate data types. Rather, a tuple type
             is an alternative way of constraining the content of a map. It defines the (string-valued) keys that can appear in the map,
             and for each permitted key, the permitted type of the corresponding values. Declaring the expected type of a map in this
@@ -28,16 +34,23 @@
             the lookup expression <code class="code">$result?Value</code> can generate a static error message, as can its use in an inappropriate
             context such as <code class="code">$result?valid eq "true"</code>.</p><p>Because tuple type declarations are often quite lengthy, as in this example, Saxon allows them to be declared once
             using a type alias:</p><pre class="programlisting" xml:space="preserve">&lt;saxon:type-alias name="validation-outcome" type="
-              tuple(    valid: xs:boolean?,          (: indicates whether the subtree is valid (default = true) :) 
-                        errors: element(vr:error)*,  (: a list of errors found when validating the subtree :) 
-                        value: xs:anyAtomicType*,    (: the typed value of an element or attribute :)
-                        type: xs:string*,            (: the types of the typed values, as component IDs :)
-                        lexical: xs:string?,         (: the lexical form of a value after whitespace normalization :)
-                        id: xs:string*,              (: any ID values found while validating an element or attribute :) 
-                        id-map: map(xs:string, element())*,  (: a mapping from ID values to elements :)
-                        idrefs: xs:string*)          (: any IDREF values found while validating an element or attribute :)
-             "/&gt;
-                </pre><p>And the type can then be referenced wherever an <code class="code">as</code> attribute can appear, for example:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:template match="*" as="map(xs:string, item()*)" saxon:as="~validation-outcome"/&gt;</pre><p>The syntax of <code class="code">saxon:as</code> is an XPath <code class="code">SequenceType</code> augmented with Saxon-specific
+  tuple( valid: xs:boolean?,          (: indicates whether the subtree is valid 
+                                         (default = true) :) 
+         errors: element(vr:error)*,  (: a list of errors found when validating the 
+                                         subtree :) 
+         value: xs:anyAtomicType*,    (: the typed value of an element or attribute :)
+         type: xs:string*,            (: the types of the typed values, as component 
+                                         IDs :)
+         lexical: xs:string?,         (: the lexical form of a value after whitespace 
+                                         normalization :)
+         id: xs:string*,              (: any ID values found while validating an 
+                                         element or attribute :) 
+         id-map: map(xs:string, element())*,  (: a mapping from ID values to elements :)
+         idrefs: xs:string*)          (: any IDREF values found while validating an 
+                                         element or attribute :)
+
+ "/&gt;
+    </pre><p>And the type can then be referenced wherever an <code class="code">as</code> attribute can appear, for example:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:template match="*" as="map(xs:string, item()*)" saxon:as="~validation-outcome"/&gt;</pre><p>The syntax of <code class="code">saxon:as</code> is an XPath <code class="code">SequenceType</code> augmented with Saxon-specific
             syntax, in this case a reference to a type alias marked as such by the presence of the leading tilde (~). The semantics
             of <code class="code">saxon:as</code> are that it provides type information additional to that contained in the <code class="code">as</code>
             attribute. Because (under the XSLT extensibility rules) attributes in the Saxon namespace are ignored by

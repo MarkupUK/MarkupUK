@@ -7,48 +7,54 @@
           
           --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12s04s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s04s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect2" id="d5e5218"><div class="titlepage"><div><div><h3 class="title">Assessment against Complex Types using Finite State Machines</h3></div></div></div><p>As we've seen, the finite state machines used to evaluate a sequence of elements against the grammar
             rules for a complex type are constructed by the schema compiler and embedded in the SCM file that is used
-            as input to the validator.</p><p>A simplified validator for a simple finite state machine could be written like this:</p><pre class="programlisting" xml:space="preserve">       &lt;xsl:iterate select="$node/*"&gt;
-            &lt;xsl:param name="state" select="$initial-state" as="element(scm:state)"/&gt;
-            &lt;xsl:on-completion&gt;
-                &lt;xsl:if test="not($state/@final = 'true')"&gt;
-                    &lt;xsl:sequence select="map{'errors': 
-                                              scm:error($node, 'Element content is incomplete')}"/&gt;
-                &lt;/xsl:if&gt;
-            &lt;/xsl:on-completion&gt;
-            &lt;xsl:variable name="matching-edge" as="element(scm:edge)?"
-                select="$state/scm:edge[scm:get(@term)[@name = local-name(current()) 
-                           and string(@targetNamespace) = namespace-uri(current())]]"/&gt;
-            &lt;xsl:variable name="matching-wildcard-edge" as="element(scm:edge)?"
-                select="$state/scm:edge[scm:get(@term)[self::scm:wildcard[
-                                          scm:wildcard-matches($containing-type, ., current())]]]"/&gt;
-            &lt;xsl:choose&gt;
-                &lt;xsl:when test="empty($matching-edge) and empty($matching-wildcard-edge)"&gt;
-                     &lt;xsl:break select="map{'errors': scm:error(., 'Element ' || name()
-                                                          || ' is not allowed here')}"/&gt;
-                &lt;/xsl:when&gt;
-                &lt;xsl:when test="empty($matching-edge)"&gt;
-                    &lt;xsl:variable name="wildcard" select="scm:get($matching-wildcard-edge/@term)" 
-                                                  as="element(scm:wildcard)?"/&gt;
-                    &lt;xsl:sequence select="scm:check-wildcard-match($containing-type, $wildcard, .)"/&gt;
-                    &lt;xsl:next-iteration&gt;
-                        &lt;xsl:with-param name="state" 
-                                        select="$states[@nr = $matching-wildcard-edge/@to]"/&gt;
-                    &lt;/xsl:next-iteration&gt;
-                &lt;/xsl:when&gt;
-                &lt;xsl:otherwise&gt;
-                    &lt;xsl:variable name="decl" 
-                                  select="scm:get($matching-edge/@term)" 
-                                  as="element(scm:element)"/&gt;
-                    &lt;xsl:apply-templates select="." mode="explicit-decl"&gt;
-                        &lt;xsl:with-param name="decl" select="$decl"/&gt;
-                    &lt;/xsl:apply-templates&gt;
-                    &lt;xsl:next-iteration&gt;
-                        &lt;xsl:with-param name="state" 
-                                        select="$states[@nr = $matching-edge/@to]"/&gt;
-                    &lt;/xsl:next-iteration&gt;
-                &lt;/xsl:otherwise&gt;
-            &lt;/xsl:choose&gt;            
-        &lt;/xsl:iterate&gt;</pre><p>The way this code works is as follows:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The <code class="code">xsl:iterate</code> instruction is new in XSLT 3.0. It is rather like <code class="code">xsl:for-each</code>,
+            as input to the validator.</p><p>A simplified validator for a simple finite state machine could be written like this:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:iterate select="$node/*"&gt;
+    &lt;xsl:param name="state" select="$initial-state" as="element(scm:state)"/&gt;
+    &lt;xsl:on-completion&gt;
+        &lt;xsl:if test="not($state/@final = 'true')"&gt;
+            &lt;xsl:sequence select="map{'errors': 
+                                      scm:error($node, 'Element content is 
+                                      incomplete')}"/&gt;
+        &lt;/xsl:if&gt;
+    &lt;/xsl:on-completion&gt;
+    &lt;xsl:variable name="matching-edge" as="element(scm:edge)?"
+        select="$state/scm:edge[scm:get(@term)[@name = local-name(current()) 
+                   and string(@targetNamespace) = namespace-uri(current())]]"/&gt;
+    &lt;xsl:variable name="matching-wildcard-edge" as="element(scm:edge)?"
+        select="$state/scm:edge[scm:get(@term)[self::scm:wildcard[
+                                  scm:wildcard-matches($containing-type, ., 
+                                  current())]]]"/&gt;
+    &lt;xsl:choose&gt;
+        &lt;xsl:when test="empty($matching-edge) and empty($matching-wildcard-edge)"&gt;
+             &lt;xsl:break select="map{'errors': scm:error(., 'Element ' || name()
+                                                  || ' is not allowed here')}"/&gt;
+        &lt;/xsl:when&gt;
+        &lt;xsl:when test="empty($matching-edge)"&gt;
+            &lt;xsl:variable name="wildcard" 
+                          select="scm:get($matching-wildcard-edge/@term)" 
+                          as="element(scm:wildcard)?"/&gt;
+            &lt;xsl:sequence select="scm:check-wildcard-match($containing-type, 
+                                  $wildcard, .)"/&gt;
+            &lt;xsl:next-iteration&gt;
+                &lt;xsl:with-param name="state" 
+                                select="$states[@nr = 
+                                        $matching-wildcard-edge/@to]"/&gt;
+            &lt;/xsl:next-iteration&gt;
+        &lt;/xsl:when&gt;
+        &lt;xsl:otherwise&gt;
+            &lt;xsl:variable name="decl" 
+                          select="scm:get($matching-edge/@term)" 
+                          as="element(scm:element)"/&gt;
+            &lt;xsl:apply-templates select="." mode="explicit-decl"&gt;
+                &lt;xsl:with-param name="decl" select="$decl"/&gt;
+            &lt;/xsl:apply-templates&gt;
+            &lt;xsl:next-iteration&gt;
+                &lt;xsl:with-param name="state" 
+                                select="$states[@nr = 
+                                        $matching-edge/@to]"/&gt;
+            &lt;/xsl:next-iteration&gt;
+        &lt;/xsl:otherwise&gt;
+    &lt;/xsl:choose&gt;            
+&lt;/xsl:iterate&gt;</pre><p>The way this code works is as follows:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The <code class="code">xsl:iterate</code> instruction is new in XSLT 3.0. It is rather like <code class="code">xsl:for-each</code>,
                     except that it processes the selected items strictly in sequence; the code for processing one item can set
                     parameters for processing the next item; and it is possible to break out of the loop early. The same effect
                     could be achieved with a recursive template, but <code class="code">xsl:iterate</code> is often easier to understand.
