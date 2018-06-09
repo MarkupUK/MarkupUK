@@ -1,0 +1,48 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction to XForms</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar14.html" title="The XForms 2.0 Test Suite" /><link rel="prev" href="ar14s01.html" title="Introduction" /><link rel="next" href="ar14s03.html" title="Test Suites" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5523"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction to XForms</h2></div></div></div><p>The essence of XForms is <span class="emphasis"><em>state</em></span>, which means that it meshes
+extremely well with the REST (Representational State Transfer) architectural
+style [<a class="citation" href="bi02.html#s1kd03" shape="rect"><span class="citation">3</span></a>].</p><p>An XForms application has two parts: a <span class="emphasis"><em>model</em></span>, and a
+<span class="emphasis"><em>user-interface</em></span>. </p><p>The model contains all the data being used, stored in <span class="emphasis"><em>instances</em></span>,
+along with descriptions of properties of, and relationships between, the data.
+For instance, data can be defined inline:</p><pre class="programlisting" xml:space="preserve">&lt;instance&gt;
+   &lt;tests xmlns=""&gt;
+      &lt;test pass="" res="" req="valid"&gt;2018-01-20&lt;/test&gt;
+      &lt;test pass="" res="" req="invalid"&gt;2018/01/20&lt;/test&gt;
+   &lt;/tests&gt;
+&lt;/instance&gt;</pre><p>or can be imported from an external source:</p><pre class="programlisting" xml:space="preserve">&lt;instance src="tests.xml"/&gt;</pre><p>Descriptions of data properties are done using <span class="emphasis"><em>bind</em></span> statements that
+bind properties to data values:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="today" type="date"/&gt;
+&lt;bind ref="color" readonly="../variant="'basic'"/&gt;
+&lt;bind ref="state" required="../country="'USA'"/&gt;
+&lt;bind ref="state" relevant="../country="'USA'"/&gt;
+&lt;bind ref="total" calculate="../number * ../unitprice"/&gt;
+&lt;bind ref="height" constraint=". &gt; 0"/&gt;</pre><p>Controls in the user-interface then <span class="emphasis"><em>bind</em></span> to the data to allow
+interaction:</p><pre class="programlisting" xml:space="preserve">&lt;input ref="age" label="Age:"/&gt;</pre><p>After initialisation the system is in <span class="emphasis"><em>stasis</em></span>: the data matches the
+descriptions, and the relationships between data are up-to-date. After that,
+<span class="emphasis"><em>events</em></span> occur, either system-generated or user-initiated, causing data
+values to change, to which the XForms system responds in order to return the
+system to stasis. While in general the system responds to events in standard
+ways, applications can also catch <span class="emphasis"><em>events</em></span> and specify <span class="emphasis"><em>actions</em></span>
+that define how to respond to particular events in particular ways:</p><pre class="programlisting" xml:space="preserve">&lt;action ev:event="xforms-value-changed"&gt;
+   &lt;setvalue ref="unsaved"&gt;true&lt;/setvalue&gt;
+&lt;/action&gt;</pre><p>As a --simple-- example, a map application might keep the x and y
+coordinates of a location and a zoom level for looking at the map:</p><pre class="programlisting" xml:space="preserve">&lt;instance&gt;
+   &lt;map xmlns=""&gt;
+      &lt;zoom&gt;10&lt;/zoom&gt;
+      &lt;x&gt;511&lt;/x&gt;
+      &lt;y&gt;340&lt;/y&gt;
+      &lt;url/&gt;
+   &lt;/map&gt;
+&lt;/instance&gt;</pre><p>The URL of the relevant map tile for that location can then
+--automatically-- be kept up-to-date whenever and however any of the values
+change, by using a bind:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="url"
+      calculate="concat('http://tile.openstreetmap.org/',
+                        ../zoom, '/', ../x, '/', ../y, '.png')"/&gt;</pre><p>See [<a class="citation" href="bi02.html#s1kd04" shape="rect"><span class="citation">4</span></a>] for a further introduction to XForms, and [<a class="citation" href="bi02.html#s1kd05" shape="rect"><span class="citation">5</span></a>] for a fully worked-out
+mapping application in XForms.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar14.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

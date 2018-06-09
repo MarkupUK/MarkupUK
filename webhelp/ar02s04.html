@@ -1,0 +1,32 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Publication Modules</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar02.html" title="How to Make a Flying Start with S1000D – Lessons Learned at the Airport" /><link rel="prev" href="ar02s03s02.html" title="Data Module Title" /><link rel="next" href="ar02s04s01.html" title="The Publication Module Code" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar02s03s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar02s04s01.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect1" id="d5e435"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Publication Modules</h2></div></div></div><p>The legacy Knowledge Warehouse system had seven top-level navigation headings, so in
+            order to provide the same top-level navigation in S1000D, it made sense to create a
+            publication module for each heading. Creating the publication modules seemed
+            straightforward as the legacy navigation structure was available as HTML and, by
+            converting this first to XHTML, it was possible to transform the navigation structure
+            into S1000D XML publication modules using XSLT.</p><div class="table" id="table8"><p class="title"><strong>Table 8. A word of advice..</strong></p><div class="table-contents"><table xml:id="table8"><tbody><tr><td rowspan="1" colspan="1">Although this was a relatively straightforward task, with the benefit of
+                        hindsight copying the existing navigation exactly was not the best decision.
+                        It was later discovered that some of the publication modules were so large
+                        that it was almost impossible to work with them in an editor. These
+                        publication modules had to be split later into multiple smaller publication
+                        modules which were then referenced from the top-level publication module,
+                        making it a much smaller and more manageable file. Reviewing the number of
+                        entries at each level in the structure before the migration began, and
+                        restructuring where prudent, would’ve avoided this extra work later.</td></tr></tbody></table></div></div><br class="table-break" clear="none" /><p>In order to match the entry in the publication module with the correct data module, a
+            title lookup was used. It soon became apparent that in some cases the lookup was unable
+            to resolve the correct data module as multiple data modules had the same title. Further
+            investigation showed that the reason for this was that the legacy system did not support
+            content re-use and therefore the same document had been copied into multiple locations
+            in the structure as it was needed. On examination it was found that the documents were
+            not always identical, some having been edited and this created inconsistency in the
+            content. This is exactly the kind of situation that S1000D is designed to prevent
+            through module reuse. To resolve the problem a manual effort was needed by authors to
+            merge the content and remove the duplicates prior to running the migration.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar02s03s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar02.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar02s04s01.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

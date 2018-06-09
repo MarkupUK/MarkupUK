@@ -1,0 +1,124 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Example of use</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="the-ant-macro-library.html" title="The ANT macro library" /><link rel="prev" href="the-ant-macro-library.html" title="The ANT macro library" /><link rel="next" href="xpants.html" title="XPantS" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="the-ant-macro-library.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="xpants.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="example-of-use"><div class="titlepage"><div><div><h3 class="title">Example of use</h3></div></div></div><p>
+      The usefulness of this library to the content delivery team can
+      best be illustrated through the example of the <span class="quote">“<span class="quote">content
+      migration</span>”</span> sub-team. This team acts as a bridge between the
+      editorial function and the fabrication pipelines (which
+      subsequently deliver content for delivery to users of the main
+      product web page). The content is mastered in XML using a variety
+      of DTDs but the definitions in these DTDs are quite broad, in the
+      sense that several different types of content can be represented
+      using the same DTD. However, for delivery to the production
+      systems certain additional rules must be enforced—these rules
+      (written in Schematron) <span class="quote">“<span class="quote">tailor</span>”</span> the broad DTD
+      definition for each particular content type.
+    </p><p>
+      The Schematron rules effectively represent the editorial
+      requirements for the content—there are many of them and they
+      change quite often. The content migration sub-team develops and
+      maintains these Schematron rules, supplying them to the
+      fabrication team for inclusion in the various pipelines related to
+      those content types. Prior to the development of the Ant library
+      the typical workflow was something like:
+    </p><div class="orderedlist"><ol class="orderedlist compact" type="1"><li class="listitem"><p>
+          Find the appropriate build.xml file and edit it, commenting
+          out details of other team members content types and
+          un-commenting their own.
+        </p></li><li class="listitem"><p>
+          Find another, apparently unrelated build.xml file (e.g. with a
+          relative path similar to
+          <span class="quote">“<span class="quote">../../common/build.xml</span>”</span>) and make similar
+          changes.
+        </p></li><li class="listitem"><p>
+          Run the first build file to create a pre-compiled Schematron
+          file (i.e. an XSLT).
+        </p></li><li class="listitem"><p>
+          Manually move the output file to a different folder.
+        </p></li><li class="listitem"><p>
+          Inform the fabrication team that there is a new version of the
+          file.
+        </p></li><li class="listitem"><p>
+          Liaise with fabrication to correct any issues found during the
+          next run of the content through its pipeline. This may include
+          confirming which version of the code is being included and
+          re-compiling if necessary.
+        </p></li></ol></div><p>
+      Note that as all code was shared in the same TFS repository it was
+      very difficult to go back and check the status of any particular
+      version. Different versions were not explicitly labelled and any
+      changes to the code might be overwritten by another team member
+      committing to the same files in the same repository.
+    </p><p>
+      Therefore, after the Ant library was developed a second, higher
+      level set of macros was developed to assist the content migration
+      sub-team. The Schematron files for each content stream were placed
+      in their own Git repository and which had its own (Ant) properties
+      file that described how the Schematron files should be compiled
+      and the various options that should be applied. A standard
+      template for a <span class="strong"><strong>build.xml</strong></span> file
+      common to all the content streams was also created. The workflow
+      now became:
+    </p><div class="orderedlist"><ol class="orderedlist compact" type="1"><li class="listitem"><p>
+          Create a new feature branch in the repository and make the
+          code changes required.
+        </p></li><li class="listitem"><p>
+          From a command line run <code class="literal">$ ant compile</code> to
+          compile the Schematron files (using the
+          <code class="literal">compile-schematron</code> macros).
+        </p></li><li class="listitem"><p>
+          Run <code class="literal">$ ant validate</code> to validate the compiled
+          Schematron against a representative data model, or series of
+          models (using the <code class="literal">validate-schematron</code>
+          macros).
+        </p></li><li class="listitem"><p>
+          Merge the feature changes back into master (and repeat from
+          step 1 for additional features).
+        </p></li><li class="listitem"><p>
+          Once all features have been finished create a
+          <span class="quote">“<span class="quote">release</span>”</span> branch,
+        </p></li><li class="listitem"><p>
+          Run the validation tasks once more. If all the tests are valid
+          then run <code class="literal">$ ant version</code> to update the
+          version number—this version number is now embedded in the
+          compiled Schematron.
+        </p></li><li class="listitem"><p>
+          Prepare release documentation and run
+          <code class="literal">$ ant docs</code> to prepare it. This
+          documentation will be deployed with the compiled Schematron
+          files so that all content developers can see what changes have
+          been made and why. The build file will check that this
+          documentation has been completed and will not deploy until it
+          has.
+        </p></li><li class="listitem"><p>
+          Run <code class="literal">$ ant deploy</code> to deploy the compiled
+          Schematron files to the CAPE for reference as well as
+          deploying them directly to a network share where the
+          fabrication pipeline will pick it up automatically. This uses
+          the <code class="literal">deploy-files</code> macros, but the standard
+          build file will not allow deployment from other than a release
+          branch or if there are outstanding commits. In other words,
+          the developer cannot deploy simply <span class="quote">“<span class="quote">as a
+          test</span>”</span>—they must think about their actions.
+        </p></li><li class="listitem"><p>
+          Merge the feature branch back into master and push to the
+          server to keep a record of all changes.
+        </p></li></ol></div><p>
+      This freed up the content migration sub-team to concentrate on the
+      details of the content and the Schematron rules, dealing with
+      actual content issues rather having to continually having to
+      manually configure build files at each step. Furthermore, the
+      addition of a version number meant that any errors encountered in
+      the fabrication pipeline were much easier to track and resolve. Of
+      course, some of these improvements are directly related to the
+      enforcement of the Development Policy—but most of the time this is
+      accomplished <span class="emphasis"><em>automatically</em></span> through the Ant
+      library macros.
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="the-ant-macro-library.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="the-ant-macro-library.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="xpants.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,60 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar10.html" title="Non-XML workflows with XProc 3.0" /><link rel="prev" href="ar10.html" title="Non-XML workflows with XProc 3.0" /><link rel="next" href="ar10s02.html" title="Reprise: Non-XML documents in XProc 1.0" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar10.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e4171"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction</h2></div></div></div><p>XProc 1.0 <a class="xref" href="bi10.html#XProc-Spec" title="XProc. An XML Pipeline Language" shape="rect">[1]</a> is clearly an XML-centric language to design workflows, actually it is
+            mostly an XML-only workflow language. To quote the  XProc 1.0 specification:</p><div class="blockquote"><blockquote class="blockquote"><p>Although some steps can read and write non-XML resources, what flows between steps through 
+                input ports and output ports are <span class="emphasis"><em>exclusively</em></span> XML documents or sequences of XML documents.
+            </p></blockquote></div><p>This XML-only approach proved to be fine for a lot of tasks, but as it turns out, even
+            workflows dealing mostly with XML documents also have the need to deal with non-XML
+            data. Just think of an ePUB mostly containing XHTML documents, but also having some
+            JPEGs with illustrations, a manifest file which is pure text and finally being
+            essentially a special kind of ZIP-document. </p><p>As such workflows show up quite often in real day life, the ability to deal with
+            non-XML documents was a high priority requirement when developing the next version of
+            XProc, which is called "XProc 3.0".<a href="#ftn.d5e4180" class="footnote" shape="rect"><sup class="footnote" id="d5e4180">[16]</sup></a></p><p>In this paper I would like to give an introduction to workflows for non-XML documents
+            in XProc 3.0. To do this as practically as possible I decided to layout a typical
+            workflow involving the necessity to deal with non-XML documents and to show, how this
+            could be done in XProc 3.0. Of course the workflow is a little bit of a made-up
+            story because it was chosen for the purpose of demonstration. But it will show some
+            basic structures of dealing with non-XML documents in XProc 3.0 and can serve as a
+            blueprint for real life projects. </p><p>The workflow discussed here is this: We have a bunch of ePUBs in a folder somewhere
+            and we have been asked to design a workflow which analyses the content of the ePUB and
+            creates an RDF metadata description and an inventory in JSON which has to be sent to one
+            of our inventory-servers which – for whatever reason – happens to understand only JSON.
+            I will explain the details of this workflow later, but please keep in mind that it
+            involves dealing with a lot of non-XML documents such as ZIP (the ePUB itself), plain
+            text, graphics in JPEG, RDF and last but not least JSON.</p><p>This paper is divided into four parts,  the third part being the central one:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>We will start with a short reminder on how one could deal with non-XML
+                        documents in XProc 1.0. As I said before, XProc 1.0 clearly is an
+                        XML-centric language, but there are some possibilities to deal with non-XML
+                        documents. To give a short reprise will hopefully help to understand the new
+                        features of XProc 3.0.</p></li><li class="listitem"><p>In order to cope with non-XML documents, some fundamental changes had to
+                        be made in the transition from XProc 1.0 to the new XProc 3.0. The
+                        most important point here was to change the concept of a document that flows
+                        from one step to another. While in XProc 1.0 a document is a
+                        well-formed XML document only, for XProc 3.0 we needed a new document
+                        model which is able to cover XML and non-XML documents as well. In the
+                        second section of this paper we will take a short look at this new concept
+                        of a document as a foundation to understand how non-XML workflows can be
+                        created in XProc 3.0.</p></li><li class="listitem"><p>The core of this paper is the third section where we will discuss in some
+                        detail how to design the sketched workflow for ePUBs. Here you will see the
+                        new document model in action and get to know some of the new XProc steps,
+                        which take advantage of this model and enable you to write workflows for
+                        non-XML documents.</p></li><li class="listitem"><p>In the last section you will find a short summary and some conclusion
+                        concerning the suitability of XProc 3.0 for non-XML workflows.</p></li></ul></div><p>
+        </p><p>A short caveat before we start: By the time of writing this article (May 2018),
+            XProc 3.0 is still work in progress. While the document model can surely be seen as
+            stable, the steps mentioned later are probably not. Though their basic outline is very
+            unlikely to change, details may change as the discussion goes along. Especially the
+            signature of the newly introduced steps and the dynamic errors raised by these steps
+            might be subject to change in the process of standardising XProc 3.0. As a result
+            of this situation, this paper is clearly not suitable as a tutorial on XProc 3.0,
+            but is intended as a first look at the new possibilities in this language. Before you
+            start to develop your own pipelines, please see <a class="link" href="http://xproc.org" target="_top" shape="rect">http://xproc.org</a>
+            for the latest version of XProc 3.0.</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e4180" class="footnote"><p><a href="#d5e4180" class="para" shape="rect"><sup class="para">[16] </sup></a>XProc 3.0 is currently developed
+                by the <span class="orgname">XProc Next Community Group</span> (<a class="link" href="https://www.w3.org/community/xproc-next/" target="_top" shape="rect">https://www.w3.org/community/xproc-next/</a>). The most recent version of
+                the editor's draft is published on <a class="link" href="https://spec.xproc.org" target="_top" shape="rect">https://spec.xproc.org</a>.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar10.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar10.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

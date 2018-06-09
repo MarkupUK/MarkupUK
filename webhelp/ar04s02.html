@@ -1,0 +1,106 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>A brief explanation of cryptic crosswords</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar04.html" title="The Cryptic Crossword Corpus Project: first steps in establishing a markup vocabulary" /><link rel="prev" href="ar04s01.html" title="Introduction" /><link rel="next" href="ar04s03.html" title="Developing the markup vocabulary for CCCP" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1091"><div class="titlepage"><div><div><h2 class="title" style="clear: both">A brief explanation of cryptic crosswords</h2></div></div></div><p>Although crosswords are now to be found in many of the world's
+languages, for the most part these are "quick" crosswords, whose clues
+generally consist of a simple synonym of the target answer <span class="citations">(<a class="link" href="bi04.html#Connor2013" shape="rect">Connor, 2013b</a>)</span>. The first quick crossword is
+generally agreed to have been published in New York in 1913; the
+British cryptic was an offshoot, first found in the 1930s <span class="citations">(<a class="link" href="bi04.html#Arnot1981" shape="rect">Arnot, 1981</a>)</span>. The cryptic is largely a British
+phenomenon; <span class="citations"><a class="link" href="bi04.html#Connor2013web" shape="rect">Connor (2013a)</a></span> suggests that this is partly
+attributable to a British taste for "imagery of the nudge-and-wink
+variety", toilet humour, and mild profanity, but also to a lack of
+other solvers from whom to learn the conventions of the cryptic clue.
+Learning how to solve cryptic crossword clues is a matter of practice,
+and of learning the rules by which words are encoded into clues
+<span class="citations">(<a class="link" href="bi04.html#Stratmann1978" shape="rect">Stratmann, 1978</a>)</span>. In order to understand the
+specific markup needs of the CCCP, it will therefore be necessary to
+take a brief tour of how target answers may be encoded by cryptic
+crossword setters.</p><p>A quick clue for the location of this conference might simply
+read "Capital city (6)" (the number in parentheses indicates how many
+letters are in the target answer). There are, of course, a number of
+capital cities with six letters; the quick-crossword solver relies on
+the intersecting words to provide some of the letters needed to narrow
+down the possibilities until the correct target is found. The
+cryptic-crossword solver, in contrast, should be left in no doubt of
+the correct answer, even if there are no intersecting letters
+available to confirm it. This is achieved by careful writing of clues
+that encode each target answer in two ways.</p><p>The commonest structure for a cryptic clue consists of the
+<span class="emphasis"><em>definition</em></span> and the <span class="emphasis"><em>subsidiary
+indication</em></span>. The definition provides some kind of synonym or
+narrative definition of the target; the subsidiary indication encodes
+the target in some other way. A frequent type of subsidiary indication
+is the <span class="emphasis"><em>charade</em></span>, in which letters or groups of
+letters from the target are clued in sequence in the subsidiary
+indication. If we take our "capital city" example, a charade clue
+might read as follows: "Left Ontario with DeLillo for UK city" (6).
+The clue breaks down as follows: <span class="emphasis"><em>L</em></span>, a common
+abbreviation for "left"; <span class="emphasis"><em>ON</em></span>, the postal
+abbreviation for "Ontario"; <span class="emphasis"><em>DON</em></span>, the first name
+of the American novelist DeLillo. Put together, these fragments
+provide the target <span class="emphasis"><em>LONDON</em></span>. "UK city", of course,
+is the definition. Notice the words "with" and "for". These are not
+mere filler. Each one has meaning in constructing the clue: "with"
+indicates that the fragments can be placed together, and "for" is a
+common indicator that what follows is the definition of the target. I
+will call these types of words "metalanguage".</p><p>The function of the metalanguage is more prominent in this clue:
+"City bird around nine doves, initially (6)". Here, the clue's first
+word is the definition, and all that follows is the subsidiary
+indication. We are looking for a word meaning "bird" which can be
+placed around the initial letters of "nine doves". The bird is
+<span class="emphasis"><em>LOON</em></span>, and if we place <span class="emphasis"><em>ND</em></span>
+between its letters we again arrive at the target
+<span class="emphasis"><em>LONDON</em></span>. Again, every single word in the clue
+serves a purpose. Finally, let us consider the following clue: "Melon
+donut in possession of Julie (6)". Here we need to know that Julie
+London was a famous singer, in order to understand that "Julie"
+provides the definition component of the clue. The subsidiary
+definition is what is known as a "container" type: the letters of the
+target are inside ("in possession of") the words <span class="emphasis"><em>meLON
+DONut</em></span>.</p><p>These latter two clues show the ambiguity inherent in most
+cryptic clues, and how linguistic features are exploited to create
+that ambiguity. The apparent noun phrase "city bird" leads the reader
+away from the necessary understanding that the split between
+definition and subsidiary indication happens between the two words. We
+can see, also, that the cryptic crossword setter is permitted to play
+fast and loose with punctuation: a more honest punctuation of the clue
+as "City: bird around nine doves initially" would make the roles of
+the various words clearer. Similarly, the metalanguage in the final
+clue is most easily read as suggesting that the donut is in Julie's
+possession, whereas the solution requires understanding that "in
+possession of" works in reverse here. Either reading is perfectly
+syntactically allowable in English, but the more obvious reading is
+the wrong one for finding the target answer.</p><p>These examples, I hope, portray a distinctive characteristic of
+a well-written cryptic clue: the solver should be left in no doubt
+that her answer is correct <span class="citations">(<a class="link" href="bi04.html#Pham2016" shape="rect">Pham, 2016</a>)</span>. The subsidiary
+indication makes it clear that no other answer is possible, by
+providing specific (albeit heavily encoded) instructions about the
+physical makeup of the target answer <span class="citations">(<a class="link" href="bi04.html#Coffey1998" shape="rect">Coffey, 1998</a>)</span>. Not all clues
+consist of a definition and subsidiary indication, however. So-called
+"double-definition" clues are also popular. These offer two
+definitions, incorporated into an apparently single syntactic unit,
+which approach the target answer from two different directions. An
+example from <span class="emphasis"><em>The Times</em></span> will exemplify this type
+of clue: "Alert goalkeeper may dive thus (2, 3, 4)". The answer is "ON
+THE BALL", for which "alert" is a synonym, and "goalkeeper may dive
+thus" is a descriptive definition. Once the solver has hit upon this
+answer, it is quite clear that nothing else will fit the bill; there
+is no other phrase that is defined by both of the definitions. Another
+example, this time from the <span class="emphasis"><em>Daily Mail</em></span>, shows the
+dangers of attempting this type of clue: "Guess there's no proof for
+it (10)". The answer, "CONJECTURE", is not particularly obvious. The
+two definitions, the synonym "Guess" and the descriptive "there's no
+proof for it" could apply to many similar words. It will be
+interesting to see whether intuitions about what makes for a good and
+a bad clue can be supported by linguistic evidence. For example, it
+seems possible that a good double-definition clue needs to have a
+certain amount of semantic distance between the two definitions. If
+these are too close, there's a risk (as in the Daily Mail example)
+that the clue ends up being too broad. It is the intersection of
+apparently quite different synonyms or definitions which both apply to
+a single target that makes for a good clue.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

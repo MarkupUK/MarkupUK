@@ -1,0 +1,38 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Data entry and initial transformation</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar07s02s02.html" title="The publication process as XProc pipeline" /><link rel="prev" href="ar07s02s02.html" title="The publication process as XProc pipeline" /><link rel="next" href="ar07s02s02s02.html" title="TEI to Emblem Schema" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02s02s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e2601"><div class="titlepage"><div><div><h4 class="title">Data entry and initial transformation</h4></div></div></div><p>
+          The reliance on micro syntax to record emblem information is prone to errors. In order to e.g. state the fact
+          that the current page shows <em class="glossterm">pictura</em> and <em class="glossterm">motto</em> of emblem E018850,
+          and the <em class="glossterm">motto</em> is the German text <span class="quote">“<span class="quote">So muß es mir ergehn, Soll ich sonst fäste
+          Stehn.</span>”</span> an undergraduate has to use the code <code class="code">E018850_P_M-de@So muß es mir ergehn. Soll ich sonst
+          fäste Stehn.</code>.
+        </p><p>
+          The conversion script does not validate this micro syntax and silently drops information that doesn't fit the
+          expected structure. We observed <em class="glossterm">motti</em> ending up in language tags and missing emblem
+          parts alltogether. We assume that most of those errors are caught during data entry by a manual inspection of
+          the emblem book's web representation, though.
+        </p><p> More problematic are "semantic errors" that are introduced to the document
+          structure. In some cases the conversion script adds a superfluous section after a
+            <em class="glossterm">pictura</em>. Our current theory is that the section is added to hold
+          a paragraph which in turn holds page breaks. This could be explained by a more or less
+          informal rule for structural metadata documents that states that page break elements are
+          only allowed inside "logical units"<a href="#ftn.d5e2613" class="footnote" shape="rect"><sup class="footnote" id="d5e2613">[13]</sup></a>. We are still uncertain if the addition of this superfluous section was done
+          deliberately or is an artefact of the conversion process. We believe the latter is the
+          case because the TEI guidelines would have provided an anonymous block element <code class="sgmltag-element">tei:ab</code>
+          without the semantics of a textual division. </p><p> Given the complicated nature of this problem and constraints of the project we
+          decided against trying to further analyze and fix the initial conversion. We hope that
+          replacing the ancient structural metadata editor with the one from the <a class="link" href="http://kitodo.org" target="_top" shape="rect">Kitodo software suite</a> will allow us to get rid of
+          the micro syntax and replace the PHP-based with an XSLT based transformation. What we
+          could do is fix the most blatant errors (e.g. <em class="glossterm">motti</em> in language
+          tags) and provide a list of questionable emblem structures to our expert scientist. </p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e2613" class="footnote"><p><a href="#d5e2613" class="para" shape="rect"><sup class="para">[13] </sup></a>
+              <a class="link" href="http://diglib.hab.de/rules/documentation/structuralMD.xml" target="_top" shape="rect">http://diglib.hab.de/rules/documentation/structuralMD.xml</a>:
+                <span class="quote">“<span class="quote">Zu beachten ist, dass ein pagebreak pb immer innerhalb einer logischen
+                Einheit, z.B. p, gesetzt wird und den Beginn einer Seite
+              kennzeichnet.</span>”</span></p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar07s02s02.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02s02s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

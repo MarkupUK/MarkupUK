@@ -1,0 +1,61 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The Generic Structure of the Tests</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar14.html" title="The XForms 2.0 Test Suite" /><link rel="prev" href="ar14s05.html" title="The XForms 2.0 test suite" /><link rel="next" href="ar14s07.html" title="Datatypes" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s05.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s07.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5580"><div class="titlepage"><div><div><h2 class="title" style="clear: both">The Generic Structure of the Tests</h2></div></div></div><p>Despite the caveats above regarding tests that cannot be tested
+automatically, the vast majority can, and almost all use a standard
+template.</p><p>To demonstrate the workings of this template, let us consider an example
+test case for a function, in this case for the function
+<code class="literal">boolean-from-string().</code></p><p>We want to test that a function calls such as
+<code class="literal">boolean-from-string('true')</code> return the correct result.</p><p>To do this, the parameter value is enclosed in an element:</p><pre class="programlisting" xml:space="preserve">&lt;test&gt;true&lt;/test&gt;</pre><p>and we add attributes where the required result, the actual result, and
+whether the test case passes or not will be stored:</p><pre class="programlisting" xml:space="preserve">&lt;test pass="" res="" req="true"&gt;true&lt;/test&gt;</pre><p>As many such test cases as necessary are then gathered together in an
+instance:</p><pre class="programlisting" xml:space="preserve">&lt;instance&gt;
+   &lt;tests pass="" name="boolean-from-string() function" xmlns=""&gt;
+      &lt;test pass="" res="" req="true"&gt;true&lt;/test&gt;
+      &lt;test pass="" res="" req="true"&gt;TRUE&lt;/test&gt;
+      &lt;test pass="" res="" req="true"&gt;tRue&lt;/test&gt;
+      &lt;test pass="" res="" req="true"&gt;1&lt;/test&gt;
+      &lt;test pass="" res="" req="false"&gt;false&lt;/test&gt;
+      &lt;test pass="" res="" req="false"&gt;FALSE&lt;/test&gt;
+      &lt;test pass="" res="" req="false"&gt;faLse&lt;/test&gt;
+      &lt;test pass="" res="" req="false"&gt;0&lt;/test&gt;
+      &lt;test pass="" res="" req="false"&gt;qwertyuiop&lt;/test&gt;
+      &lt;test pass="" res="" req="false"&gt;&lt;/test&gt;
+      ...
+   &lt;/tests&gt;
+&lt;/instance&gt;</pre><p>A bind is then used to calculate the individual results:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="test/@res" calculate="boolean-from-string(..)"/&gt;</pre><p>whose effect is to calculate the <code class="literal">res</code> attribute for all
+<code class="literal">test</code> elements.</p><p>Another bind, independent of which function is being tested, calculates if
+the computer result matches the expected value:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="test/@pass" calculate="if(../@res = ../@req, 'yes', 'no')"/&gt;</pre><p>and finally a bind for the attribute on the outmost element records if all
+tests have passed:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="@pass" calculate="if(//test[@pass!='yes'], 'FAIL', 'PASS')"/&gt;</pre><p>which says that if there is a <code class="literal">test</code> element whose
+<code class="literal">pass</code> attribute does not have the value <code class="literal">yes</code>, then the
+test set fails, and otherwise it passes. We may in future also add a percentage
+pass value, that counts the number of passed tests:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="@percent" calculate="100*count(//test[@pass='yes']) div count(//test)"/&gt;</pre><p>With this structure, every test form has an identical set of controls, that
+output the name of the test, an optional description (which, following XForms
+rules, is only displayed if present in the instance), whether all tests have
+passed, for quick inspection, and the list of each test with an indication of
+what was expected when it has failed:</p><pre class="programlisting" xml:space="preserve">&lt;group&gt;
+   &lt;label class="title" ref="@name"/&gt;
+   &lt;output class="block" ref="description"/&gt;
+   &lt;output class="{@pass}" ref="@pass"/&gt;
+   &lt;repeat ref="test"&gt;
+      &lt;output value="."/&gt; → &lt;output ref="@res"/&gt;
+      &lt;output class="wrong" ref="@req[.!=../@res]"/&gt;
+   &lt;/repeat&gt;
+&lt;/group&gt;</pre><p>Note that with the statement</p><pre class="programlisting" xml:space="preserve">&lt;output class="wrong" ref="@req[.!=../@res]"/&gt;</pre><p>this only selects the <code class="literal">req</code> attribute if its value does not match
+that of the <code class="literal">res</code> attribute on the same element. If they match, the
+<code class="literal">req</code> is not selected, and nothing is output.</p><p>This looks like this when run:</p><p>
+		<span class="inlinemediaobject"><img src="papers/pemberton/boolean-from-string.png" /></span>
+
+</p><p>Here is an example of a fail (and in this case with a description as
+well):</p><p>		<span class="inlinemediaobject"><img src="papers/pemberton/seconds-from-epoch.png" /></span>
+</p><p>If we want to test a function with more than one parameter, we structure the
+<code class="literal">test</code> elements slightly differently, for instance for the
+<code class="literal">compare()</code> function which has two parameters, by enclosing each
+parameter in an element of its own: </p><pre class="programlisting" xml:space="preserve">&lt;test pass="" res="" req="-1"&gt;compare(&lt;a&gt;apple&lt;/a&gt;, &lt;b&gt;orange&lt;/b&gt;)&lt;/test&gt;</pre><p>and then modify the bind that calculates the results:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="test/@res" calculate="compare(../a, ../b)"/&gt;</pre><p>Note that in the general template structure, these are the only places where
+there are differences between test cases: in the data, and in the bind
+calculating the result. The rest remains identical.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s05.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar14.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s07.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

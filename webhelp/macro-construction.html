@@ -1,0 +1,152 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Macro construction</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="xpants.html" title="XPantS" /><link rel="prev" href="xpants.html" title="XPantS" /><link rel="next" href="xpants-contents.html" title="XPantS contents" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="xpants.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="xpants-contents.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="macro-construction"><div class="titlepage"><div><div><h3 class="title">Macro construction</h3></div></div></div><p>
+      Most of the macros follow a pattern. Firstly, the main entry point
+      is a macro of the same name as the module (or file). So, for
+      example, the
+      <span class="strong"><strong>compile-schematron.xml</strong></span> file
+      contains a <span class="quote">“<span class="quote">top level</span>”</span>
+      <code class="literal">&lt;compile-schematron&gt;</code> macro. This will
+      detect the type of arguments given to it and run either the
+      <code class="literal">&lt;compile-schematorn-file&gt;</code> macro if a
+      single file is supplied or the
+      <code class="literal">&lt;compile-schematron-fileset&gt;</code> macro if a
+      fileset (or folder of files) has been given. Note that in the
+      latter case the <span class="quote">“<span class="quote">-fileset</span>”</span> macro will call the
+      <span class="quote">“<span class="quote">-file</span>”</span> macro in a loop over all files in the
+      fileset. This pattern is typical of all macros that can take
+      either a file or a fileset specification.
+    </p><p>
+      Macros will also use other macros in the library as required. For
+      example, almost all macros use macros from the
+      <span class="strong"><strong>attr-checks.xml</strong></span> module to
+      provide additional checks on their arguments, beyond that provided
+      by the Ant <code class="literal">&lt;macrodef&gt;</code>facility itself.
+    </p><p>
+      Although considerable use of the Ant Contrib
+      <code class="literal">&lt;for&gt;</code> macro is used (simply due to the
+      utility it provides) an attempt has been made to avoid other logic
+      constructs such as the
+      <code class="literal">&lt;if&gt;/&lt;then&gt;/&lt;else&gt;</code> macros. As
+      Ant is generally declarative in nature rather than imperative,
+      extensive use has been made of its built in
+      <span class="quote">“<span class="quote"><a class="link" href="https://ant.apache.org/manual/ifunless.html" target="_top" shape="rect">if/unless</a></span>”</span>
+      attributes.
+    </p><p>
+      As an example of macro construction consider the
+      <code class="literal">&lt;xspec-file&gt;</code> macro below:
+    </p><pre class="programlisting" xml:space="preserve">
+&lt;macrodef
+    name="xspec-file"
+    description="Run a single XSpec file"&gt;
+
+    &lt;attribute
+        name="file"
+        default=""
+        description="XSpec file"/&gt;
+
+    &lt;attribute
+        name="test"
+        default=""
+        description="Type of test to run [xslt,xquery,schematron]"/&gt;
+
+    &lt;attribute
+        name="coverage"
+        default="false"
+        description="Output test coverage report [true,false]"/&gt;
+
+    &lt;attribute
+        name="junit"
+        default="false"
+        description="Output JUnit report [true,false]"/&gt;
+
+    &lt;sequential&gt;
+
+        &lt;!-- fail if required attributes not set --&gt;
+        &lt;check-attr-set
+          macro="xspec-file" 
+          name="file" 
+          value="@{file}"/&gt;
+
+        &lt;check-attr-list 
+          macro="xspec-file" 
+          name="test" 
+          value="@{test}" 
+          list="xslt,xquery,schematron"/&gt;
+
+        &lt;check-attr-bool 
+          macro="xspec-file" 
+          name="coverage" 
+          value="@{coverage}"/&gt;
+        &lt;check-attr-bool 
+          macro="xspec-file" 
+          name="junit" 
+          value="@{junit}"/&gt;
+
+        &lt;!-- find XSpec command --&gt;
+        &lt;check-exe-path 
+          property="xspec.exe" 
+          unix="xspec.sh" 
+          windows="xspec.bat" 
+          unless:set="xspec.exe"/&gt;
+
+        &lt;!-- get test type --&gt;
+        &lt;local name="test.@{test}"/&gt;
+        &lt;property name="test.@{test}" value="true"/&gt;
+
+        &lt;!-- run tidy --&gt;
+        &lt;property name="exec.failonerror" value="true"/&gt;
+
+        &lt;exec
+            executable="${xspec.exe}"
+            failonerror="${exec.failonerror}"&gt;
+            &lt;arg line="-t" if:set="test.xslt"/&gt;
+            &lt;arg line="-q" if:set="test.xquery"/&gt;
+            &lt;arg line="-s" if:set="test.schematron"/&gt;
+            &lt;arg line="-c" if:true="@{coverage}"/&gt;
+            &lt;arg line="-j" if:true="@{junit}"/&gt;
+            &lt;arg line="@{file}"/&gt;
+        &lt;/exec&gt;
+
+    &lt;/sequential&gt;
+&lt;/macrodef&gt;
+</pre><p>
+      All <code class="literal">&lt;macrodef&gt;</code> elements and their related
+      <code class="literal">&lt;attribute&gt;</code>/<code class="literal">&lt;element&gt;</code>
+      children have <span class="quote">“<span class="quote">description</span>”</span> attributes—these are used
+      to generate documentation via the
+      <span class="strong"><strong>extract-markdown.xml</strong></span> module. In
+      the first section, the attributes are checked: the file name
+      cannot be blank, the type of test must be one of
+      <span class="quote">“<span class="quote">xslt</span>”</span>, <span class="quote">“<span class="quote">xquery</span>”</span> or
+      <span class="quote">“<span class="quote">schematron</span>”</span> and the values of the
+      <span class="quote">“<span class="quote">coverage</span>”</span> and <span class="quote">“<span class="quote">junit</span>”</span> attributes must
+      be <span class="quote">“<span class="quote">true</span>”</span> or <span class="quote">“<span class="quote">false</span>”</span>. The various
+      <code class="literal">&lt;check-attr-...&gt;</code> macros will fail the
+      build if these conditions are not met. (Note that Ant itself will
+      only check if attributes are required or optional, and will apply
+      their default values. It cannot check attribute types or lists of
+      allowed values). Next the system’s <span class="emphasis"><em>path</em></span> is
+      checked for the presence of the XSpec executable (this is
+      <span class="quote">“<span class="quote">xspec.sh</span>”</span> in Unix based systems and
+      <span class="quote">“<span class="quote">xspec.bat</span>”</span> for Windows). Again the build will fail
+      if the executable cannot be found.
+    </p><p>
+      Next a property is set whose name is based on the test type. So,
+      therefore, if the <span class="quote">“<span class="quote">xquery</span>”</span> test was selected the
+      <span class="quote">“<span class="quote">test.xquery</span>”</span> property will be created. This is used
+      in the <code class="literal">&lt;exec&gt;</code> macro to set the correct
+      command line arguments: the <span class="quote">“<span class="quote">test.xslt</span>”</span> and
+      <span class="quote">“<span class="quote">test.schematron</span>”</span> properties will not exist and so
+      the <span class="quote">“<span class="quote">-t</span>”</span> and <span class="quote">“<span class="quote">-s</span>”</span> arguments will not be
+      included in the call. This pattern is used extensively in the
+      XPantS library to keep the code readable (although it does require
+      familiarity with how Ant properties work).
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="xpants.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="xpants.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="xpants-contents.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,55 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Basic concepts</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar09s03.html" title="Source navigation based model" /><link rel="prev" href="ar09s03.html" title="Source navigation based model" /><link rel="next" href="ar09s03s02.html" title="Primitive operations" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar09s03s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3134"><div class="titlepage"><div><div><h3 class="title">Basic concepts</h3></div></div></div><p>As discussed in the previous section, document construction can be regarded as a
+                sequence of basic decisions concerning the questions <span class="ital">how many
+                    instances to construct</span> and <span class="ital">which character
+                    sequence to use</span> (as simple element content or attribute value).
+                Consider, for instance, the &lt;creator&gt; element. As its minimum and maximum
+                cardinality differ (being 0 and unbounded), we must take a decision how many
+                elements we will actually instantiate. However, as there may be more than one
+                &lt;publication&gt; to be constructed, the answer clearly depends on which
+                &lt;publication&gt; is considered – the question “how many instances?” cannot be
+                answered globally, but only locally, concerning &lt;creator&gt; children of a
+                particular &lt;publication&gt; element. In fact, we must ask and answer the question
+                again and again for each &lt;publication&gt; appearing in the target document.
+                Similarly, the string value to be used for @publicationYear must be determined
+                repeatedly, once for each &lt;publication&gt; element in the transformation result. </p><p>To generalize, the basic decisions concerning the instantiation of a model node
+                are taken in the context of an individual parent node. To put it differently: if the
+                parent node has been identified, the decisions can be made, which means one subset
+                of the model instances can be constructed, comprising all instances found under the
+                given parent. It is important to remember that the complete set of instances of a
+                given model node is but the union of the subsets obtained for the instances of the
+                parent model node. This enables a decomposition of the highly complex operation of
+                document construction into primitive operations - small building blocks of
+                processing which implement the basic decisions. Defining a <span class="bold"><strong>local instantiation</strong></span> of a model node as the subset of its instances
+                sharing a particular parent node, we obtain the following picture:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>Document construction = instantiation of a document model</p></li><li class="listitem"><p>Document model = a set of model nodes</p></li><li class="listitem"><p>Instantiation of a model node = a set of local instantiations of a model
+                        node</p></li><li class="listitem"><p>Local instantiation of a model node = result of a composite operation
+                        “local construction”</p></li><li class="listitem"><p>Local construction = composition of primitive operations</p></li><li class="listitem"><p>Primitive operation = implementation of a basic decision</p></li></ul></div><p>This picture amounts to a decomposition of document construction into primitive
+                operations. However, it does not give any hints how to implement those operations.
+                Its practical value depends on an extension enabling their implementation. In
+                particular, if the implementation can be derived from model and configuration data,
+                code generation becomes feasible.</p><p>Focusing on document construction by transformation of a source document, we can
+                translate the patterns observed in the previous section into formal concepts. Table
+                1 showed how the basic decisions are driven by a navigation of the source document.
+                This navigation was described as the mapping of a context of source nodes to another
+                set of source nodes which enables the decision. A formal definition of primitive
+                operations is prepared by defining input, output and semantics of these mappings.
+                Besides, having realized the importance of parent node identity, we introduce the
+                notion of a node path as a means for expressing node identity (see <a class="xref" href="ar09s03s01.html#concepts" title="Table 2. Some concepts facilitating the decomposition of document to document transformation into primitive operations." shape="rect">Table 2, “Some concepts facilitating the decomposition of document to document
+                    transformation into primitive operations.”</a>).</p><div class="table" id="concepts"><p class="title"><strong>Table 2. Some concepts facilitating the decomposition of document to document
+                    transformation into primitive operations.</strong></p><div class="table-contents"><table class="table" summary="Some concepts facilitating the decomposition of document to document&#xA;                    transformation into primitive operations." border="1"><colgroup span="1"><col width="18%" class="c1" span="1" /><col width="18%" class="c2" span="1" /><col width="18%" class="c3" span="1" /><col width="46%" class="c4" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1">Name</th><th align="left" rowspan="1" colspan="1">Abbreviation</th><th align="left" rowspan="1" colspan="1">Property of …</th><th align="left" rowspan="1" colspan="1">Semantics</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">Node path</td><td align="left" rowspan="1" colspan="1">NP</td><td align="left" rowspan="1" colspan="1">Instance node</td><td align="left" rowspan="1" colspan="1">Identifies the identity of the node</td></tr><tr><td align="left" rowspan="1" colspan="1">Source context</td><td align="left" rowspan="1" colspan="1">SC</td><td align="left" rowspan="1" colspan="1">Node path</td><td align="left" rowspan="1" colspan="1">Given a node path, a set of source nodes enabling
+                                the construction of the target node identified by the node
+                                path</td></tr><tr><td align="left" rowspan="1" colspan="1">Propagated source context</td><td align="left" rowspan="1" colspan="1">PSC<sub>parent-instance</sub></td><td align="left" rowspan="1" colspan="1">Location</td><td align="left" rowspan="1" colspan="1">Given a location and the node path of an instance of
+                                the parent location: a set of source nodes enabling the construction
+                                of the location instances which are child of the node identified by
+                                the node path</td></tr><tr><td align="left" rowspan="1" colspan="1">Source context array</td><td align="left" rowspan="1" colspan="1">SCA<sub>parent-instance</sub></td><td align="left" rowspan="1" colspan="1">Location</td><td align="left" rowspan="1" colspan="1">Given a location and the node path of an instance of
+                                the parent location: an array with members being sets of source
+                                nodes; for each member, one location instance is constructed, with a
+                                source context equal to the value of the member</td></tr></tbody></table></div></div><br class="table-break" clear="none" /></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar09s03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar09s03s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

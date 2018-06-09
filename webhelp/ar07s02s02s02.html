@@ -1,0 +1,38 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>TEI to Emblem Schema</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar07s02s02.html" title="The publication process as XProc pipeline" /><link rel="prev" href="ar07s02s02s01.html" title="Data entry and initial transformation" /><link rel="next" href="ar07s02s02s03.html" title="Emblem Schema documents" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02s02s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02s02s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e2621"><div class="titlepage"><div><div><h4 class="title">TEI to Emblem Schema</h4></div></div></div><p>
+          The transformation from TEI to Emblem Schema failed because the structural metadata document was declared to
+          be a TEI document by a DOCTYPE-declaration but the TEI namespace was not declared in the document. Instead the
+          DTD declared an <code class="sgmltag-attribute">xmlns</code> attribute with a default value of <code class="sgmltag-attvalue">http://www.tei-c.org/ns/1.0</code>. Thus in order for the namespace binding to be present the
+          XML processor had to process the DTD when loading the document. The reason why the transformation failed was
+          simply that XProc used the DTD to supply the <code class="sgmltag-attribute">xmlns</code> attribute with its default
+          value while the original transformation was initiated in PHP which disables DTD processing by default. The
+          transformation script thus expected the elements of the structural metadata document to be in the null
+          namespace, while they were placed in the TEI namespace in our pipeline.
+        </p><p> To allow for consistent namespace-aware processing we relocated the elements to the
+          TEI namespace by applying an appropriate XSL transformation and modified the existing
+          transformations accordingly. We also removed the DOCTYPE-declaration and changed the
+          inclusion mechanism of <code class="filename">facsimile.xml</code> from external entity references
+          to <a class="link" href="http://www.w3.org/TR/xinclude/" target="_top" shape="rect">XInclude</a>. The latter prompted
+          us to add a namespace declaration to <code class="filename">facsimile.xml</code>, which was
+          missing. What we did not realize back then (and still have to do) is that we need to
+          change references to the <code class="sgmltag-element">tei:graphic</code> elements due to XInclude's
+          base URI fixup. Referencing attributes like <code class="sgmltag-attribute">facs</code> are typed as
+            <code class="code">xsd:anyURI</code> and thus need to reference the originating file and not just
+          document local <code class="sgmltag-attribute">xml:id</code>s.</p><p> We furthermore noticed that all structural metadata documents defined an <code class="sgmltag-attribute">xml:base</code> attribute on the outermost element. The content of this
+          attribute varied. Some documents used the persistent URL of the digital object, some used
+          a relative URI reference denoting the object identifier with, and some without trailing
+          slash. It is unclear, why <code class="sgmltag-attribute">xml:base</code> was used in the first
+          place and what caused the variations in its content. Effectively the attribute was used as
+          if it holds the digital object identifier which happens to be the relative path to the
+          object in most cases. </p><p>
+          Although the use of <code class="sgmltag-attribute">xml:base</code> caused no apparent error we removed it to avoid
+          problems in the future.
+        </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02s02s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar07s02s02.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02s02s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

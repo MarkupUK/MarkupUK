@@ -1,0 +1,365 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Applying the model</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar10.html" title="Non-XML workflows with XProc 3.0" /><link rel="prev" href="ar10s03.html" title="XProc 3.0's new concept of a document" /><link rel="next" href="ar10s05.html" title="Conclusions" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar10s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e4347"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Applying the model</h2></div></div></div><p>The non-XML workflow to be developed here was shortly introduced above, but now let us
+            look into details and see how we could realize it in XProc 3.0. As you might
+            recall, the workflow deals with ePUBs stored somewhere on our file system. And our
+            workflow should create some RDF metadata about the ePUB's content and create an
+            inventory which has to be sent to a JSON-only web service. As said above this workflow
+            is a made-up story to explore the new possibilities of XProc 3.0. It is not a real
+            life project, but could serve as a blueprint for those.</p><p>First let us sum up, what kinds of non-XML documents are involved in our workflow:
+            First of course we have ePUBs which are essentially ZIP documents with a defined
+            structure. Then we have to produce some metadata according to the RDF model, which might
+            be represented as XML (like in RDF/XML or RDFa). But as we deal with non-XML document
+            types, we will of course use one of the text based serializations of RDF, namely Turtle.
+            The source for our metadata generation will be the Dublin core metadata information
+            expressed in the ePUB's root file. Our ePUB will typically also contain a lot of image
+            files and someone wants to know, which images are used in which ePUB. So we will have to
+            create an inventory of all the images (JPEG, PNG and GIF) in the ePUBs together with
+            their width and height. This inventory has to be in JSON because we need to send it to
+            an inventory server which only understands JSON. So we have a pretty zoo of different
+            non-XML document formats to deal with in our pipeline.</p><p>Let us start with the outermost step which has just the task of finding all ePUBs in a
+            given folder:<a href="#ftn.d5e4352" class="footnote" shape="rect"><sup class="footnote" id="d5e4352">[17]</sup></a></p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">  1 &lt;p:declare-step</strong> <span class="hl-attribute" style="color: #F5844C">version</span>=<span class="hl-value" style="color: #993300">"3.0"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"epub-folder"</span> <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"xs:anyURI"</span> <span class="hl-attribute" style="color: #F5844C">required</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    
+      <strong class="hl-tag" style="color: #000096">&lt;p:directory-list</strong> <span class="hl-attribute" style="color: #F5844C">path</span>=<span class="hl-value" style="color: #993300">"{$epub-folder}"</span> 
+  5       <span class="hl-attribute" style="color: #F5844C">include-filter</span>=<span class="hl-value" style="color: #993300">".*\.epub"</span> 
+          <span class="hl-attribute" style="color: #F5844C">recursive</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    
+      <strong class="hl-tag" style="color: #000096">&lt;p:for-each&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;p:with-input</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"//c:file"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+ 10     <strong class="hl-tag" style="color: #000096">&lt;epp:analyze-epub&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;p:with-option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"href"</span>
+              <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"concat($epub-folder,/c:file/@name)"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/epp:analyze-epub&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/p:for-each&gt;</strong>
+ 15 <strong class="hl-tag" style="color: #000096">&lt;/p:declare-step&gt;</strong></pre><p>For those readers with little or no experience in XProc, let me just say that the step
+                <code class="literal">p:directory-list</code> will produce a list of content for the directory
+            specified by <code class="literal">path</code>, in our case containing only directory entries
+            which match the regular expression given with <code class="literal">include-filter</code>. The
+            step produces an XML document with a <code class="literal">c:directory</code> root element
+            containing <code class="literal">c:file</code> or <code class="literal">c:directory</code> elements. Since
+            we are only interested in (ePUB-)files, the <code class="literal">p:for-each</code> will select
+            all the respective elements. The treatment of the ePUB is actually done in the user
+            defined step <code class="literal">epp:analyze-epub</code>, which is called with the ePUB's
+            absolute URI as option value.</p><p>Readers familiar with XProc will discover some of the new features of XProc 3.0
+            in this example: We now have typed values for options and variables (expressed by
+            attribute <code class="literal">as</code> on the <code class="literal">p:option</code>-declaration). While
+            in XProc 1.0 all values of options or variables were either strings or
+                <code class="literal">untyped atomic</code>, they can now have any value (including documents,
+            nodes, maps and arrays) and the XProc processor has to make sure they only have a value
+            of the declared type. The second point you might have discovered are the curly braces
+            and if you are familiar with XSLT just might have guessed that they are attribute value
+            templates. If so, you are right. XProc 3.0 introduces attribute value templates and
+            text value templates (as known from XSLT 3.0). AVTs prove to be very handy to write
+            shorter pipelines, because now you can use the attribute shortcut for options even if
+            they contain XPath expressions. The long form with <code class="literal">p:with-option</code> will
+            only be necessary if your XPath expression refers to the context item because the
+            context item for AVTs is undefined. This is why we have to use the explicit form in
+            supplying the value for <code class="literal">href</code> on <code class="literal">epp:analyze-epub</code>.
+            And finally you may have discovered that <code class="literal">p:directory-list</code> has a new
+            attribute, so you can decide whether you only want a listing for the top level directory
+            or also for any directory contained.<a href="#ftn.d5e4372" class="footnote" shape="rect"><sup class="footnote" id="d5e4372">[18]</sup></a> So this pipeline might have some interesting new stuff, but when it comes to
+            non-XML documents it is quite boring. So let us go on and see how we can deal with
+            non-XML documents.</p><p>The first non-XML format we have to deal with is of course ePUB which is a special
+            kind of ZIP archive. Uncompressing and compressing this kind of archive format is
+            already essential to many traditional XProc workflows, because it is not only needed for
+            ePUBs but is also the underlying format for “docx”. Using the framework of
+            XProc 1.0 two different approaches have been developed to deal with archives: The
+            step <code class="literal">pxp:unzip</code>, proposed by the EXProc-community allows you to
+            extract one document which will appear on the step's output port: If the document has an
+            XML context-type, the document itself appears, but for every other document a
+                <code class="literal">c:data</code> document is returned which contains the base64-encoded
+            representation of the selected zip's content. This approach is totally in line with
+            XProc's basic concept, but obviously has a lot of limitations. The second approach to
+            deal with ZIP archives is represented by the step <code class="literal">tr:unzip</code> which is
+            part of the <code class="literal">transpect</code>-framework developed by le-tex publishing services.<a href="#ftn.d5e4379" class="footnote" shape="rect"><sup class="footnote" id="d5e4379">[19]</sup></a> This step extracts a complete ZIP archive (or a single entry) to a specified
+            destination folder in the file system. Here the XML-only limitation is circumvent by
+            writing to the file system instead of exposing the base64-encoded content on a result
+            port. But it obviously breaks away from the concept of documents following between steps
+            on ports.</p><p>In XProc 3.0 we can now have the best of the two approaches: Thanks to the
+            extension of the document model now XML and non-XML documents can flow on the output
+            ports of a new <code class="literal">uncompress</code> step, which might have the following
+            signature:<a href="#ftn.d5e4383" class="footnote" shape="rect"><sup class="footnote" id="d5e4383">[20]</sup></a></p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:declare-step</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"xpc:uncompress"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:input</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"source"</span> <span class="hl-attribute" style="color: #F5844C">content-types</span>=<span class="hl-value" style="color: #993300">"*/*"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:output</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"manifest"</span> <span class="hl-attribute" style="color: #F5844C">sequence</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:output</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"result"</span> <span class="hl-attribute" style="color: #F5844C">content-types</span>=<span class="hl-value" style="color: #993300">"*/*"</span> 
+      <span class="hl-attribute" style="color: #F5844C">sequence</span>=<span class="hl-value" style="color: #993300">"true"</span> <span class="hl-attribute" style="color: #F5844C">primary</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"include-filter"</span> <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"xs:string+"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"exclude-filter"</span> <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"xs:string+"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"method"</span> <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"xs:token"</span> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"'zip'"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/p:declare-step&gt;</strong></pre><p>The ZIP-archive flows into this step on the port <code class="literal">source</code> which
+            intentionally accepts all content types. The first reason is that ZIP archives can
+            appear with many different media types where some do not even have the suffix “zip”. The
+            second reason is, that this step is designed as a kind of Swiss knife for different
+            kinds of archive formats. The documents contained in the archive flow out on the port
+                <code class="literal">result</code>, which is the primary output port. For a typical archive
+            this will be a sequence of different document types, where each document is a pair of a
+            representation and its document properties. The options
+                <code class="literal">include-filter</code> and <code class="literal">exclude-filter</code> can be used
+            to control, which entries from the archive should appear on the output port. Like the
+            options with the same names used on XProc's standard step
+                <code class="literal">p:directory-list</code> they are interpreted as regular expressions used
+            to match the names of the archives entries. Unlike its predecessor the step now make use
+            of XProc's new alignment to the XDM type universe. So we can now supply a sequence of
+            regular expressions and say, that an archive's entry is returned on the output port, if
+            its name is matched by at least one of the regular expressions on
+                <code class="literal">include-filter</code> and by none of the regular expressions of
+                <code class="literal">exclude-filter</code>. Obviously this gives you a very powerful
+            mechanism to control, which entries are extracted from the archive and which are
+            not.</p><p>Now let us put this step into action in the workflow we have to design. We are not
+            interested in all archive entries, but only in the image files (since we have to create
+            an inventory of them) and the root file, since it contains the metadata we are after.
+            For brevity I will skip the problem of identifying the ePUB's root file by inspecting
+            entry “META-INF/container.xml”. We will guess, that the root file is found in a document
+            named “package.opf". Also for brevity the following pipeline will read the ePUB twice,
+            once to extract the root file and another time to extract the graphic files. In a real
+            life project one would probably only open the ePUB once for efficiency reasons and then
+            split the resulting sequence into the root file and the graphic files. Here is what our
+            step <code class="literal">epp:analyze-epub</code> might look like:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:declare-step</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"epp:analyze-epub"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"href"</span> <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"xs:anyURI"</span> <span class="hl-attribute" style="color: #F5844C">required</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;xpc:uncompress</strong> <span class="hl-attribute" style="color: #F5844C">include-filter</span>=<span class="hl-value" style="color: #993300">".*/package\.opf"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:with-input</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"{$href}"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/xpc:uncompress&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;epp:extract-metadata /&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;xpc:uncompress&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:with-input</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"{$href}"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:with-option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"include-filter"</span>
+      <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"('.*\.jpg', '.*\.png', '.*\.gif')"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/xpc:uncompress&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;epp:create-inventory /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/p:declare-step&gt;</strong></pre><p>If you look at this short pipeline, I think you will recognize how natural it is now
+            to work with non-XML documents in XProc 3.0. We extract an XML document named
+            “package.opf” from the ePUB and let it flow into step
+                <code class="literal">epp:extract-metadata</code> and we extract the relevant graphic files
+            from the ePUB and let a sequence of non-XML document flow into step
+                <code class="literal">epp:create-inventory</code>.</p><p>Now let us turn to the conversion of the Dublin core metadata contained in
+                <code class="literal">opf:metadata</code> of the ePUB's root file into the Turtle
+            serialization of an RDF graph. By looking at the ePUB's root file, we will find the
+            metadata as the following example
+            shows:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;opf:metadata</strong>
+    <span class="hl-attribute" style="color: #F5844C">xmlns:opf</span>=<span class="hl-value" style="color: #993300">"http://www.idpf.org/2007/opf"</span>
+    <span class="hl-attribute" style="color: #F5844C">xmlns:dc</span>=<span class="hl-value" style="color: #993300">"http://purl.org/dc/elements/1.1/"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;dc:identifier&gt;</strong>urn:isbn:978-80-906259-2-1<strong class="hl-tag" style="color: #000096">&lt;/dc:identifier&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;dc:title&gt;</strong>XML Prague 2017<strong class="hl-tag" style="color: #000096">&lt;/dc:title&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;dc:language&gt;</strong>en<strong class="hl-tag" style="color: #000096">&lt;/dc:language&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;dc:creator&gt;</strong>Jiří Kosek<strong class="hl-tag" style="color: #000096">&lt;/dc:creator&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;dc:date&gt;</strong>2017<strong class="hl-tag" style="color: #000096">&lt;/dc:date&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/opf:metadata&gt;</strong></pre><p>From this format we need to generate a Turtle serialization which should look like
+            this:</p><pre class="programlisting" xml:space="preserve">&lt;urn:isbn:978-80-906259-2-1&gt;
+  dc:title "XML Prague 2017" ;
+  dc:language "en" ;
+  dc:creator "Jiří Kosek" ;
+  dc:date "2017" .</pre><p>I think the first intuition of many readers will be to use XSLT for this conversion.
+            As an XProc author I would definitely agree with this intuition and write an XSLT
+            stylesheet called by XProc's <code class="literal">p:xslt</code> to invoke the transformation.
+            With XProc 3.0 this is possible because the text document created by XSLT is now a
+            first class citizen of a pipeline and there is no need anymore to wrap it in an element
+            node to make it an XML document.</p><p>But as this paper deals with non-XML documents in XProc 3.0, let us see, how this
+            could be done without invoking an XSLT transformation. The following fragment shows how
+            one might do it:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:variable</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"id"</span> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"/opf:metadata/dc:identifier"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;p:for-each&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:with-input</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"/opf:metadata/dc:*[not(name(.) = 
+      'dc:identifier')]"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:variable</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"entry"</span> <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"document-node()"</span> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"."</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:identity&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:with-input&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;p:inline</strong> <span class="hl-attribute" style="color: #F5844C">content-type</span>=<span class="hl-value" style="color: #993300">"text/turtle"</span><strong class="hl-tag" style="color: #000096">
+        &gt;</strong>{$entry/*/name()} "{$entry/*/text()}"<strong class="hl-tag" style="color: #000096">&lt;/p:inline&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/p:with-input&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/p:identity&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/p:for-each&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;xpc:aggregate-text</strong> <span class="hl-attribute" style="color: #F5844C">separator</span>=<span class="hl-value" style="color: #993300">" ; &amp;#xD;"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;xpc:add-text</strong> <span class="hl-attribute" style="color: #F5844C">text</span>=<span class="hl-value" style="color: #993300">"&amp;lt;{$id}&amp;gt; &amp;#xD;"</span> <span class="hl-attribute" style="color: #F5844C">position</span>=<span class="hl-value" style="color: #993300">"before"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;xpc:add-text</strong> <span class="hl-attribute" style="color: #F5844C">text</span>=<span class="hl-value" style="color: #993300">"."</span> <span class="hl-attribute" style="color: #F5844C">position</span>=<span class="hl-value" style="color: #993300">"after"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong></pre><p>Here a text value template (known from XSLT) is used to create a text document for
+            every element entry in the Dublic core namespace. We have to use the variable
+                <code class="literal">entry</code> (which is a document node), because as for AVTs the context
+            item is undefined for TVTs. What appears on the output port of
+                <code class="literal">p:for-each</code> is a sequence of text documents, each containing the
+            predicate and the object of a statement. The step <code class="literal">xpc:aggregate-text</code>
+            then takes this sequence of text documents to create one single text document. Between
+            two adjacent text documents a semicolon and a carriage return is inserted. And finally
+            the two appearances of <code class="literal">xpc:add-text</code> put the ePUB's identifier in
+            front of text and a colon behind it so we have a valid Turtle statement.</p><p>As you can see, text based format like Turtle can be very easily created using the new
+            features introduced with XProc 3.0. Currently the standard step library does not
+            contain any steps dealing especially with text documents. The two steps used in the
+            previous example are pretty good candidates for this, but I am not sure they will make
+            it into the final library. The reason here is, that both steps can be written in XProc
+            itself using the string functions provided by XPath. So it might be a question of
+            principle whether to include such steps in the standard library which would make
+            pipeline authoring more convenient or ask the authors to import their XProc
+            implementation into their pipeline every time they need this functionality.</p><p>When it comes to RDF itself as a theoretical concept, there is currently no support in
+            XProc 3.0. Of course RDF/XML and RDFa are supported as they are XML documents and
+            text based serialization formats of a graph can be handled as we have just seen. But an
+            RDF graph as a theoretical concept in opposition to its various representations is
+            currently not one of XProc's document types. The XProc Next Community Group has
+            mentioned RDF several times in their discussions at the various meetings, but not really
+            tackled the topic yet.<a href="#ftn.d5e4416" class="footnote" shape="rect"><sup class="footnote" id="d5e4416">[21]</sup></a> There might be good reasons to extend the current document model by RDF
+            graphs. The RDF document type would be independent of any serialization form and there
+            could be steps to parse a serialization form to an abstract graph and to serialize the
+            graph. Additionally we could have steps, that add triples to a graph or remove a
+            specific triple etc. Going further one could wish for a step to validate the graph with
+            SHACL or another step to query the graph with SPARQL. In his paper for XML Prague 2018
+            Hans-Jürgen Rennau <a class="xref" href="bi10.html#Rennau_2018" title="Combining graph and tree: writing SHAX, obtaining SHACL, XSD and more" shape="rect">[5]</a> argues that XML and RDF are
+            complementary concepts and that <span class="quote">“<span class="quote">an integration of RDF and XML technologies is a
+                very promising goal.</span>”</span> Given our previous discussion one might think of XProc
+            as one of the places where this integration might take place. But as I said before,
+            there is no decision on whether RDF graphs will become part of XProc's document model.
+            And there might be doubts they will make it, because sometimes its better to get things
+            done, than to get things perfect.</p><p>Let us go back to our workflow example. Having dealt with ZIP archives and ePUBs, text
+            documents and Turtle we now have to turn to the last open point of our workflow which is
+            to create a JSON inventory of the image files contained in the ePUB. Given the fact one
+            of XProc's mayor use cases today is in publishing, the lack of support for images and
+            image processing is surely striking. Pipeline authors had to step in here and write
+            their own extension steps to do at least some rudimentary image processing.<a href="#ftn.d5e4422" class="footnote" shape="rect"><sup class="footnote" id="d5e4422">[22]</sup></a> But this is typically only an in house solution because you have to write
+            these steps in the programming language the XProc processor used is written in and you
+            have to make known these steps to the processor in some vendor specific way. Pipelines
+            using these steps are not interoperable with other XProc processors or other
+            configurations of the same processor.<a href="#ftn.d5e4426" class="footnote" shape="rect"><sup class="footnote" id="d5e4426">[23]</sup></a></p><p> As we saw above, XProc 3.0 changes this with the introduction of the new
+            document model which allows images to be loaded in a pipeline and to flow between steps.
+            Currently there are no special steps dealing with images, but you can easily imagine
+            steps that extract data from an image document or do some image processing e.g. scaling.
+            And finally it is now very easy to create an ePUB containing XML documents and images
+            alike. The old workaround was to create an intermediate folder on the file system,
+            storing all XML documents into this folder and copying all the images there too, and
+            then call a step to create an archive from the respective folder. With the new document
+            model you will not need this workaround anymore but can simply have a zipping step,
+            taking all the (XML and non-XML) documents on its input port sequence and creating an
+            archive from it to appear on the output port.</p><p>As you might recall, the workflow we are designing, involves some image processing
+            because we are requested to create an inventory of all the image files contained in an
+            ePUB and this inventory has to contain the dimensions of the images as well. For this we
+            need a step that takes an image document on its input port and produces an XML document
+            containing the required information on its output port. The signature of such a step
+            might look like this:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:declare-step</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"xpc:image-profile"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:input</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"source"</span> 
+    <span class="hl-attribute" style="color: #F5844C">content-types</span>=<span class="hl-value" style="color: #993300">"image/jpeg image/png image/gif"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:output</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"result"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/p:declare-step&gt;</strong></pre><p>On the step's output port an XML document appears containing information about the
+            image, which might look like this:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;c:image-profile&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;c:image-property</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"name"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"pic1.jpg"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;c:image-property</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"mimetype"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"image/jpeg"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;c:image-property</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"width"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"300"</span> <span class="hl-attribute" style="color: #F5844C">unit</span>=<span class="hl-value" style="color: #993300">"px"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;c:image-property</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"height"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"500"</span> <span class="hl-attribute" style="color: #F5844C">unit</span>=<span class="hl-value" style="color: #993300">"px"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <em class="hl-comment" style="color: silver">&lt;!-- more properties to come here --&gt;</em>
+<strong class="hl-tag" style="color: #000096">&lt;/c:image-profile&gt;</strong></pre><p>The XProc Next Community Group has not decided yet about the format of the resulting
+            XML document. As for some applications the use of attributes seems to be convenient,
+            other applications may prefer to have the properties as element names and the values as
+            text children of these elements. There is no reason why such a step should not have an
+            option allowing the pipeline author to select between these and other possible formats.
+            Actually for the workflow discussed in this paper it would be very handy, if the output
+            is not restricted to different varieties of XML documents, but could also be a JSON
+            document, as we have to send the graphics inventory to a JSON only web service.</p><p>So it comes to JSON as the last data format or document type we have to consider in
+            our workflow. From what we have done so far, we could have an XML document containing
+            all the <code class="literal">c:image-profile</code> documents for the image files of an ePUB.<a href="#ftn.d5e4437" class="footnote" shape="rect"><sup class="footnote" id="d5e4437">[24]</sup></a> And there are different ways to produce the lexical JSON we would like to
+            send to a web service:</p><p>The first way to produce a JSON representation of this document has little to do with
+            the newly introduced JSON document type in XProc, but uses text documents as a vehicle
+            for lexical JSON. And of course it makes use of the XPath function
+                <code class="literal">fn:xml-to-json()</code> which takes an XML document in a special
+            designed vocabulary as an argument and returns a string conforming to the JSON grammar.
+            Since we need a textual representation of the JSON document if we want to send it to a
+            web service, the string result here is fine for us. If we would need actual JSON,
+            calling the function <code class="literal">fn:parse-json()</code> with the previous function
+            call's result as a parameter would do the job. All we need to do to generate the JSON
+            document therefore is (1) call an XSLT stylesheet that takes our source document and
+            transforms it into the XML format expected for <code class="literal">fn:xml-to-json()</code> and
+            (2) create the request document for <code class="literal">p:http-request</code>.</p><p>The second possible strategy to create a lexical JSON representation of our image
+            inventory document is to create the text document directly with XSLT without the
+            intermediate step of creating an XML-document in a format suitable for calling
+                <code class="literal">fn:xml-to-json()</code>. This might be a plausible strategy too, but as
+            XML to XML transformation with XSLT is an everyday job, one might be better off doing
+            this and leaving the problem of transformation to JSON to the processor's built-in
+            function.</p><p>Thirdly we could create the lexical JSON document directly in XProc as we have done
+            with Turtle in the example above. Lexical JSON and Turtle are both text based formats so
+            using XProc 3.0's new text documents seems to be a practicable way.</p><p>Taking all these possibilities together, one might come up with the question if the
+            JSON document type introduced with XProc 3.0 has a meaningful purpose at all.<a href="#ftn.d5e4453" class="footnote" shape="rect"><sup class="footnote" id="d5e4453">[25]</sup></a> The underlying impression is boosted by the fact, that the only step
+            currently defined for JSON documents is <code class="literal">p:load</code>. One might expect,
+            that one processor or the other additionally may support JSON documents in
+                <code class="literal">p:store</code> (as non-XML serialization is an optional feature). As no
+            other step is currently defined in XProc's standard library one has either to rely on
+            the processor or site specific extension steps or (as I would expect) convert JSON to
+            XML (<code class="literal">fn:json-to-xml()</code>) and back (<code class="literal">fn:xml-to-json()</code>).<a href="#ftn.d5e4459" class="footnote" shape="rect"><sup class="footnote" id="d5e4459">[26]</sup></a> This shortcoming may in part be due to the pending update of the step
+            library. For example: XSLT 3.0 widened the concept of the “initial context node” to
+            the new concept of the “initial match selection”, which includes not only a sequence of
+            documents, but also a sequence of parentless items like (XDM) values and maps. This
+            change in the underlying technology will most certainly be reflected in an updated
+            signature of <code class="literal">p:xslt</code>.<a href="#ftn.d5e4463" class="footnote" shape="rect"><sup class="footnote" id="d5e4463">[27]</sup></a> And this updated signature might also allow JSON documents to flow into the
+            input port of <code class="literal">p:xslt</code>. Along this line of thinking
+                <code class="literal">p:xquery</code> might be another step where JSON documents flow in (and
+            out).</p><p>Another way to make JSON documents more useful to pipeline authors may be the
+            introduction of JSON specific steps into XProc 3.0's standard step library.
+            Concerning our task to create a JSON document from the sequence of XML documents with
+            image information, a step that creates a JSON document containing a map and a step that
+            joins a sequence of JSON documents with maps to one single JSON document would be
+            helpful. Omitting the exact specification of such steps, a possible pipeline might look
+            like this:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:for-each&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:output</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"json-info"</span> <span class="hl-attribute" style="color: #F5844C">content-type</span>=<span class="hl-value" style="color: #993300">"application/json"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:variable</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"props"</span> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"[
+      xs:string(//*[@name='mimetype']/@value),
+      xs:string(//*[@name='width']/@value),
+      xs:string(//*[@name='height']/@value
+    ]"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;xpc:json-document&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:with-option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"value"</span> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"
+      map{xs:string(//*[@name='name']/@value) : $props}
+    "</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/xpc:json-document&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/p:for-each&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;xpc:aggreate-json-map /&gt;</strong></pre><p>The result here should be a JSON document containing a map, where in each map entry the key
+            corresponds to the name of the image file and the value of each entry is an array
+            containing the mime type, the width and the height as strings in that order. Obviously
+            this might be done in a more elegant way, but as we are concerned only with the basic
+            concepts here, this example might be sufficient.</p><p>Thinking along these lines we might invent other JSON specific steps which might be
+            useful in pipelines. If we restrict our selves to JSON documents that are maps, one
+            might think about a step, that adds one entry to the map:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:declare-step</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"xpc:add-to-json-map"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:input</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"source"</span> <span class="hl-attribute" style="color: #F5844C">content-types</span>=<span class="hl-value" style="color: #993300">"application/json"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"key"</span> <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"xs:string"</span> <span class="hl-attribute" style="color: #F5844C">required</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"value"</span> <span class="hl-attribute" style="color: #F5844C">required</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/p:declare-step&gt;</strong></pre><p>And then of course we would also need a step to remove a key/value entry from a map
+            e.g. by giving a key.</p><p>But the key problem to me with JSON documents still is their connection to XPath and
+            XDM which is, as I said above, currently missing in XProc 3.0: While we are able to
+            express something like “remove the third child element of this node in this XML
+            document” for XML documents, we are not able to say “remove the third key/value pair
+            from the map in this JSON document”. We might invent some steps for JSON documents, but
+            currently we are limited to mutations of the top level map (or array) since we are not
+            able to say something like “select entry four of the array that is associated with key
+                <code class="literal">a</code>”.</p><p>The other problem of course is, that JSON and JSON documents can not be mapped to XDM
+            instances on a 1:1 basis: This is because a JSON document (at its “root”) may either be
+            a map or an array or an atomic value. Therefore the above proposed step
+                <code class="literal">xpc:add-to-json-map</code> is quite naive because it presupposes, that
+            the JSON document on the source port contains a map. But if the top level object of this
+            document is not a map, an error would be raised most probably. And this error could not
+            be avoided by a prior checking, because currently there is no way to ask, whether the
+            top level object of a JSON document is a map or something else.</p><p>To sum up our discussion of JSON documents I think it is fair to say, that some more
+            work has to be done, to make them really useful to pipeline authors. This (preliminary)
+            assessment is surely contrasted by the fact, that we can do a lot of useful things with
+            JSON in XProc 3.0, because we now have maps and arrays for variables and options,
+            and we have text documents for lexical JSON. Finally with the XML representation of JSON
+            invented for XPath 3.1 we have a lossless way of representing JSON in XML, can make
+            use of all the XProc steps to manipulate the document and then put it back to lexical
+            JSON in order to store it or send it to the web.</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e4352" class="footnote"><p><a href="#d5e4352" class="para" shape="rect"><sup class="para">[17] </sup></a>To keep the following code readable, I will omit all namespace declarations.</p></div><div id="ftn.d5e4372" class="footnote"><p><a href="#d5e4372" class="para" shape="rect"><sup class="para">[18] </sup></a>As of May 2018 you will not find this option in the specification, as we have
+                    not done much work on the standard step library yet. There was a request for
+                    this feature which I think is very handy, but the name of the option and its
+                    exact behaviour can not be taken for granted yet.</p></div><div id="ftn.d5e4379" class="footnote"><p><a href="#d5e4379" class="para" shape="rect"><sup class="para">[19] </sup></a>See http://transpect.github.io/modules-unzip-extension.html.</p></div><div id="ftn.d5e4383" class="footnote"><p><a href="#d5e4383" class="para" shape="rect"><sup class="para">[20] </sup></a>Again, this exact specification of this step is not formalized in the specification yet. It is
+                    pretty sure that such a step will be part of XProc 3.0's standard step
+                    library, but the exact signature (e.g. names and types of the options) and the
+                    step's exact behaviour is still under discussion.</p></div><div id="ftn.d5e4416" class="footnote"><p><a href="#d5e4416" class="para" shape="rect"><sup class="para">[21] </sup></a>For XProc 1.0 there are some attempts to deal with RDF documents. The
+                    most prominent are, of course, the RDF extension steps for XMLCalabash.<a class="xref" href="bi10.html#Walsh_XMLCalabash" title="XML Calabash Reference" shape="rect">[4]</a></p></div><div id="ftn.d5e4422" class="footnote"><p><a href="#d5e4422" class="para" shape="rect"><sup class="para">[22] </sup></a>See for example the steps <code class="literal">image-identify</code> and
+                        <code class="literal">image-transform</code> from le-tex's transpect framework.</p></div><div id="ftn.d5e4426" class="footnote"><p><a href="#d5e4426" class="para" shape="rect"><sup class="para">[23] </sup></a>See <a class="xref" href="bi10.html#Berndzen_Imsieke_2016" title="Interoperability of XProc pipelines" shape="rect">[6]</a>, especially section 5.</p></div><div id="ftn.d5e4437" class="footnote"><p><a href="#d5e4437" class="para" shape="rect"><sup class="para">[24] </sup></a>For brevity  the XProc snippet is left out here: It is just a
+                        <code class="literal">p:for-each</code> iteration over the image documents delivered
+                    from <code class="literal">uncompress</code>, calling <code class="literal">xpc:image-profile</code>
+                    on each and do a <code class="literal">p:wrap-sequence</code> on the sequence flowing out
+                    of the <code class="literal">p:for-each</code>.</p></div><div id="ftn.d5e4453" class="footnote"><p><a href="#d5e4453" class="para" shape="rect"><sup class="para">[25] </sup></a>To avoid misunderstanding: We are talking about JSON documents as an XProc
+                    document type not about maps and arrays as part of XDM. Having variables and
+                    options that can contain maps and arrays is useful without doubt. Replacing
+                    parameter ports with maps should count as a prove.</p></div><div id="ftn.d5e4459" class="footnote"><p><a href="#d5e4459" class="para" shape="rect"><sup class="para">[26] </sup></a>See the above discussion on implementation defined aspects of
+                        <code class="literal">p:cast-content-type</code>.</p></div><div id="ftn.d5e4463" class="footnote"><p><a href="#d5e4463" class="para" shape="rect"><sup class="para">[27] </sup></a>To ensure compatibility with legacy pipelines or to allow the use of
+                    XSLT 2.0-only processors, one might also think of adding a new step for
+                    XSLT 3.0 transformation.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar10s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar10.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

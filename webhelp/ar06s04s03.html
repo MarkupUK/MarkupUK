@@ -1,0 +1,40 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Left and Right Page Headers: :left and :right</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar06s04.html" title="Headers and Footers" /><link rel="prev" href="ar06s04s02s07.html" title="Total pages : counter(pages)" /><link rel="next" href="ar06s04s04.html" title="Last and only pages: :last and :only" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar06s04s02s07.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar06s04s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1912"><div class="titlepage"><div><div><h3 class="title">Left and Right Page Headers: <code class="code" id="page-left">:left</code> and <code class="code" id="page-right">:right</code></h3></div></div></div><p>You can set left and right margins as well as headers and footers<a href="#ftn.d5e1917" class="footnote" shape="rect"><sup class="footnote" id="d5e1917">[4]</sup></a> separately for left and right pages. These may be different again for the first page. You can also hide the titles and page number from the left-hand side of the left pages and the right-hand side of the right pages when it is the first page.</p><p>When used together with named pages, the style of the left and right pages and of the first page of each named page can be specified.</p><pre class="programlisting" xml:space="preserve">
+@page <span class="bold"><strong>Chapter:left</strong></span> {     /* left page setting */
+  margin-left: 23mm;
+  margin-right: 27mm;
+
+  @top-left {     /* book title in the running head of the left page */
+    content: string(Title);
+  }
+  @bottom-left {  /* page number */
+    content: counter(page);
+  }
+}
+
+@page <span class="bold"><strong>Chapter:right</strong></span> {    /* right page setting */
+  margin-left: 27mm;
+  margin-right: 23mm;
+
+  @top-right {    /* section title in the running head of the right page */
+    content: string(Section);
+  }
+  @bottom-right { /* page number */
+    content: counter(page);
+  }
+}
+
+@page <span class="bold"><strong>Chapter:first</strong></span> {    /* setting of the first page of a Chapter */
+  /* hide page header */
+  @top-right { content: none }
+  @top-left  { content: none }
+}
+</pre><div class="figure" id="d5e1927"><p class="title"><strong>Figure 9. Three pages with different headers and footers</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="70%"><tr><td rowspan="1" colspan="1"><img src="papers/graham/images/FirstPage.svg" width="100%" alt="Three pages with different headers and footers" /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e1917" class="footnote"><p><a href="#d5e1917" class="para" shape="rect"><sup class="para">[4] </sup></a>Use <code class="code">string(Title)</code> and <code class="code">string(Chapter)</code>, see <a class="xref" href="StringSet.html" title="Variable strings : string-set property" shape="rect">the section called “Variable strings : <code class="code">string-set</code> property”</a>.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar06s04s02s07.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar06s04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar06s04s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

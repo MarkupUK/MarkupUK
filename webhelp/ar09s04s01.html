@@ -1,0 +1,129 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Metadata item model</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="section-metadata-model.html" title="Metadata model SNAT (Source Navigation Annotated Target tree)" /><link rel="prev" href="section-metadata-model.html" title="Metadata model SNAT (Source Navigation Annotated Target tree)" /><link rel="next" href="ar09s04s02.html" title="Advanced features" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="section-metadata-model.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar09s04s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3283"><div class="titlepage"><div><div><h3 class="title">Metadata item model</h3></div></div></div><p>The following table describes the most important metadata attributes in terms of a
+                name and semantics. It also indicates the scope of the attributes, which is the set
+                of location nodes where this attribute may appear. The scope is defined by
+                constraints imposed on the location properties. The @src item, for example, appears
+                only on locations with simple content, and @for-each, @group-by and @sort-by appear
+                only on locations with a maximum cardinality greater 1. By default, all attribute
+                values are interpreted as XQuery expressions. Exceptions are enabled by special
+                syntax rules not described here.</p><div class="table" id="table-metadata-items"><p class="title"><strong>Table 4. The metadata model of a SNAT (Source Navigation Annotated Target tree). Each
+                    kind of metadata is modeled in terms of an attribute name, value semantics and
+                    attribute scope, which restricts the use of this attribute to locations with
+                    certain properties. The column Gen? indicates whether the attribute is generated
+                    as part of the initial SNAT tree generated from the target XSD (Y) or added to
+                    the generated SNAT tree by hand if required (N).</strong></p><div class="table-contents"><table class="table" summary="The metadata model of a SNAT (Source Navigation Annotated Target tree). Each&#xA;                    kind of metadata is modeled in terms of an attribute name, value semantics and&#xA;                    attribute scope, which restricts the use of this attribute to locations with&#xA;                    certain properties. The column Gen? indicates whether the attribute is generated&#xA;                    as part of the initial SNAT tree generated from the target XSD (Y) or added to&#xA;                    the generated SNAT tree by hand if required (N)." border="1"><colgroup span="1"><col width="13%" class="c1" span="1" /><col width="20%" class="c2" span="1" /><col width="40%" class="c3" span="1" /><col width="20%" class="c4" span="1" /><col width="7%" class="c5" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1">Attribute name</th><th align="left" rowspan="1" colspan="1">Location properties</th><th align="left" rowspan="1" colspan="1">Meaning</th><th align="left" rowspan="1" colspan="1">Example</th><th align="left" rowspan="1" colspan="1">Gen?</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">alt</td><td align="left" rowspan="1" colspan="1">Location of an element or attribute which is
+                                optional</td><td align="left" rowspan="1" colspan="1">XPath expression, evaluated if @src or @ctxt yields
+                                the empty sequence; the value of @alt is used as if yielded by @src
+                                or @ctxt, respectively</td><td align="left" rowspan="1" colspan="1">"#UNKNOWN"</td><td align="left" rowspan="1" colspan="1">Y</td></tr><tr><td align="left" rowspan="1" colspan="1">atom</td><td align="left" rowspan="1" colspan="1">Location of a simple content element or
+                                attribute</td><td align="left" rowspan="1" colspan="1">XPath expression, evaluated in a context binding
+                                variable $v to the value of an accompanying @src; if specified, the
+                                value of @atom, rather than the concatenated string values of @src,
+                                is used as element content or attribute value</td><td align="left" rowspan="1" colspan="1">substring($v, 1, 3)</td><td align="left" rowspan="1" colspan="1">N</td></tr><tr><td align="left" rowspan="1" colspan="1">case</td><td align="left" rowspan="1" colspan="1">Child of a choice group descriptor
+                                    (<code class="code">z:_choice_</code>)</td><td align="left" rowspan="1" colspan="1">XPath expression; the selected choice branch is the
+                                first child of <code class="code">z:_choice_</code> whose @case has a true
+                                effective Boolean value</td><td align="left" rowspan="1" colspan="1">@Success eq "false"</td><td align="left" rowspan="1" colspan="1">Y</td></tr><tr><td align="left" rowspan="1" colspan="1">ctxt</td><td align="left" rowspan="1" colspan="1">Location of a complex element with maximum
+                                cardinality equal 1</td><td align="left" rowspan="1" colspan="1">XPath expression; its value is used as the
+                                propagated source context</td><td align="left" rowspan="1" colspan="1">PubInfo/Address</td><td align="left" rowspan="1" colspan="1">Y</td></tr><tr><td align="left" rowspan="1" colspan="1">dflt</td><td align="left" rowspan="1" colspan="1">Location of a simple content element or attribute
+                                which is mandatory</td><td align="left" rowspan="1" colspan="1">XPath expression, evaluated if @src yields the empty
+                                sequence; the value of @default is used as if yielded by
+                                @src</td><td align="left" rowspan="1" colspan="1">"?"</td><td align="left" rowspan="1" colspan="1">Y</td></tr><tr><td align="left" rowspan="1" colspan="1">for-each</td><td align="left" rowspan="1" colspan="1">Location of an element with maximum cardinality
+                                &gt;1</td><td align="left" rowspan="1" colspan="1">XPath expression; its value is used as the
+                                propagated source context; if not accompanied by @group-by, one
+                                target instance per value item is constructed, otherwise one target
+                                instance per group of value items</td><td align="left" rowspan="1" colspan="1">books/book</td><td align="left" rowspan="1" colspan="1">Y</td></tr><tr><td align="left" rowspan="1" colspan="1">group-by</td><td align="left" rowspan="1" colspan="1">Location of an element with maximum cardinality &gt;
+                                1</td><td align="left" rowspan="1" colspan="1">XPath expression, evaluated in the context of each
+                                value item yielded by @for-each; for each group of items with equal
+                                @group-by, one target instance is instantiated</td><td align="left" rowspan="1" colspan="1">../author/surName</td><td align="left" rowspan="1" colspan="1">N</td></tr><tr><td align="left" rowspan="1" colspan="1">if</td><td align="left" rowspan="1" colspan="1">Location of a complex element which is
+                                optional</td><td align="left" rowspan="1" colspan="1">XPath expression, evaluated in the context of the
+                                value of an accompanying @ctxt; if specified, the element is only
+                                instantiated if the effective Boolean value of @if is true</td><td align="left" rowspan="1" colspan="1">.//(au, ed, py)</td><td align="left" rowspan="1" colspan="1">N</td></tr><tr><td align="left" rowspan="1" colspan="1">sort-by, sort-by2, sort-by3 </td><td align="left" rowspan="1" colspan="1">Location of a complex element with maximum
+                                cardinality &gt; 1</td><td align="left" rowspan="1" colspan="1">XPath expressions, optionally following by the
+                                string “DESCENDING”, used to control the order of value items
+                                received from @for-each</td><td align="left" rowspan="1" colspan="1">author/surName</td><td align="left" rowspan="1" colspan="1">N</td></tr><tr><td align="left" rowspan="1" colspan="1">src</td><td align="left" rowspan="1" colspan="1">Location of a simple content element or
+                                attribute</td><td align="left" rowspan="1" colspan="1">XPath expression; selects the nodes providing the
+                                information used as element content or attribute value</td><td align="left" rowspan="1" colspan="1">author/surName</td><td align="left" rowspan="1" colspan="1">Y</td></tr></tbody></table></div></div><br class="table-break" clear="none" /><p>An example SNAT and the transformer code generated from it are shown by the
+                following two listings.</p><div class="example" id="d5e3366"><p class="title"><strong>Example 2. SNAT document, defining the transformation described as an introductory
+                    example.</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">
+&lt;z:snats xmlns:z="http://www.xsdplus.org/ns/structure"&gt;
+  &lt;z:prolog/&gt;    
+  &lt;z:snat&gt;
+    &lt;<span class="bold"><strong>publications</strong></span> <span class="bold"><strong><span class="italics">ctxt</span></strong></span>="<span class="underline"><span class="italic">books</span></span>"&gt;
+      &lt;z:_attributes_&gt;
+        &lt;<span class="bold"><strong>updatedAt</strong></span> <span class="bold"><strong><span class="italics">src</span></strong></span>="<span class="underline"><span class="italic">@lastUpdate</span></span>" <span class="bold"><strong><span class="italic">alt</span></strong></span>=""/&gt;
+      &lt;/z:_attributes_&gt;
+      &lt;<span class="bold"><strong>publication</strong></span> <span class="bold"><strong><span class="italic">for-each</span></strong></span>="<span class="underline"><span class="italic">book</span></span>"&gt;
+        &lt;z:_attributes_&gt;
+          &lt;<span class="bold"><strong>publicationYear</strong></span> <span class="bold"><strong><span class="italic">src</span></strong></span>="<span class="underline"><span class="italic">py</span></span>" <span class="bold"><strong><span class="italic">alt</span></strong></span>=""/&gt;
+        &lt;/z:_attributes_&gt;
+        &lt;<span class="bold"><strong>isbn</strong></span> <span class="bold"><strong><span class="italic">src</span></strong></span>="<span class="underline"><span class="italic">@isbn</span></span>" <span class="bold"><strong><span class="italic">dflt</span></strong></span>="<span class="underline"><span class="italic">'#MISSING'</span></span>"/&gt;
+        &lt;<span class="bold"><strong>title</strong></span> <span class="bold"><strong><span class="italic">src</span></strong></span>="<span class="underline"><span class="italic">title</span></span>" <span class="bold"><strong><span class="italic">dflt</span></strong></span>=""/&gt;
+        &lt;<span class="bold"><strong>creator</strong></span> <span class="bold"><strong><span class="italic">for-each</span></strong></span>="<span class="underline"><span class="italic">author</span></span>"&gt;
+          &lt;<span class="bold"><strong>creatorRole</strong></span> <span class="bold"><strong><span class="italic">src</span></strong></span>="<span class="underline"><span class="italic">'Author'</span></span>" <span class="bold"><strong><span class="italic">dflt=</span></strong></span>""/&gt;
+          &lt;<span class="bold"><strong>creatorName</strong></span> <span class="bold"><strong><span class="italic">src</span></strong></span>="." <span class="bold"><strong><span class="italic">dflt</span></strong></span>="<span class="italic"></span>"/&gt;
+        &lt;/creator&gt;
+      &lt;/publication&gt;
+    &lt;/publications&gt;
+  &lt;/z:snat&gt;
+&lt;/z:snats&gt;                    
+                </pre></div></div><br class="example-break" clear="none" /><div class="example" id="d5e3427"><p class="title"><strong>Example 3. XQuery code, generated from the SNAT tree shown in the preceding
+                    listing.</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">
+let $c := *
+let $c := $c/<span class="underline"><span class="italic">books</span></span>
+return
+&lt;<span class="bold"><strong>publications</strong></span>&gt;{
+   let $v := $c/<span class="underline"><span class="italic">@lastUpdate</span></span>
+   return
+      if (empty($v)) then () else
+      attribute <span class="bold"><strong>updatedAt</strong></span> {$v},
+   for $c in $c/<span class="underline"><span class="italic">book</span></span>
+   return
+      &lt;<span class="bold"><strong>publication</strong></span>&gt;{
+         let $v := $c/<span class="underline"><span class="italic">py</span></span>
+         return
+            if (empty($v)) then () else
+            attribute <span class="bold"><strong>publicationYear</strong></span> {$v/string()},
+         &lt;<span class="bold"><strong>isbn</strong></span>&gt;{
+            let $v := $c/<span class="underline"><span class="italic">@isbn</span></span>
+            return
+               if (exists($v)) then $v/string() else <span class="underline"><span class="italic">'#MISSING'</span></span>
+         }&lt;/isbn&gt;,
+         &lt;<span class="bold"><strong>title</strong></span>&gt;{$c/<span class="underline"><span class="italic">title</span></span>/string()}&lt;/title&gt;,
+         for $c in $c/<span class="underline"><span class="italic">author</span></span>
+         return
+            &lt;<span class="bold"><strong>creator</strong></span>&gt;{
+               &lt;<span class="bold"><strong>creatorRole</strong></span>&gt;{'Author'}&lt;/creatorRole&gt;,
+               &lt;<span class="bold"><strong>creatorName</strong></span>&gt;{$c/string()}&lt;/creatorName&gt;
+            }&lt;/creator&gt;
+      }&lt;/publication&gt;
+}&lt;/publications&gt;                    
+                </pre></div></div><br class="example-break" clear="none" /><p>The code may be viewed as assembled from the primitive operations reflecting the
+                metadata values. All data values, for example, are obtained by evaluating the
+                expressions found in attributes @src, @alt and @dflt. Similarly, the propagation and
+                distribution of the source context is guided by attributes @ctxt and @for-each. The
+                following listing summarizes the rules how to derive the implementations of
+                primitive operations from metadata item values.</p><div class="table" id="table-code-assembly"><p class="title"><strong>Table 5. The primitive operations context-propagator, context-distributor and
+                    context-atomizer as implied by metadata values. Notation: v@foo is the value of
+                    the expression supplied by attribute @foo, "if v@foo" means "if the value is not
+                    the empty sequence, “if @foo” means “if attribute @foo exists”. The
+                    context-distributor is described informally by equating subsets of the
+                    propagated context (given by v@for-each or v@ctxt) with the source context (SC)
+                    of a distinct target item (TI).</strong></p><div class="table-contents"><table class="table" summary="The primitive operations context-propagator, context-distributor and&#xA;                    context-atomizer as implied by metadata values. Notation: v@foo is the value of&#xA;                    the expression supplied by attribute @foo, &#34;if v@foo&#34; means &#34;if the value is not&#xA;                    the empty sequence, “if @foo” means “if attribute @foo exists”. The&#xA;                    context-distributor is described informally by equating subsets of the&#xA;                    propagated context (given by v@for-each or v@ctxt) with the source context (SC)&#xA;                    of a distinct target item (TI)." border="1"><colgroup span="1"><col width="33%" class="c1" span="1" /><col width="40%" class="c2" span="1" /><col width="27%" class="c3" span="1" /></colgroup><tbody><tr><td colspan="3" align="left" rowspan="1"><span class="bold"><strong>
+                                    Context-propagator</strong></span></td></tr><tr><td align="left" rowspan="1" colspan="1">if @for-each:</td><td colspan="2" align="left" rowspan="1">v@for-each</td></tr><tr><td align="left" rowspan="1" colspan="1">if (@ctxt and @alt):</td><td colspan="2" align="left" rowspan="1">if (v@ctxt) then v@ctxt
+                                else v@alt</td></tr><tr><td align="left" rowspan="1" colspan="1">if @ctxt:</td><td colspan="2" align="left" rowspan="1">v@ctxt</td></tr><tr><td align="left" rowspan="1" colspan="1">if (@src and @alt):</td><td colspan="2" align="left" rowspan="1">if (v@src) then v@src else
+                                v@alt</td></tr><tr><td align="left" rowspan="1" colspan="1">else:</td><td colspan="2" align="left" rowspan="1">v@src</td></tr><tr><td colspan="3" align="left" rowspan="1"><span class="bold"><strong>Context-distributor</strong></span></td></tr><tr><td align="left" rowspan="1" colspan="1">if (@for-each and @group-by):</td><td align="left" rowspan="1" colspan="1">each group of items in v@for-each:</td><td align="left" rowspan="1" colspan="1">SC of one distinct TI</td></tr><tr><td align="left" rowspan="1" colspan="1">if @for-each:</td><td align="left" rowspan="1" colspan="1">each item in v@for-each:</td><td align="left" rowspan="1" colspan="1">SC of one distinct TI</td></tr><tr><td align="left" rowspan="1" colspan="1">else:</td><td align="left" rowspan="1" colspan="1">all items in v@ctxt:</td><td align="left" rowspan="1" colspan="1">SC of the only TI</td></tr><tr><td colspan="3" align="left" rowspan="1"><span class="bold"><strong>
+                                    Context-atomizer</strong></span></td></tr><tr><td align="left" rowspan="1" colspan="1">if (@atom):</td><td colspan="2" align="left" rowspan="1">v@atom</td></tr><tr><td align="left" rowspan="1" colspan="1">else:</td><td colspan="2" align="left" rowspan="1">string-join($source-context, " ")</td></tr></tbody></table></div></div><br class="table-break" clear="none" /><p>By now we have decomposed document transformation into three primitive operations,
+                and we have set up a model how to derive their implementation from a small set of
+                metadata. In principle, the expressiveness of this metadata language is sufficient
+                for describing arbitrary transformation. However, the benefits of the approach get
+                quickly lost if the expressions supplied as metadata become very complex, or if the
+                decomposition into independent expressions entails blunt repetition of non-trivial
+                expressions. Therefore we extend the model by a few advanced features addressing
+                these issues.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="section-metadata-model.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="section-metadata-model.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar09s04s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

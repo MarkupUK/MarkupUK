@@ -1,0 +1,99 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Outline of the XSLT</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar03.html" title="Two (and a half) models for markup of bibliographic references" /><link rel="prev" href="ar03s06.html" title="Converting the OUP data model to BITS" /><link rel="next" href="ar03s08.html" title="Limitations of the conversion" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s06.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s08.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e914"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Outline of the XSLT</h2></div></div></div><p>The approach we adopted was to pass the content of the &lt;bibItem&gt; element through a
+            template a number of times, each time looking for a different attribute to match in the
+            text.</p><div class="example" id="d5e917"><p class="title"><strong>Example 17. Stages of conversion</strong></p><div class="example-contents"><p>Original content:</p><pre class="programlisting" xml:space="preserve">Deborah Furet How Illusions Pass, 176-196, 234-247. London: Gerald Duckworth, 1987</pre><p>After first pass:</p><pre class="programlisting" xml:space="preserve">Deborah Furet &lt;title&gt;How Illusions Pass&lt;/title&gt;, 176-196, 234-247. 
+London: Gerald Duckworth, 1987</pre><p>After second pass:</p><pre class="programlisting" xml:space="preserve">Deborah &lt;surname&gt;Furet&lt;/surname&gt; &lt;title&gt;How Illusions Pass&lt;/title&gt;, 
+176-196, 234-247. London: Gerald Duckworth, 1987</pre><p>After third pass:</p><pre class="programlisting" xml:space="preserve">Deborah &lt;surname&gt;Furet&lt;/surname&gt; &lt;title&gt;How Illusions Pass&lt;/title&gt;, 
+176-196, 234-247. London: Gerald Duckworth, &lt;year&gt;1987&lt;/year&gt;</pre></div></div><br class="example-break" clear="none" /><p>The template for the original &lt;bibItem&gt; element is:</p><pre class="programlisting" xml:space="preserve">  
+&lt;xsl:template match="bibItem[
+    @class = 'bookChapter' 
+    or @class = 'book' 
+    or @class = 'journalArticle' 
+    ]"&gt;
+    &lt;xsl:variable name="content" as="node()+" select="child::node()"/&gt;
+    
+    &lt;xsl:variable name="content-plus-title" as="node()+"&gt;
+      &lt;xsl:choose&gt;
+        &lt;xsl:when test="@title"&gt;
+          &lt;xsl:call-template name="getElement"&gt;
+            &lt;xsl:with-param name="class" select="@class" tunnel="yes"/&gt;
+            &lt;xsl:with-param name="attributeName" select="'title'" tunnel="yes"/&gt;
+            &lt;xsl:with-param name="stringToMatch" select="@title" tunnel="yes"/&gt;
+            &lt;xsl:with-param name="matched" select="false()" tunnel="yes"/&gt;
+            &lt;xsl:with-param name="nodesToCheck" select="$content"/&gt;
+          &lt;/xsl:call-template&gt;
+        &lt;/xsl:when&gt;
+        &lt;xsl:otherwise&gt;
+          &lt;xsl:copy-of select="$content"/&gt;
+        &lt;/xsl:otherwise&gt;
+      &lt;/xsl:choose&gt;
+    &lt;/xsl:variable&gt;
+
+    &lt;xsl:variable name="content-plus-name" as="node()+"&gt;
+        &lt;!-- call to "getElement" but parameter $nodesToCheck is $content-plus-title --&gt;
+    &lt;/xsl:variable&gt;
+
+    &lt;xsl:variable name="content-plus-date" as="node()+"&gt;
+        &lt;!-- call to "getElement" but parameter $nodesToCheck is $content-plus-name --&gt;    
+    &lt;/xsl:variable&gt;
+
+    &lt;xsl:copy&gt;
+      &lt;xsl:apply-templates select="@*"/&gt;
+      &lt;xsl:copy-of select="$content-plus-date"/&gt;
+    &lt;/xsl:copy&gt;
+    
+  &lt;/xsl:template&gt;
+</pre><p>The content of the &lt;bibItem&gt; element goes through several stages within the
+            template. Passing from one stage to the next involves a call to a template
+                <span class="quote">“<span class="quote">getElement</span>”</span> to find a particular attribute value within the content
+            and wrap it in the corresponding BITS element. The output of the first stage is passed
+            as the input to the next, and so on, until the output of the last stage is copied into
+            the output XML tree.</p><p>The <span class="quote">“<span class="quote">getElement</span>”</span> template that does the matching is:</p><pre class="programlisting" xml:space="preserve">  
+&lt;xsl:template name="getElement"&gt;
+    &lt;xsl:param name="class" as="xs:string" required="yes" tunnel="yes"/&gt;
+    &lt;xsl:param name="attributeName" as="xs:string" required="yes" tunnel="yes"/&gt;
+    &lt;xsl:param name="stringToMatch" as="xs:string" required="yes" tunnel="yes"/&gt;
+    &lt;xsl:param name="matched" as="xs:boolean" tunnel="yes"/&gt;
+    &lt;xsl:param name="nodesToCheck" as="node()+"/&gt;
+    
+    &lt;xsl:variable name="thisNode" as="node()" select="$nodesToCheck[1]"/&gt;
+    &lt;xsl:variable name="remainingNodes" as="node()*" 
+    select="$nodesToCheck except $thisNode"/&gt;
+    
+    &lt;xsl:variable name="nodeAsString" as="xs:string" select="string($thisNode)"/&gt; 
+        
+    &lt;xsl:variable name="matches" as="xs:boolean" 
+    select="oupdtg:hasMatch($nodeAsString,$stringToMatch)"/&gt;
+
+    &lt;!-- 
+        Code to look at $thisNode (the first node)
+        Either copy it (if $stringToMatch is not found, 
+        or if it has been matched already)
+        or wrap part of the text node matching $stringToMatch 
+        in an element appropriate to the $attributeName
+    --&gt;
+
+    &lt;xsl:if test="count($remainingNodes) != 0"&gt;
+      &lt;xsl:call-template name="getElement"&gt;
+        &lt;xsl:with-param name="matched" select="$matched or $matches" tunnel="yes"/&gt;
+        &lt;xsl:with-param name="nodesToCheck" select="$remainingNodes"/&gt;
+      &lt;/xsl:call-template&gt;
+    &lt;/xsl:if&gt;
+     
+&lt;/xsl:template&gt;
+</pre><p>The parameters to the template are:</p><div class="informaltable"><table class="informaltable" border="1"><colgroup span="1"><col width="50%" class="c1" span="1" /><col width="50%" class="c2" span="1" /></colgroup><thead><tr><th rowspan="1" colspan="1">Parameter</th><th rowspan="1" colspan="1">Description</th></tr></thead><tbody><tr><td rowspan="1" colspan="1">class</td><td rowspan="1" colspan="1">The type of item that is being referenced (e.g. book, journal article).</td></tr><tr><td rowspan="1" colspan="1">attributeName</td><td rowspan="1" colspan="1">The name of the attribute whose value is being sought in the content (e.g.
+                <span class="quote">“<span class="quote">author</span>”</span>, <span class="quote">“<span class="quote">title</span>”</span>). The value of this and the $class
+              parameter determine the name of the element that is wrapped round a matching
+              string.</td></tr><tr><td rowspan="1" colspan="1">stringToMatch</td><td rowspan="1" colspan="1">The value (author name, article title, etc) that the template is looking for in
+              the content.</td></tr><tr><td rowspan="1" colspan="1">matched</td><td rowspan="1" colspan="1">A boolean variable, whose value is <span class="quote">“<span class="quote">true()</span>”</span> if the string has
+              already been matched in the content.</td></tr><tr><td rowspan="1" colspan="1">nodesToCheck</td><td rowspan="1" colspan="1">The remaining content of the bibItem. The template parses one node at a time, and
+              then recursively calls itself with the remaining nodes passed as this
+              parameter.</td></tr></tbody></table></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s06.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s08.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,164 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Developing the markup vocabulary for CCCP</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar04.html" title="The Cryptic Crossword Corpus Project: first steps in establishing a markup vocabulary" /><link rel="prev" href="ar04s02.html" title="A brief explanation of cryptic crosswords" /><link rel="next" href="ar04s04.html" title="Conclusion" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1124"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Developing the markup vocabulary for CCCP</h2></div></div></div><p>The previous section of this paper has given an outline of a
+sample of the elements that are used to construct a cryptic crossword
+clue. In developing a markup vocabulary for CCCP, it has been
+necessary to consider how these elements (as well as others not
+discussed above for reasons of space) relate to each other, and which
+of them are required in order to give a comprehensive account of the
+structure of a clue. There are, of course, elements above the level of
+the clue that could also be captured, such as the source of the
+crossword, the name of the setter, the date on which the crossword
+appeared, and so on. </p><p>Making decisions about how much detail to include required some
+predictions about the questions that might be asked of the corpus data
+at a later stage of the project. <span class="citations"><a class="link" href="bi04.html#Cleary1996" shape="rect">Cleary (1996)</a></span> suggested some
+possible avenues for research, including examining differences between
+setters, and the use of polysemous words both in clues and as targets.
+To this might be added comparison of the "house styles" of various
+newspapers, comparison of the language of clues at different points in
+time, and the use of words with ambiguous part of speech. Evidently,
+these questions require marking up not only the structural features of
+the clue itself, but also of the name of the publication, the setter,
+the date, and the parts of speech of individual words. Since I am also
+interested in how various fragments of the target answers are commonly
+(or, indeed, uncommonly) represented in the subsidiary indications,
+there also needs to be a way to link each part of the clue to the
+corresponding part of the answer.</p><p>The following example shows a single clue and answer pair within
+the root <code class="literal">&lt;corpus&gt;</code> element:</p><pre class="programlisting" xml:space="preserve">&lt;corpus&gt;
+    &lt;publication pub="independent" type="anthology" ISBN="0550101756" pubdate="2005"&gt;
+        &lt;puzzle id="1" setter="Aelred"&gt;
+            &lt;item id="4"&gt;
+                &lt;clue&gt;
+                    &lt;subsidiary&gt;
+                        &lt;source class="definition" id="1"&gt;
+                            &lt;word pos="JJ"&gt;Feeble&lt;/word&gt;
+                            &lt;word pos="NN"&gt;type&lt;/word&gt;
+                        &lt;/source&gt;
+                        &lt;meta class="locator" type="concatenation"&gt;
+                            &lt;word pos="VVZ"&gt;adopts&lt;/word&gt;
+                        &lt;/meta&gt;
+                        &lt;source class="translation" id="2"&gt;
+                            &lt;word pos="DT"&gt;the&lt;/word&gt;
+                        &lt;/source&gt;
+                        &lt;meta class="operator" type="translation"&gt;
+                            &lt;word pos="JJ"&gt;French&lt;/word&gt;
+                        &lt;/meta&gt;
+                    &lt;/subsidiary&gt;
+                    &lt;def type="hypernym"&gt;
+                        &lt;word pos="NN"&gt;headdress&lt;/word&gt;
+                    &lt;/def&gt;
+                &lt;/clue&gt;
+                &lt;solution words="1" letters="6" text="wimple" pos="NN"&gt;
+                    &lt;unit id="1"&gt;WIMP&lt;/unit&gt;
+                    &lt;unit id="2"&gt;LE&lt;/unit&gt;
+                &lt;/solution&gt;
+            &lt;/item&gt;
+        &lt;/puzzle&gt;
+    &lt;/publication&gt;
+&lt;/corpus&gt;</pre><p>(N.B. for ease of reading, part-of-speech tagging is omitted
+from all examples below).</p><p>The first element within the root,
+<code class="literal">&lt;publication&gt;</code>, captures the published source
+for the crosswords. In this case, the source is an anthology, so the
+ISBN and the publication date are also captured, as is the publication
+- in this case, <span class="emphasis"><em>The Independent</em></span>. Within this
+element, the first <code class="literal">&lt;puzzle&gt;</code> element has an
+<span class="bold"><strong>id</strong></span> attribute (to indicate its place
+within the anthology) and a <span class="bold"><strong>setter</strong></span>
+attribute. This attribute must often have the value "anon", because
+many anthologies fail to identify the specific setter of each puzzle.
+Each <code class="literal">&lt;puzzle&gt;</code> element contains a number of
+<code class="literal">&lt;item&gt;</code> elements; these contain the clue and
+answer pairs.</p><p>The clue in the above example has the structure defined in
+section 2 above: a subsidiary indication and a definition. These are
+captured inside the <code class="literal">&lt;clue&gt;</code> element, as
+<code class="literal">&lt;subsidiary&gt;</code> and
+<code class="literal">&lt;def&gt;</code>. The attribute <span class="bold"><strong>type</strong></span> on <code class="literal">&lt;def&gt;</code>
+indicates whether the definition element is a straight synonym, a
+phrase, a narrative definition, or some other kind of semantic
+relative of the target answer; in this case, the definition is a
+hypernym (a term that is more general than the target answer). This
+information will be useful for exploring questions of how different
+kinds of definition might affect clue difficulty.</p><p>The child elements of <code class="literal">&lt;subsidiary&gt;</code> are
+<code class="literal">&lt;source&gt;</code> (for the words that are manipulated
+to restructure the target answer) and <code class="literal">&lt;meta&gt;</code>
+(for metalanguage). The <code class="literal">source</code> attribute <span class="bold"><strong>class</strong></span> indicates how the word must be
+manipulated in order to produce an answer (or answer fragment). In
+this example, the first <code class="literal">&lt;source&gt;</code> is a
+definition of its corresponding fragment, and the second must be
+translated. The attribute <span class="bold"><strong>class</strong></span> on
+<code class="literal">&lt;meta&gt;</code> indicates the function performed by
+the metalanguage. In this case, the first example is of the "locator"
+class, and the "concatenation" subtype, which indicates that the
+result of the second <code class="literal">&lt;source&gt;</code> is placed after
+the first. The second example is an operator, and an additional
+<span class="bold"><strong>type</strong></span> attribute tells us that the
+operation required is translation. Finally, each individual word in
+the clue is enclosed in a <code class="literal">&lt;word&gt;</code> element,
+with an attribute indicating part of speech. The part-of-speech tagset
+used is the Penn Treebank tagset as modified for use in the Sketch
+Engine corpus software <span class="citations">(<a class="link" href="bi04.html#SketchEngine" shape="rect">Sketch Engine</a>)</span>. The
+<code class="literal">&lt;solution&gt;</code> element contains basic information
+such as number of words, number of letters, and the plain text of the
+target answer, as well as its part of speech (if that can be
+determined). The target itself is then broken down into
+<code class="literal">&lt;unit&gt;</code> elements, each of which has an
+<span class="bold"><strong>id</strong></span> attribute whose value corresponds
+to the <span class="bold"><strong>id</strong></span> of the
+<code class="literal">&lt;source&gt;</code> element from which it was produced.
+For a double-definition clue, the markup looks a little
+different:</p><pre class="programlisting" xml:space="preserve">&lt;item id="13"&gt;
+    &lt;clue&gt;
+        &lt;def type="synonym"&gt;Alert&lt;/def&gt;
+        &lt;def type="descriptive"&gt;goalkeeper may dive thus&lt;/def&gt;
+    &lt;/clue&gt;
+    &lt;solution words="3" letters="9" text="on the ball" pos="PHRASE"&gt;
+        &lt;unit&gt;ON THE BALL&lt;/unit&gt;
+    &lt;/solution&gt;
+&lt;/item&gt;</pre><p>Here there are two <code class="literal">&lt;def&gt;</code> elements, and
+the single <code class="literal">&lt;unit&gt;</code> element is not given an
+<span class="bold"><strong>id</strong></span> attribute, as it is assumed that
+definitions always point towards the answer.</p><p>Clues with "container" type <span class="bold"><strong>locator</strong></span> class metalanguage generally require
+embedding one <code class="literal">&lt;unit&gt;</code> within another in the
+answer. This is easily achieved by making it legal for one
+<code class="literal">&lt;unit&gt;</code> to have another as a child
+element:</p><pre class="programlisting" xml:space="preserve">&lt;item id="6"&gt;
+    &lt;clue&gt;
+        &lt;def type="descriptive"&gt;Irish leader&lt;/def&gt;
+        &lt;subsidiary&gt;
+            &lt;source class="anagram" id="1"&gt;is a cheat&lt;/source&gt;
+            &lt;punct&gt;,&lt;/punct&gt;
+            &lt;meta class="operator" type="anagram"&gt;worried&lt;/meta&gt;
+            &lt;meta class="locator" type="container"&gt;about&lt;/meta&gt;
+            &lt;source class="abbreviation" id="2"&gt;nothing&lt;/source&gt;
+        &lt;/subsidiary&gt;
+    &lt;/clue&gt;
+    &lt;solution words="1" letters="9" text="Taoiseach" pos="NP"&gt;
+        &lt;unit id="1"&gt;TA&lt;unit id="2"&gt;O&lt;/unit&gt;ISEACH&lt;/unit&gt;
+    &lt;/solution&gt;
+&lt;/item&gt;</pre><p>Another distinctive markup requirement is found in <span class="emphasis"><em>The
+Sun</em></span>, which publishes "Two-Speed Crosswords". The same grid
+of target answers is offered with two sets of clues: one quick, and
+one cryptic. On the principle that it is always better to capture too
+much information than too little, I decided to add the quick clues in
+an initial <code class="literal">&lt;quick&gt;</code> element for these
+crosswords:</p><pre class="programlisting" xml:space="preserve">&lt;item id="2"&gt;
+    &lt;clue&gt;
+        &lt;quick&gt;On fire&lt;/quick&gt;
+        &lt;subsidiary&gt;
+            &lt;source class="literal" id="1"&gt;A&lt;/source&gt;
+            &lt;source class="synonym" id="2"&gt;fair&lt;/source&gt;
+        &lt;/subsidiary&gt;
+        &lt;def type="synonym"&gt;land&lt;/def&gt;
+    &lt;/clue&gt;
+    &lt;solution words="1" letters="6" text="alight" pos="VV"&gt;
+        &lt;unit id="1"&gt;A&lt;/unit&gt;
+        &lt;unit id="2"&gt;LIGHT&lt;/unit&gt;
+    &lt;/solution&gt;
+&lt;/item&gt;</pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

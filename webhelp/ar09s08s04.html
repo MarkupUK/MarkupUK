@@ -1,0 +1,102 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Example SNAT and source code</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar09s08.html" title="Proof of concept: RDF-to-XML, SNAT-based" /><link rel="prev" href="ar09s08s03.html" title="Code assembly model" /><link rel="next" href="bi09.html" title="Bibliography" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018042310.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018042310" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s08s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="bi09.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e4023"><div class="titlepage"><div><div><h3 class="title">Example SNAT and source code</h3></div></div></div><p>A small example will illustrate the use of the code generator. Let the goal again
+                be the construction of a <code class="code">publications</code> document, but this time using an
+                RDF data source. The following two listings show a SNAT document and the source code
+                generated from it.</p><div class="example" id="d5e4027"><p class="title"><strong>Example 5. SNAT document, defining the transformation of RDF data into an XML
+                    document.</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">
+&lt;z:snats xmlns:z="http://www.xsdplus.org/ns/structure"&gt;
+  &lt;z:prolog&gt;
+    &lt;z:nsMap&gt;
+      &lt;z:ns prefix="lib" uri="http://www.example.org/ns/resources/library#"/&gt;
+    &lt;/z:nsMap&gt;
+  &lt;/z:prolog&gt;    
+  &lt;z:snat&gt;
+    <span class="bold"><strong>&lt;publications</strong></span> <span class="italic"><span class="bold"><strong>ctxt</strong></span></span>="<span class="underline"><span class="italic">$libs</span></span>"
+      &lt;z:_attributes_&gt;
+        <span class="bold"><strong>&lt;updatedAt</strong></span> <span class="italic"><span class="bold"><strong>src</strong></span></span>="<span class="underline"><span class="italic">lib:lastUpdate</span></span>" alt=""/&gt;
+      &lt;/z:_attributes_&gt;
+      <span class="bold"><strong>&lt;publication</strong></span> <span class="italic"><span class="bold"><strong>for-each</strong></span></span>="<span class="underline"><span class="italic">descendant::lib:book</span></span>"&gt;
+        &lt;z:_attributes_&gt;
+          <span class="bold"><strong>&lt;publicationYear</strong></span> <span class="italic"><span class="bold"><strong>src</strong></span></span>="<span class="underline"><span class="italic">lib:py</span></span>" alt=""/&gt;
+        &lt;/z:_attributes_&gt;
+        <span class="bold"><strong>&lt;isbn</strong></span> <span class="italic"><span class="bold"><strong>src</strong></span></span>="<span class="underline"><span class="italic">lib:isbn</span></span>" dflt="'#MISSING'"/&gt;
+        <span class="bold"><strong>&lt;title</strong></span> <span class="italic"><span class="bold"><strong>src</strong></span></span>="<span class="underline"><span class="italic">lib:title</span></span>" dflt=""/&gt;
+        <span class="bold"><strong>&lt;creator</strong></span> <span class="italic"><span class="bold"><strong>for-each</strong></span></span>="<span class="underline"><span class="italic">lib:author</span></span>"&gt;
+          <span class="bold"><strong>&lt;creatorRole</strong></span> <span class="italic"><span class="bold"><strong>src</strong></span></span>="<span class="underline"><span class="italic">'Author'</span></span>" dflt=""/&gt;
+          <span class="bold"><strong>&lt;creatorName</strong></span> <span class="italic"><span class="bold"><strong>src</strong></span></span>="." dflt=""/&gt;
+        &lt;/creator&gt;
+      &lt;/publication&gt;
+    &lt;/publications&gt;
+  &lt;/z:snat&gt;
+&lt;/z:snats&gt;</pre></div></div><br class="example-break" clear="none" /><div class="example" id="d5e4073"><p class="title"><strong>Example 6. XQuery code, generated from the SNAT document shown in the preceding
+                    listing.</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">declare variable <span class="bold"><strong>$dataSources</strong></span> as element(rx:dataSources) external;
+declare variable $sparqlLib :=                    
+<span class="bold"><strong>&lt;sparqlLib&gt;</strong></span>
+  &lt;sparql key="$libs" initialContext="$libs"/&gt;
+  &lt;sparql key="descendant::lib:book"&gt;...&lt;/sparql&gt;
+  &lt;sparql key="lib:author"&gt;...&lt;/sparql&gt;
+  &lt;sparql key="lib:books/lib:lastUpdate"&gt;...&lt;/sparql&gt;
+  &lt;sparql key="lib:isbn"&gt;...&lt;/sparql&gt;  
+  &lt;sparql key="lib:py"&gt;...&lt;/sparql&gt;  
+  &lt;sparql key="lib:title"&gt;...&lt;/sparql&gt;  
+&lt;sparqlLib&gt;;  
+
+declare function <span class="bold"><strong>f:updContext</strong></span>(<span class="italic">$dataSources</span> as element(rx:dataSources),
+                              <span class="italic">$context</span> as xs:string*, 
+                              <span class="italic">$queryKey</span> as xs:string) as xs:string* {...};
+
+let $c := <span class="italic">f:updContext</span>($dataSources, (), "<span class="underline"><span class="italic">$libs</span></span>")
+return   
+<span class="bold"><strong>&lt;publications</strong></span>&gt;{
+    let $v := <span class="italic">f:updContext</span>($dataSources, $c, "<span class="underline"><span class="italic">lib:books/lib:lastUpdate</span></span>")
+    return
+        if (empty($v)) then () else
+        attribute <span class="bold"><strong>&lt;updatedAt</strong></span> {$v},
+        
+    for $c in <span class="italic">f:updContext</span>($dataSources, $c, "<span class="underline"><span class="italic">descendant::lib:book</span></span>")
+    return
+        <span class="bold"><strong>&lt;publication</strong></span>&gt;{
+            let $v := <span class="italic">f:updContext</span>($dataSources, $c, "<span class="underline"><span class="italic">lib:py</span></span>")
+            return
+               if (empty($v)) then () else
+               attribute <span class="bold"><strong>publicationYear</strong></span> {$v},
+            <span class="bold"><strong>&lt;isbn</strong></span>&gt;{
+               let $v := <span class="italic">f:updContext</span>($dataSources, $c, "<span class="underline"><span class="italic">lib:isbn</span></span>")               
+               return
+                  if (exists($v)) then $v else '#MISSING'
+            }&lt;/isbn&gt;,            
+            <span class="bold"><strong>&lt;title</strong></span>&gt;{<span class="italic">f:updContext</span>($dataSources, $c, "<span class="underline"><span class="italic">lib:title</span></span>")}&lt;/title&gt;,
+            
+            for $c in <span class="italic">f:updContext</span>($dataSources, $c, "<span class="underline"><span class="italic">lib:author</span></span>")
+            return
+               <span class="bold"><strong>&lt;creator</strong></span>&gt;{
+                  <span class="bold"><strong>&lt;creatorRole</strong></span>&gt;Author&lt;/creatorRole&gt;,
+                  <span class="bold"><strong>&lt;creatorName</strong></span>&gt;{$c}&lt;/creatorName&gt;
+               }&lt;/creator&gt;
+        }&lt;/publication&gt;    
+}&lt;/publications&gt; 
+                </pre></div></div><br class="example-break" clear="none" /><p>The XQuery source code has the same structure as the code generated for XML data
+                sources (compare example "<a class="xref" href="ar09s02.html#example-xquery-for-xml-source" title="Example 1. XQuery code implementing the example transformation as a pull transformation." shape="rect">XQuery code generated for
+                XML data source</a>". Note the difference -
+                using an XML data source, navigation is accomplished by path expressions, whereas
+                using an RDF data source, navigation is accomplished by submitting SPARQL queries
+                referenced by query keys to a generic evaluator. The original RPath expressions are
+                used as query keys, which enhances the readability of the code.</p><p>The input of the transformation is an XML document identifying the RDF graph and a
+                set of resources bound to user-defined names. Example:</p><pre class="programlisting" xml:space="preserve">&lt;rx:dataSources xmlns:rx="https://www.xsdplus.org/ns/..."&gt;
+  &lt;rx:namespace prefix="lib" uri="http://www.example.org/ns/..."/&gt;
+  &lt;rx:graph name="main" uri="localhost:9093//..."&gt;
+    &lt;rx:resource uri="lib:rwth" name="libs"/&gt;
+    &lt;rx:resource uri="lib:wage" name="libs"/&gt;
+    &lt;rx:resource uri="lib:jota" name="libs"/&gt;
+  &lt;/rx:graph&gt;
+&lt;/rx:dataSources&gt;</pre><p>The metadata expressions can reference the resources via variable references (e.g.
+                    <code class="code">ctxt="$libs"</code> and thus use them as starting points of
+                navigation.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s08s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar09s08.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="bi09.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
