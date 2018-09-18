@@ -1,0 +1,277 @@
+// Include custom web fonts
+@import url(../css/fonts.css);
+
+// Include custom svg icons
+@import "IKONS";
+
+// bootstrap over-rides
+$primary:       #3b4063;
+$success:       #72a98f;
+$warning:       #ffbf00;
+$danger:        #ca4d5e;
+$secondary:     #7d8ca3;
+$info:          #8a817c;
+$light:         #e9ecef;
+
+// not sure the default system fonts go well with league gothic...
+
+$font-family-sans-serif:
+  // Basic web fallback
+  "Helvetica Neue", Arial, sans-serif,
+  // Emoji fonts
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+// Increase font size for headings in League Gothic:
+//
+$display1-size: 12rem;
+$h1-font-size:  3.5rem;
+
+// Include bootstrap after overrides to ensure over-rides work correctly
+@import "../bootstrap/scss/bootstrap";
+
+// Custom CSS
+
+
+//Image spans
+.MUK-title {
+    height: 1em;
+    width: auto;
+    content: url(../img/MarkupUK.svg);
+}
+
+.MUK-logo {
+    height: 1em;
+    width: auto;
+    content: url(../img/MUK_Logo.svg);
+}
+
+//html and body
+
+html {   
+    @include make-container();
+    body {
+        @include make-row();
+        @extend 
+            .justify-content-between,
+            .m-3;
+        background-image: url(../img/background.jpg);
+        background-attachment: fixed;
+        background-size: cover;
+    }
+}
+
+//header and navigation
+
+header {
+    @extend 
+        .bg-light,
+        .col-12,
+        .rounded;
+    nav{
+        @extend
+            .navbar,
+            .navbar-light, 
+            .navbar-expand-md, 
+            .text-right;
+        ul {
+            @extend 
+                .navbar-collapse,
+                .navbar-nav;
+            li {
+                @extend .nav-item;
+                a {
+                    @extend .nav-link;
+                }
+            }
+        }
+    };
+    .navbar-brand {
+        font-size: $h1-font-size;
+        width: 100%;
+        @extend .text-left;
+    }
+}
+
+//contacts & social media
+nav.contact {
+    @extend
+        .nav,
+        .justify-content-center;
+    a {
+        @extend
+            .nav-item,
+            .nav-link;
+        font-size: $h1-font-size;
+    }
+}
+
+
+//content
+
+article, aside {
+    @extend
+        .bg-light,
+        .p-3,
+        .col,
+        .mb-3,
+        .rounded;
+}
+
+aside {
+    @extend
+        .text-center;
+    &.events {
+        h2, p{
+            @extend .mb-5;
+        }
+    }
+}
+
+table {
+    @extend
+        .table,
+        .table-striped,
+        .table-responsive,
+        .table-hover;
+    thead {
+        @extend
+            .table-primary;
+    }
+    td:first-child,
+    th:first-child {
+        text-align: right;
+        border-right: 1px solid $info;
+    }
+}
+
+.jumbotron {
+    @extend
+        .mt-4,
+        .mb-0,
+        .col-12;
+    background-image: url(../img/background-frosted.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    h1, h2 {
+        @extend .text-center;
+    }
+    h1 {
+        @extend .display-1;
+    }
+    h2 {
+        @extend .display-2;
+    }
+}
+
+
+//links
+
+a {
+    &:link{
+        @extend .text-danger;
+    }
+    &:visited {
+        @extend .text-primary;
+    }
+}
+
+a.twitter {
+    content: icon(twitter, $primary);
+    max-height: 1em;
+    &:link{
+        content: icon(twitter, $primary);
+    }
+    &:hover{
+        content: icon(twitter, $danger);
+    }
+}
+
+a.facebook {
+    content: icon(facebook_2, $danger);
+    max-height: 1em;
+    &:link{
+        content: icon(facebook_2, $primary);
+    }
+    &:hover{
+        content: icon(facebook_2, $danger);
+    }
+}
+
+a.linkedin {
+    content: icon(linkedin, $danger);
+    max-height: 1em;
+    &:link{
+        content: icon(linkedin, $primary);
+    }
+    &:hover{
+        content: icon(linkedin, $danger);
+    }
+}
+
+a.email {
+    content: icon(mail, $danger);
+    max-height: 1em;
+    &:link{
+        content: icon(mail, $primary);
+    }
+    &:hover{
+        content: icon(mail, $danger);
+    }
+}
+
+//.email-text {}      // It would be nice to prepend an inline svg of the mail icon here, but I can't work out how ;(
+
+//typography
+
+strong {
+    @extend .text-danger;
+}
+
+h1 {
+    @extend .leagueGothic, .text-primary;
+}
+
+h2 {
+    @extend
+        .text-secondary,
+        .mb-4;
+}
+
+.leagueGothic {
+    font-family: 'League Gothic';
+}
+
+//grid settings
+
+.affiliates {
+    @extend 
+        .pr-md-0,
+        .mt-4,
+        .col-12,
+        .col-md-4;
+}
+
+.content {
+    @extend 
+        .pl-md-0,
+        .mt-4,
+        .col-12,
+        .col-md-8;}
+
+.card-columns {
+    // Extra small devices (portrait phones, less than 576px)
+    @media (max-width: 575.98px) {column-count: 1;}
+    
+    // Small devices (landscape phones, 576px and up)
+    @media (min-width: 576px) and (max-width: 767.98px) {column-count: 2;}
+    
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 768px) and (max-width: 991.98px) {column-count: 3;}
+    
+    // Large devices (desktops, 992px and up)
+    @media (min-width: 992px) and (max-width: 1199.98px) {column-count: 4;}
+    
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1200px) {column-count: 5;}
+}
+

@@ -1,0 +1,42 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Mapping alignments to navigation</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="section-source-alignment-based-model.html" title="Source alignment based model" /><link rel="prev" href="ar09s05s03.html" title="Annotated target tree (SAAT)" /><link rel="next" href="ar09s05s05.html" title="Inferring context propagation" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s05s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar09s05s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3717"><div class="titlepage"><div><div><h3 class="title">Mapping alignments to navigation</h3></div></div></div><p>A SNAT document describes an intended transformation precisely, whereas alignment
+                is less precise. Consider, for example, the relationship between
+                    <code class="code">publication</code>, <code class="code">isbn</code> and <code class="code">title</code> nodes. The
+                SNAT document guarantees that each source <code class="code">book</code> is mapped to a distinct
+                    <code class="code">publication</code> and that the <code class="code">isbn</code> and <code class="code">title</code>
+                children of a <code class="code">publication</code> element refer to the same <code class="code">book</code>
+                source element. This expectation is very intuitive, and therefore it may go
+                unnoticed that the alignments shown above do not make these commitments: the
+                alignments would not be contradicted by a transformation where a
+                    <code class="code">publication</code> contains a <code class="code">title</code> taken from one
+                    <code class="code">book</code> and an <code class="code">isbn</code> taken from another <code class="code">book</code>,
+                or (if we ignore cardinality constraints) a <code class="code">publication</code> containing all
+                    <code class="code">title</code> and all <code class="code">isbn</code> values found in any book. </p><p>The core of this problem lies in <span class="bold"><strong>semantic
+                    relationships</strong></span> pertaining to structural relationships in general, and
+                parent-child relationships in particular. The node name <code class="code">title</code>, for
+                instance, indicates that node contents represent a title, but it does not hint at a
+                semantic relationship between nodes, which constrains the child <code class="code">title</code>
+                to represent a property of the parent <code class="code">publication</code>. (Were the element
+                name <code class="code">hasTitle</code>, this would be slightly different.) The SNAT model of a
+                transformation preserves the intended semantic relationships implicitly: via
+                navigation. Navigation to a <span class="italic">particular</span>
+                <code class="code">title</code> as well as to a particular <code class="code">isbn</code>, executed while
+                constructing an individual target <code class="code">publication</code>, ensures that the target
+                document expresses the intended semantics.</p><p>The question arises if we cannot set up rules how to map alignments to navigation
+                steps. <a class="xref" href="ar09s05s03.html#alignments-versus-navigation-steps" title="Table 6. A comparison between navigation steps and alignments." shape="rect">Table 6, “A comparison between navigation steps and alignments.”</a> clearly suggests such a
+                possibility. It should be remembered that the SNAT model is essentially a
+                decomposition of transformation into navigation steps, or, the other way around, an
+                integration of navigation steps into a complete picture of a transformation. If we
+                can infer navigation steps from pairs of alignments (the alignments of parent and
+                child locations), we have come very close to solving the problem of mapping
+                alignments to a complete picture of the transformation. The task of generating
+                transformation code from alignments can be redefined as the task of mapping a SAAT
+                tree to a SNAT tree.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s05s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="section-source-alignment-based-model.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar09s05s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

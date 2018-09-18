@@ -1,0 +1,66 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Reprise: Non-XML documents in XProc 1.0</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar10.html" title="Non-XML workflows with XProc 3.0" /><link rel="prev" href="ar10s01.html" title="Introduction" /><link rel="next" href="ar10s03.html" title="XProc 3.0's new concept of a document" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar10s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e4200"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Reprise: Non-XML documents in XProc 1.0</h2></div></div></div><p>First a short reminder of what XProc 1.0 is, or I should say, was, because I
+            believe pipeline authors will appreciate the new possibilities of XProc 3.0 so
+            much, that they will switch to the new language version as soon as possible. One way to
+            describe XProc 1.0 is to say that it is a pipeline language to design workflows
+                <span class="emphasis"><em>for</em></span> XML <span class="emphasis"><em>in</em></span> XML. This definition is based
+            on the fact, that only XML documents are allowed to flow between the steps that make up
+            the pipeline. This feature of XProc 1.0 is most visible in an error message one
+            gets to see from time to time when working with XProc 1.0:</p><div class="blockquote"><blockquote class="blockquote"><p>It is a dynamic error (XD0001) if a non-XML resource is produced on a step output
+                or arrives on a step input.</p></blockquote></div><p>Please note that this is dynamic error number 1. Although this error message is
+            sometimes annoying, it clearly states the nature of XProc. XProc was invented and
+            developed with the goal to be able to specify <span class="quote">“<span class="quote">a sequence of operations to be
+                performed on a collection of XML input documents.</span>”</span> Of course the creators of
+            XProc knew that there are not only XML-documents, so there was a section on "Non-XML
+            documents" in the original specs. This section is about thirteen lines and makes a
+            distinction between almost-XML documents (HTML) and non-XML documents. For the first
+            there is the ability to turn it into XML, and for the second a mechanism is presented,
+            to let them <span class="quote">“<span class="quote">flow quietly through the pipeline</span>”</span>: The non-XML document is
+            either converted into text or base64-encoded and wrapped in an element node with a
+            document-node, which means it now <span class="quote">“<span class="quote">can be processed like any other XML
+                document</span>”</span>.</p><p>This was of course an elegant way to deal with non-XML documents in XProc, but it also
+            meant that these documents can only "go with the flow". XProc itself defines no steps
+            for these documents, the only interesting things you could do with them is to send them
+            to a web service or store them on your disk, provided they are not base64-encoded or
+            your XProc processor implements the optional feature of decoding base64-encoded
+            documents before it stores them. Of course you could store them anyway, but storing a
+            base64-encoded JPEG wrapped in an XML element does not count as interesting, does
+            it?</p><p>And as this situation became unpleasant, different mechanisms were invented to go
+            around it. Steps were invented to deal with ZIP archives because we all know, that
+            sometimes XML documents are packed into ZIP or should be packed into ZIP. But as ZIP
+            documents could not flow through a pipeline themselves and although they may contain
+            flowable XML-documents, they typically encapsulate a lot of stuff that could not flow
+            with a pipeline. This is particularly problematic if you going to pack a ZIP, have a lot
+            of XML-documents to put in, but also need some images and/or a text document.</p><p>To invent a workaround they probably looked at ANT and did what ANT does: Read and/or
+            write to the file system. So unpacking a ZIP reads a file from the file system and
+            creates a lot of files with the unpacked content on another place in the file system.
+            Some steps just read from the file system but produce an XML-document that flows in the
+            pipeline, e.g. XMLCalabash's extension step <code class="literal">cx:metadata-extractor</code>
+            which reads an image and produces an XML-document containing the image's metadata. Other
+            steps take XML-documents as input but write their non-XML result to the file system,
+            like XProc's extension step <code class="literal">p:xsl-formatter</code> which typically produces
+            PDF.</p><p>Some of these steps are really handy, some are mere workarounds. But from a purist
+            perspective they are all workarounds because XProc is designed to be a language where
+            documents flow between ports, and reading and/or writing to file systems is clashing
+            with the style. But even if you do not share a puristic approach to language design,
+            there are some problems with this approach:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>As your intermediate results are written to the file system, you have to
+                        remember to delete them, once they are no longer needed.</p></li><li class="listitem"><p>Writing to the file system might sometimes also be dangerous because an
+                        incautiously designed pipeline could overwrite some (or even all) vital
+                        documents on your file system with its intermediate results.</p></li><li class="listitem"><p>Sometimes it's not even handy, e.g. when you have to write a ZIP-archive to
+                        the file system and then read it again because you want to send it to some
+                        web service from the pipeline.</p></li><li class="listitem"><p>From an implementer's perspective the read-/write-approach of steps has
+                        the disadvantage, that the connection between input- and output-ports is not
+                        the only thing to take into account, when the execution plan for a pipeline
+                        is to be determined. Since a step might need to read from the file system
+                        the results another wrote there, this establishes a connection between the
+                        steps too. I think this is one of the reasons why no implementation ever
+                        fulfilled XProc's promise yet, that a pipeline could be split up in parallel
+                        processes running side by side on our multi-core computers.</p></li><li class="listitem"><p>Finally: Did I mention JSON yet?</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar10s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar10.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

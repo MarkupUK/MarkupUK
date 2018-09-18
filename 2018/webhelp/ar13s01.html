@@ -1,0 +1,83 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction and Background</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar13.html" title="When Overlapping XML Meets Changing XML Does Confusion Reign?" /><link rel="prev" href="ar13.html" title="When Overlapping XML Meets Changing XML Does Confusion Reign?" /><link rel="next" href="ar13s02.html" title="How Content Duplication Represents Any Change" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5354"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction and Background</h2></div></div></div><p>Our focus has been on the representation of change to structured documents, and in
+            this work our original objective was to find a way to represent change to structure, and
+            this turned out to provide a useful representation for overlapping hierarchy, but with
+            the advantage that other changes could also be represented.</p><p>Jeni Tennison says in one of her excellent blogs, "Overlap is arguably the main
+            remaining problem area for markup technologists." [<a class="xref" href="bi12.html#Tennison1" shape="rect">1</a>]. She
+            points out that this is not only an issue for academics looking at poetry and historical
+            documents, but is also an issue in managing change to structured documents. The example
+            she cites is legislation which is amended over time where the authors are not concerned
+            about changes to structure, their primary interest is in the textual changes.</p><p>There are a number of different approaches to this problem, and some excellent reviews
+            of the advantages and disadvantages of the approaches [<a class="xref" href="bi12.html#Overlapping" shape="rect">2</a>] 
+            [<a class="xref" href="bi12.html#Overlapping2" shape="rect">3</a>] [<a class="xref" href="bi12.html#Overlapping3" shape="rect">4</a>] [<a class="xref" href="bi12.html#Overlapping4" shape="rect">5</a>].
+            Our own goal is to represent changes to documents, such as versions of documents over a
+            period of time as they are amended, and to represent them in a way that is easy to
+            process. This reflects the classic advantage of XML, where content can be re-purposed to
+            meet different needs. If the document can be re-purposed, then we need to be able to
+            re-purpose changes also, and this means changes need to be represented in way that is
+            easy to process.</p><p>Ignoring for the moment changes to attributes, most changes can be represented by the
+            addition and deletion of elements and their content. Additionally, we need to be able to
+            mark segments of text that are either added or deleted. This approach allows us to
+            represent any change, although not always in an optimal way. For example, in the
+            extreme, the deletion of the 'old' document and addition of the 'new' document correctly
+            represents the changes, but not in a very useful way. This leads to the observation that
+            by duplicating content it is always possible to represent a change in a structured
+            document. The problem is that we do not wish to duplicate content because this appears
+            to the user as a change to the content, whereas in practice the only change may be to
+            the structural markup around that content. This leads to the need to represent the
+            addition, deletion, and overlapping of structural elements representing
+            hierarchy.</p><p>The TEI format [<a class="xref" href="bi12.html#TEI" shape="rect">6</a>] has powerful, though complex, ways of
+            representing different hierarchies, and also variants of text within a document. The
+            goal is to provide rich semantic information about the document, representing all of
+            this information in a single place. Using this semantically rich representation, it
+            would be possible to generate all the different variants of the document, including
+            variants of the text and variants of the hierarchy. When we are considering change, it
+            is essentially all these different variants that we use as a starting point. Therfore in
+            this respect our goal is very similar to, but not quite the same as, the goal of the TEI
+            format. As our starting point is a set of document variants, it is natural that we
+            clearly identify each of these source variants in the single merged document. We
+            therefore always make a very precise differentiation between two overlapping structures,
+            because these are considered to have come from different source documents.</p><p>The inherent model that we adopt here, i.e. one that addresses the representation of
+            variants of the whole document, is important because it does differ from a model where
+            the desire is to represent variants in structure within a document. The latter model can
+            lead to a very large number of whole document variants, and our model is not well suited
+            to a large number of variants because the attribute values representing the variants
+            become long and therefore difficult to manage. Our model addresses primarily overlap in
+            the context of change to a document and is not intended as a solution to all overlap
+            representation problems.</p><p>Although TEI has these mechanisms, most XML document formats, such as DITA[<a class="xref" href="bi12.html#DITA" shape="rect">7</a>] or DocBook[<a class="xref" href="bi12.html#DocBook" shape="rect">8</a>], do not and would therefore
+            benefit from a way of representing overlap. In these formats, overlap representation is
+            needed in order to better represent change. There is a clear advantage to having a
+            standard way to enhance an existing schema with change and overlap representation
+            because structured document editing applications then need to understand only one way of
+            handling this. Schmidt [<a class="xref" href="bi12.html#Schmidt2" shape="rect">9</a>] suggests that a good way to manage
+            documents that have overlapping hierarchy is to split them into separate documents and
+            merge them as needed, though this idea does not seem to have gained a significant
+            following.</p><p>There is another distinguishing feature of this solution. In other solutions for
+            representing overlap, identifier attributes (which may or may not be strictly of type
+            xml:id) are often used to indicate which fragments are part of the same element, but
+            with this solution there is no such use of identifier attributes. The problem with using
+            identifier attribtues is that it is difficult to denote a fragment that is part of two
+            separate hierarchies because only one identifier attribute can be present on each
+            element. The identifier attribute could contain a list of identifiers but this does lead
+            to make it more difficult to process.</p><p>The representation described here is pure XML. As such, standard XML processing tools
+            such as XSLT and XQuery can be used to process it. Each of the original document
+            variants can be extracted: this was our primary goal and is an important feature. We
+            have verified that it is quite simple in XSLT to extract a single version, and it is
+            simple to determine the ancestors of a particular element or piece of text. We are
+            currently researching alternative types of processing. One XSLT approach shows
+            particular promise for processing n-way comparison results. This uses a template that
+            employs sibling recursion and XSLT 3.0 maps, the maps keep track of the state of each
+            tree using an extension to the principle of a common stack. </p><p>There are validation rules, which we express in Schematron, for this representation.
+            Validation against the original schema of the source documents would need to be done by
+            extracting each version and validating it. In other words, we can assert that the
+            representation is correct if the Schematron rules are passed and if we can extract each
+            of the original documents correctly, i.e. the extracted document is deep equal to the
+            original.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

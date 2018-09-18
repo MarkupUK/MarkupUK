@@ -1,0 +1,125 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>XPantS contents</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="xpants.html" title="XPantS" /><link rel="prev" href="macro-construction.html" title="Macro construction" /><link rel="next" href="build-file-example.html" title="Build file example" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="macro-construction.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="build-file-example.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="xpants-contents"><div class="titlepage"><div><div><h3 class="title">XPantS contents</h3></div></div></div><p>
+      These macros have been developed as they were required, especially
+      the external tool wrappers, but they can be divided into three
+      broad categories.
+    </p><p>
+      The XML macros include:
+    </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>
+          <code class="literal">apply-transform</code>: Applies an XSLT (or a
+          series of XSLTs) to a file or fileset. As might be expected
+          this is a wrapper around the built in Ant
+          <code class="literal">&lt;xslt&gt;</code> task but with some convenience
+          features.
+        </p></li><li class="listitem"><p>
+          <code class="literal">compile-schematron</code>: Compiles a Schematron
+          file (or files) into an XSLT using the ISO Schematron
+          transforms, although the individual stylesheets that perform
+          the various stages of the compilation can be overridden if
+          required. Standard XPantS library XSLTs can also be applied
+          directly, e.g. to remove comments.
+        </p></li><li class="listitem"><p>
+          <code class="literal">convert-schema</code>: A wrapper around the
+          <a class="link" href="http://www.thaiopensource.com/relaxng/trang.html" target="_top" shape="rect">Trang</a>
+          converter (and consequently has the same limitations).
+        </p></li><li class="listitem"><p>
+          <code class="literal">validate-instance</code>: A wrapper around Ant’s
+          <code class="literal">&lt;xmlvalidate&gt;</code> and
+          <code class="literal">&lt;schemavalidate&gt;</code> tasks, along with a
+          wrapper around the
+          <a class="link" href="http://www.thaiopensource.com/relaxng/jing.html" target="_top" shape="rect">Jing</a>
+          validator for RNG/RNC instance files. This allows the user to
+          use the same macro to validate an instance against any type of
+          schema.
+        </p></li></ul></div><p>
+      Some of the more utility based macros include:
+    </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>
+          <code class="literal">attr-checks</code>: These macros are mainly used
+          by the rest of the library as part of it’s parameter checking
+          and error handling.
+        </p></li><li class="listitem"><p>
+          <code class="literal">compare-files</code>: Compare files (or filesets)
+          using either the <span class="emphasis"><em>diff</em></span> tool or
+          <a class="link" href="https://www.deltaxml.com" target="_top" shape="rect">DeltaXML</a>
+          (which must also be installed).
+        </p></li><li class="listitem"><p>
+          <code class="literal">deploy-files</code>: Deploys a set of files to a
+          target. This may use the standard file system utilities
+          (i.e. the Ant <code class="literal">&lt;copy&gt;</code> task) but
+          options exist for using the AWS command line tool (for
+          example, deployment to an S3 bucket) or
+          <span class="emphasis"><em>scp</em></span>.
+        </p></li><li class="listitem"><p>
+          <code class="literal">extract-markdown</code>: Uses XSLTs internal to
+          the library to extract Markdown documentation from Ant build
+          files, XSLT files or Schematron files. For Ant build files it
+          also adds documentation around the macros and targets the file
+          contains. XSLT file documentation is enhanced with lists of
+          templates and Schematron files have documentation for pattern,
+          rules, asserts and reports added. The output is Markdown, so
+          may need to be converted into HTML (e.g. using the
+          <code class="literal">&lt;pandoc&gt;</code> macro, below).
+        </p></li><li class="listitem"><p>
+          <code class="literal">file-utils</code>: These macros are mainly used by
+          the rest of the library as part of it’s parameter checking and
+          error handling.
+        </p></li></ul></div><p>
+      A number of external (command line based) tools also have Ant
+      macro wrappers:
+    </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>
+          <code class="literal">aws</code>: A wrapper around the AWS command line
+          tool. It also includes a macro that uses the <span class="quote">“<span class="quote">s3
+          sync</span>”</span> command, which is used by
+          <code class="literal">&lt;deploy-files&gt;</code>.
+        </p></li><li class="listitem"><p>
+          <code class="literal">git</code>: These macros provide access to the
+          <span class="emphasis"><em>git</em></span> command line functionality.
+          Convenience functions are included for getting the current
+          branch name, getting the current status, checking for
+          outstanding commits (and failing the build if there are any)
+          and checking if the current branch matches a particular
+          pattern (e.g. failing the build if the current branch is not
+          "release).
+        </p></li><li class="listitem"><p>
+          <code class="literal">pandoc</code>: A wrapper for the
+          <a class="link" href="http://pandoc.org" target="_top" shape="rect">Pandoc</a> document
+          converter. Most of the important options are available as
+          arguments to the <code class="literal">&lt;pandoc&gt;</code> macro.
+        </p></li><li class="listitem"><p>
+          <code class="literal">python</code>: A wrapper for the
+          <span class="emphasis"><em>python</em></span> command to run local scripts or
+          installed modules. Also includes macros to build and install
+          Python Package Index (PyPi) modules.
+        </p></li><li class="listitem"><p>
+          <code class="literal">ssh</code>: Wrappers for the
+          <span class="emphasis"><em>ssh</em></span> (Secure Shell) and
+          <span class="emphasis"><em>scp</em></span> commands. Also used by the
+          <code class="literal">&lt;deploy-files&gt;</code> macro.
+        </p></li><li class="listitem"><p>
+          <code class="literal">tidy</code>: A wrapper around the
+          <a class="link" href="http://www.html-tidy.org" target="_top" shape="rect">HTML Tidy</a>
+          application.
+        </p></li><li class="listitem"><p>
+          <code class="literal">version-number</code>: One of the newer macros,
+          this contains a number of functions to update version numbers
+          that conform to the Semantic Versioning standard.
+        </p></li><li class="listitem"><p>
+          <code class="literal">xspec</code>: This is simply a wrapper around the
+          <span class="strong"><strong>xspec.bat</strong></span>/<span class="strong"><strong>xspec.sh</strong></span>
+          scripts provided by the XSpec install (so it should be on the
+          path).
+        </p></li></ul></div><p>
+      The
+      <a class="link" href="https://ant.apache.org/antlibs/antunit/" target="_top" shape="rect">AntUnit</a>
+      testing framework is gradually being applied to more of the macros
+      as development time permits. This should increase the stability
+      and quality of the library.
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="macro-construction.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="xpants.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="build-file-example.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

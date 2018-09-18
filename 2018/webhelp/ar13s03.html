@@ -1,0 +1,119 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Representing Structural Change without Content Duplication</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar13.html" title="When Overlapping XML Meets Changing XML Does Confusion Reign?" /><link rel="prev" href="ar13s02.html" title="How Content Duplication Represents Any Change" /><link rel="next" href="ar13s04.html" title="Dominant Hierarchy" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5388"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Representing Structural Change without Content Duplication</h2></div></div></div><p>In order to avoid duplication of content, we need to distinguish between the element
+            tag and its content so that we can make assertions about the tag and content separately
+            and independently.</p><p>As a starting point, we can add an attribute to an element to indicate whether or not
+            this element was present in a particular variant of the document. If the element was
+            present, then the implication is that both the tag and the contents were present. In the
+            above situation, we want to indicate that the content, i.e. the word 'quick', was
+            present in two versions, but the tag, i.e. the &lt;s&gt;, was only present in one version.
+            We can take a simple approach to this and add an additional attribute with this
+            information.</p><pre class="programlisting" xml:space="preserve">&lt;p dx=”A,B” dxTag=”A,B”&gt;The 
+  &lt;s dx=”A,B” dxTag=”B”&gt;quick&lt;/s&gt; 
+  brown fox.&lt;/p&gt;</pre><p>Here, the dx attributes tells us the documents in which the element (and its content)
+            were present, as described above. But now the dxTag attribute tells us a bit more:
+            whether or not the tag itself was present. So where the document identifiers are the
+            same in both the dx attribute and the dxTag attribute, the element and its content were
+            present. Where we see dx='A,B' and dxTag='B' we can deduce that the tag was present only
+            in B. This means that A contained ‘quick’ and B contained ‘&lt;s&gt;quick&lt;/s&gt;’.</p><p>We can optimize this a little by omiting the dxTag attribute if its value is the same
+            as the dx value. Therefore we
+            get:</p><pre class="programlisting" xml:space="preserve">&lt;p dx=”A,B”&gt;The 
+  &lt;s dx=”A,B” dxTag=”B”&gt;quick&lt;/s&gt;
+  brown fox.&lt;/p&gt;</pre><p>This is a simple representation of a simple change. We can make an adjustment to this
+            to represent, for example, a change from &lt;i&gt; in document A to &lt;s&gt; in document B as
+            follows:</p><pre class="programlisting" xml:space="preserve">&lt;p dx=”A,B”&gt;The 
+  &lt;i dx=”A,B” dxTag=”A”&gt;&lt;s dx=”A,B” dxTag=”B”&gt;quick&lt;/s&gt;&lt;/i&gt;
+  brown fox.&lt;/p&gt;</pre><p>We can now introduce some overlap and see how the principles above are extended. When
+            overlap occurs, in order to avoid duplicating content, we need to split some of the
+            elements into fragments - this is the approach that Jeni Tennison calls 'fragmentation'.
+            When we fragment an element, then clearly one original element becomes two or more
+            fragments. The dxTag attribute refers to the whole tag, so we need to extend this to
+            represent the start and the end. To achieve this we have dxTagStart and dxTagEnd so that
+            we clearly distinguish between the start fragment and the end fragment. In more complex
+            situations where an element is split into more than two fragments, we also introduce
+            dxTagMiddle for any fragement betwen the start and end fragments.</p><p>This is an example of simple
+            overlap:</p><pre class="programlisting" xml:space="preserve">&lt;p&gt;The quick brown fox. It jumped over the lazy dog.&lt;/p&gt;</pre><pre class="programlisting" xml:space="preserve">&lt;p&gt;The quick brown fox.&lt;/p&gt;&lt;p&gt; It jumped over the lazy dog.&lt;/p&gt;</pre><p>This is represented
+            as:</p><pre class="programlisting" xml:space="preserve">&lt;p dxTagStart="A" dxTag="B" dx="A,B"&gt;The quick brown fox.&lt;/p&gt;
+&lt;p dxTagEnd="A" dxTag="B" dx="A,B"&gt; It jumped over the lazy dog.&lt;/p&gt;</pre><p>This shows two &lt;p&gt; elements, and for the B document each of these represents a
+            complete element, denoted by dxTag="B". For the A document, the two &lt;p&gt; elements are
+            fragements and so the first is identified by dxTagStart="A" and the second one by
+            dxTagEnd="A". This is an unambiguous representation that requires no duplication of
+            textual content. The astute observer may comment that the leading space in the second
+            paragraph of the B document would probably have been deleted. Proper handling of
+            whitespace is a consumer of considerable time and effort in XML document processing.
+            This type of change could be represented but it complicates the story so is ignored for
+            this example.</p><p>We can now consider an example of double overlap, where text is moved from one
+            paragraph to
+            another:</p><pre class="programlisting" xml:space="preserve">&lt;p&gt;The quick brown fox. It jumped over the lazy dog.&lt;/p&gt;&lt;p&gt; Yes!&lt;/p&gt;</pre><pre class="programlisting" xml:space="preserve">&lt;p&gt;The quick brown fox.&lt;/p&gt;&lt;p&gt; It jumped over the lazy dog. Yes!&lt;/p&gt;</pre><p>This is represented
+            as:</p><pre class="programlisting" xml:space="preserve">&lt;p dxTagStart="A" dxTag="B" dx="A,B"&gt;The quick brown fox.&lt;/p&gt;
+&lt;p dxTagEnd="A" dxTagStart="B" dx="A,B"&gt; It jumped over the lazy dog.&lt;/p&gt;
+&lt;p dxTag="A" dxTagEnd="B" dx="A,B"&gt; Yes!&lt;/p&gt;</pre><p>This shows three &lt;p&gt; elements, all of which are fragments in at least one document.
+            In the B document the first of these represents a complete element, denoted by
+            dxTag="B". The last two &lt;p&gt; elements are fragments and so the first is identified by
+            dxTagStart="B" and the second one by dxTagEnd="B". This mechanism will scale to any
+            level of complexity, for example three or more overlapping hierarchies. As overlap
+            increases, so does the fragmentation and therefore the complexity of the result.</p><p>Although there is not time to explore this more fully in this paper, it would
+            certainly be interesting to determine how easy it is to perform queries on this
+            structure such as, "find all the paragraphs containing both the word 'fox' and the word
+            'dog'" and have this return just the A document because in the B document these words
+            are in different paragraphs.</p><p>We can now look at a larger example including a change. We will for the example ignore
+            white space changes. The A document
+            is:</p><pre class="programlisting" xml:space="preserve">&lt;book&gt;
+    &lt;p&gt;
+        &lt;seg&gt;Scorn not the sonnet;&lt;/seg&gt;
+        &lt;seg&gt;critic, you have frowned, Mindless of its just honours;&lt;/seg&gt;
+        &lt;seg&gt;with this key SHAKESPEARE unlocked his heart;&lt;/seg&gt;
+        &lt;seg&gt;the melody Of this small lute gave ease to Petrarch's wound.&lt;/seg&gt;
+    &lt;/p&gt;
+&lt;/book&gt;</pre><p>And the second, B, document is as
+            follows:</p><pre class="programlisting" xml:space="preserve">&lt;book&gt;
+    &lt;l&gt;Scorn not the sonnet; critic, you have frowned,&lt;/l&gt;
+    &lt;l&gt;Mindless of its just honours; with this key&lt;/l&gt;
+    &lt;l&gt;Shakespeare unlocked his heart; the melody&lt;/l&gt;
+    &lt;l&gt;Of this small lute gave ease to Petrarch's wound.&lt;/l&gt;
+&lt;/book&gt;</pre><p>There are different representations that we can generate for this depending on how we
+            decide to nest the fragments. For example, if we generally nest the &lt;seg&gt; elements
+            inside the &lt;l&gt; elements, we get this
+            result:</p><pre class="programlisting" xml:space="preserve">&lt;book dx="A,B"&gt;
+    &lt;p dx="A,B" dxTag="A"&gt;
+        &lt;l dx="A,B" dxTag="B"&gt;
+            &lt;seg dx="A,B" dxTag="A"&gt;Scorn not the sonnet; &lt;/seg&gt;
+            &lt;seg dx="A,B" dxTagStart="A"&gt;critic, you have frowned,&lt;/seg&gt;
+        &lt;/l&gt;
+        &lt;l dx="A,B" dxTag="B"&gt;
+            &lt;seg dx="A,B" dxTagEnd="A"&gt;Mindless of its just honours; &lt;/seg&gt;
+            &lt;seg dx="A,B" dxTagStart="A"&gt;with this key&lt;/seg&gt;
+        &lt;/l&gt;
+        &lt;l dx="A,B" dxTag="B"&gt;
+            &lt;seg dx="A,B" dxTagEnd="A"&gt;
+                &lt;deltaxml:textGroup dx="A,B"&gt;
+                    &lt;deltaxml:text dx="A"&gt;SHAKESPEARE&lt;/deltaxml:text&gt;
+                    &lt;deltaxml:text dx="B"&gt;Shakespeare&lt;/deltaxml:text&gt;
+                &lt;/deltaxml:textGroup&gt; unlocked his heart;&lt;/seg&gt;
+            &lt;seg dx="A,B" dxTagStart="A"&gt;the melody&lt;/seg&gt;
+        &lt;/l&gt;
+        &lt;l dx="A,B" dxTag="B"&gt;
+            &lt;seg dx="A,B" dxTagEnd="A"&gt;Of this small lute gave ease to Petrarch's
+                wound.&lt;/seg&gt;
+        &lt;/l&gt;
+    &lt;/p&gt;
+&lt;/book&gt; </pre><p>It is instructive to visualize this structure as shown below. Here we are looking at
+            it primarily as document A, so the tags and text that belong only to B have been greyed
+            out. This is to visualize more clearly the A structure. Some of the &lt;seg&gt; elements
+            are still split so these would need to be merged in order to get back to the original A
+            document, although the basic original structure of A is apparent.<span class="inlinemediaobject"><img src="papers/markupuk-laf01/markupuk-laf01/lafo061201.jpg" width="540" /></span></p><p>This visualization illustrates the very simple nature of this approach. The attributes
+            we are adding provide information about an element, specifically for each variant the
+            attributes tell us which of the following is true: </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The tag and its content are present in this variant and the element is not
+                        fragmented</p></li><li class="listitem"><p>The tag and its content are present in this variant and the element is
+                        fragmented, so this is the start, the end or a middle fragment</p></li><li class="listitem"><p>The content is present in this variant but not the tag</p></li><li class="listitem"><p>The tag and its content are not present in this variant</p></li></ul></div><p>Therefore it is very simple to extract any one variant from the whole document or any
+            part of it. It is also very simple to work out, for a given piece of content, the list
+            of ancestors in any variant. An important characteristic of this representation is that
+            as the overlap reduces to zero so the representation reduces to the original
+            structure.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,61 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Declaring Map Types</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar12s04.html" title="Implementation" /><link rel="prev" href="ar12s04s01.html" title="Use of Maps for Returned Values" /><link rel="next" href="ar12s04s03.html" title="Assessment against Complex Types using Finite State Machines" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12s04s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s04s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect2" id="d5e5198"><div class="titlepage"><div><div><h3 class="title">Declaring Map Types</h3></div></div></div><p>Standard XSLT 3.0 allows maps (as described in the previous section) to be returned from templates, stored in variables,
+            and so on, so this style of processing is perfectly possible without departing from the standard. However, the facilities for
+            declaring the type of these maps are very weak. The closest we can get is <code class="code">map(xs:string, item()*)</code> which is
+            satisfied by any map whose keys are strings.</p><p>Much of the debugging process for this stylesheet involves understanding the contents of these returned maps, and it
+            is therefore frustrating that the XSLT 3.0 type system is so poor at validating these maps and reporting type errors. Saxon 
+            therefore introduces an extension to XSLT 3.0, called tuple types. Here is a declaration of the returned structure as
+            a tuple type:</p><pre class="programlisting" xml:space="preserve">
+  tuple( valid: xs:boolean?,          (: indicates whether the subtree is valid 
+                                         (default = true) :) 
+         errors: element(vr:error)*,  (: a list of errors found when validating the 
+                                         subtree :) 
+         value: xs:anyAtomicType*,    (: the typed value of an element or attribute :)
+         type: xs:string*,            (: the types of the typed values, as component 
+                                         IDs :)
+         lexical: xs:string?,         (: the lexical form of a value after whitespace 
+                                         normalization :)
+         id: xs:string*,              (: any ID values found while validating an 
+                                         element or attribute :) 
+         id-map: map(xs:string, element())*,  (: a mapping from ID values to elements :)
+         idrefs: xs:string*)          (: any IDREF values found while validating an 
+                                         element or attribute :)
+    </pre><p>This clearly documents the expected contents of the map much more precisely than the bland declaration 
+                <code class="code">map(xs:string, item()*)</code>.</p><p>Tuples in Saxon are not a separate data type in the way that maps and arrays are separate data types. Rather, a tuple type
+            is an alternative way of constraining the content of a map. It defines the (string-valued) keys that can appear in the map,
+            and for each permitted key, the permitted type of the corresponding values. Declaring the expected type of a map in this
+            form gives much improved static and dynamic type checking. For example, attempting to reference a non-existing field using
+            the lookup expression <code class="code">$result?Value</code> can generate a static error message, as can its use in an inappropriate
+            context such as <code class="code">$result?valid eq "true"</code>.</p><p>Because tuple type declarations are often quite lengthy, as in this example, Saxon allows them to be declared once
+            using a type alias:</p><pre class="programlisting" xml:space="preserve">&lt;saxon:type-alias name="validation-outcome" type="
+  tuple( valid: xs:boolean?,          (: indicates whether the subtree is valid 
+                                         (default = true) :) 
+         errors: element(vr:error)*,  (: a list of errors found when validating the 
+                                         subtree :) 
+         value: xs:anyAtomicType*,    (: the typed value of an element or attribute :)
+         type: xs:string*,            (: the types of the typed values, as component 
+                                         IDs :)
+         lexical: xs:string?,         (: the lexical form of a value after whitespace 
+                                         normalization :)
+         id: xs:string*,              (: any ID values found while validating an 
+                                         element or attribute :) 
+         id-map: map(xs:string, element())*,  (: a mapping from ID values to elements :)
+         idrefs: xs:string*)          (: any IDREF values found while validating an 
+                                         element or attribute :)
+
+ "/&gt;
+    </pre><p>And the type can then be referenced wherever an <code class="code">as</code> attribute can appear, for example:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:template match="*" as="map(xs:string, item()*)" saxon:as="~validation-outcome"/&gt;</pre><p>The syntax of <code class="code">saxon:as</code> is an XPath <code class="code">SequenceType</code> augmented with Saxon-specific
+            syntax, in this case a reference to a type alias marked as such by the presence of the leading tilde (~). The semantics
+            of <code class="code">saxon:as</code> are that it provides type information additional to that contained in the <code class="code">as</code>
+            attribute. Because (under the XSLT extensibility rules) attributes in the Saxon namespace are ignored by
+            XSLT processors other than Saxon, this whole mechanism enables Saxon to do extra compile-time and run-time type
+            checking, without in any way sacrificing the interoperability of the stylesheet: it still functions correctly
+            under other standards-conforming XSLT 3.0 processors.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12s04s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar12s04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s04s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

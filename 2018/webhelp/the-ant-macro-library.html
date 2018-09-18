@@ -1,0 +1,108 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The ANT macro library</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar11.html" title="Lightweight XML DevOps using Apache Ant" /><link rel="prev" href="documentation.html" title="Documentation" /><link rel="next" href="example-of-use.html" title="Example of use" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="documentation.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="example-of-use.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="the-ant-macro-library"><div class="titlepage"><div><div><h2 class="title" style="clear: both">The ANT macro library</h2></div></div></div><p>
+    It was clear that continuing to use the existing build process was
+    unsustainable, especially as the team was growing and required its
+    members to be able to rapidly switch roles within it. Therefore,
+    using the Development Policy as the basis for the team’s
+    requirements, a new Ant macro library was developed.
+  </p><p>
+    Although there are many build systems available it was decided to
+    keep using Apache Ant for two main reasons. Firstly, it is an XML
+    based technology which would be familiar to the team, and secondly
+    it would allow the team to re-use parts of the existing build system
+    where appropriate. The various Ant macros in the existing build
+    system were analysed for common code and functionality and a new
+    library constructed using the following principles:
+  </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>
+        Macro definitions would be used rather than custom Java code.
+        This would be simpler to maintain and would not require
+        additional skills beyond XML.
+      </p></li><li class="listitem"><p>
+        Modular code: related macro definitions would be grouped
+        together as files/modules to minimize the number of
+        <code class="literal">&lt;include&gt;</code> statements required.
+      </p></li><li class="listitem"><p>
+        Documentation for each of the modules would be included in the
+        module itself (as Markdown in the
+        <code class="literal">&lt;description&gt;</code> tag, as described above)
+        and automatically generated for deployment to an internal web
+        site.
+      </p></li><li class="listitem"><p>
+        Common sense naming conventions were followed: for example, the
+        file <span class="quote">“<span class="quote">compile-schematron.xml</span>”</span> contains macros
+        involved in Schematron compilation and so on.
+      </p></li><li class="listitem"><p>
+        Performance of the build system was not considered to be an
+        issue; instead maintainability of the code by the whole team was
+        considered to be more important.
+      </p></li><li class="listitem"><p>
+        Additional configuration tools like
+        <a class="link" href="http://ant.apache.org/ivy/" target="_top" shape="rect">Ivy</a> and
+        <a class="link" href="https://maven.apache.org" target="_top" shape="rect">Maven</a> were
+        also not involved, again for simplicity and maintainability
+        reasons.
+      </p></li></ul></div><p>
+    The macros in the library were developed over time but can be
+    grouped into a few broad categories:
+  </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>
+        XML operations, such as compiling Schematron files, validating
+        XML instance documents and so on.
+      </p></li><li class="listitem"><p>
+        Deployment of files using a variety of mechanisms.
+      </p></li><li class="listitem"><p>
+        Wrappers around shell commands/system executables, such as
+        <span class="emphasis"><em>git</em></span>, <span class="emphasis"><em>ssh</em></span> and so on.
+      </p></li><li class="listitem"><p>
+        Utility macros used by other macros.
+      </p></li></ul></div><p>
+    A number of XSLTs were also developed to work with these macros.
+    These generally involved:
+  </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>
+        Extracting Markdown documentation from Ant build files, XSLTs
+        and Schematron.
+      </p></li><li class="listitem"><p>
+        Filtering and converting SVRL reports.
+      </p></li><li class="listitem"><p>
+        Modifying Schematron files in a number if ways, for example to
+        display report and assert IDs in their respective messages.
+      </p></li><li class="listitem"><p>
+        General utilty stylesheets to modify XML documents in various
+        ways (remove documentation elements, linearise XML files etc).
+      </p></li></ul></div><p>
+    These XSLTs were deployed to a standard location on the CAPE where
+    they could be referenced by the Ant macros.
+  </p><p>
+    It should be noted that most these macros are essentially
+    <span class="quote">“<span class="quote">wrappers</span>”</span> around existing Ant functionality—but the
+    value of the Ant library lies in this encapsulation of higher level
+    functionality. For example, the <code class="literal">deploy-files</code>
+    macro is really just a wrapper around the Ant
+    <code class="literal">&lt;copy&gt;</code> task. However,
+    <code class="literal">deploy-files</code> is aware of the context within which
+    the team is working: team members merely supply a target path on the
+    CAPE and a relevant file set and the macro does the rest.
+  </p><p>
+    This <span class="quote">“<span class="quote">wrapper</span>”</span> pattern has proved very useful in day to
+    day use. For example, the standard deploy target for the CAPE is an
+    anonymous Samba share hosted on a AWS EC2 Linux instance. This
+    allows Ant’s basic <code class="literal">&lt;copy&gt;</code> mechanism (that
+    works over file systems) to be used for deployment, as well as
+    allowing developers to browse the deployment to check for
+    correctness. However, a recently Windows 10 patch removed the
+    ability for Windows 10 machines to connect to anonymous shares,
+    which meant that those developers could no longer deploy any files.
+    To get around this the <code class="literal">deploy-files</code> macro was
+    updated to use optionally use <span class="emphasis"><em>ssh</em></span> (Secure
+    Shell) as a deployment mechanism. Once the relevant
+    <span class="emphasis"><em>ssh</em></span> keys were installed and configured they
+    could carry on deploying assets with no changes required to their
+    existing build files.
+  </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="documentation.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar11.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="example-of-use.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

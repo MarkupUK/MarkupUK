@@ -1,0 +1,46 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>OUP data model</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar03.html" title="Two (and a half) models for markup of bibliographic references" /><link rel="prev" href="ar03s03.html" title="Online functionality of bibliographic references" /><link rel="next" href="ar03s05.html" title="BITS data model" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e821"><div class="titlepage"><div><div><h2 class="title" style="clear: both">OUP data model</h2></div></div></div><p>When OUP was first developing its data model, the digital content was created by
+      converting scholarly monographs that had already been published in print. The intention was to
+      sell the online content as a way of making these books more widely available. </p><p>The online version had to be as faithful as possible to the original print version. This
+      meant that bibliographic references had to be captured as plain text, as submitted by the
+      author. Each reference was wrapped in a <code class="code">&lt;bibItem&gt;</code> element.</p><p>Having the references link to library catalogues (via OpenURL[<a class="citation" href="bi03.html#d5e1013" shape="rect"><span class="citation">8</span></a>]) was
+            desirable, so we chose to identify the components of a reference by copying them into
+            attribute values on the <code class="code">&lt;bibItem&gt;</code> element.</p><p>OpenURLs and other search links are generated on the platform by parsing these
+      attributes.</p><p>This model also lets us add value to abbreviated references (e.g.
+      <span class="quote">“<span class="quote">Ibid.</span>”</span>)</p><div class="example" id="d5e832"><p class="title"><strong>Example 12. OUP data model for a book reference</strong></p><div class="example-contents"><p>(Using Vancouver style for the text of the reference.)</p><pre class="programlisting" xml:space="preserve">&lt;bibItem 
+  class="book" 
+  author="Lalloo F|Kerr B|Friedman J|Evans G"
+  title="Risk assessment and management in cancer genetics"
+  date="2005"
+  place="Oxford"
+  publisher="Oxford University Press"
+  &gt;
+    Lalloo F, Kerr B, Friedman J, Evans G. 
+    Risk assessment and management in cancer genetics.
+    Oxford: Oxford University Press; 2005
+&lt;/bibItem&gt;</pre></div></div><br class="example-break" clear="none" /><div class="example" id="d5e836"><p class="title"><strong>Example 13. OUP data model for a journal article reference</strong></p><div class="example-contents"><p>(Using Vancouver style for the text of the reference.)</p><pre class="programlisting" xml:space="preserve">&lt;bibItem 
+  class="journalArticle" 
+  author="Salomone A|Bozzo A|Di Corcia D|Gerace E|Vincenti M"
+  title="Occupational exposure to alcohol-based hand sanitizers: 
+      the diagnostic role of alcohol biomarkers in hair"
+  date="2018"
+  vol="42"
+  journalIssue="3"
+  page="157"
+  pageLast="162"
+  doiTarget="10.1093/jat/bkx094"
+  &gt;
+    Salomone A, Bozzo A, Di Corcia D, Gerace E, Vincenti M. 
+    Occupational exposure to alcohol-based hand sanitizers: 
+      the diagnostic role of alcohol biomarkers in hair. 
+    J Anal Toxicol. 2018 Apr 1;42(3):157–162, 
+    doi:10.1093/jat/bkx094
+&lt;/bibItem&gt;</pre></div></div><br class="example-break" clear="none" /></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
