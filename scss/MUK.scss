@@ -177,7 +177,8 @@ a {
 
 a.twitter {
     content: icon(twitter, $primary);
-    max-height: 1em;
+    max-height: 3em;
+    margin: 0 0.5em;
     &:link{
         content: icon(twitter, $primary);
     }
@@ -188,7 +189,8 @@ a.twitter {
 
 a.facebook {
     content: icon(facebook_2, $danger);
-    max-height: 1em;
+    max-height: 3em;
+    margin: 0 0.5em;
     &:link{
         content: icon(facebook_2, $primary);
     }
@@ -199,7 +201,8 @@ a.facebook {
 
 a.linkedin {
     content: icon(linkedin, $danger);
-    max-height: 1em;
+    max-height: 3em;
+    margin: 0 0.5em;
     &:link{
         content: icon(linkedin, $primary);
     }
@@ -210,7 +213,8 @@ a.linkedin {
 
 a.email {
     content: icon(mail, $danger);
-    max-height: 1em;
+    max-height: 3em;
+    margin: 0 0.5em;
     &:link{
         content: icon(mail, $primary);
     }

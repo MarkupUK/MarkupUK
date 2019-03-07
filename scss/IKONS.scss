@@ -40,12 +40,12 @@ behance.net/piotrkwiatkowski
 */
 
 @function _buildIcon($icon) {
-    $icon: '%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20width%3D%2264%22%20height%3D%2264%22%3E#{$icon}%3C%2Fsvg%3E';
+    $icon: '%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20xmlns%3Axlink%3D%27http%3A//www.w3.org/1999/xlink%27%20width%3D%2764%27%20height%3D%2764%27%3E#{$icon}%3C/svg%3E';
     @return $icon;
   }
-  
+
 @function _buildPath($path, $parameters) {
-$icon: '%3Cpath%20fill%3D%22#{map-get($parameters, color)}%22%20stroke%3D%22#{map-get($parameters, stroke-color)}%22%20stroke-width%3D%22#{map-get($parameters, stroke-width)}%22%20style%3D%22#{map-get($parameters, css)}%22%20d%3D%22#{$path}%22%20%2F%3E';
+$icon: '%3Cpath%20fill%3D%27%23#{str-slice(#{map-get($parameters, color)}, 2)}%27%20stroke%3D%27#{map-get($parameters, stroke-color)}%27%20stroke-width%3D%27#{map-get($parameters, stroke-width)}%27%20style%3D%27#{map-get($parameters, css)}%27%20d%3D%27#{$path}%27%20/%3E';
 @return $icon;
 }
 
