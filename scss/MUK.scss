@@ -262,20 +262,56 @@ h2 {
         .col-12,
         .col-md-8;}
 
-.card-columns {
+//.card-columns {
     // Extra small devices (portrait phones, less than 576px)
-    @media (max-width: 575.98px) {column-count: 1;}
+    //@media (max-width: 575.98px) {column-count: 1;}
     
     // Small devices (landscape phones, 576px and up)
-    @media (min-width: 576px) and (max-width: 767.98px) {column-count: 2;}
+    //@media (min-width: 576px) and (max-width: 767.98px) {column-count: 2;}
     
     // Medium devices (tablets, 768px and up)
-    @media (min-width: 768px) and (max-width: 991.98px) {column-count: 3;}
+    //@media (min-width: 768px) and (max-width: 991.98px) {column-count: 3;}
     
     // Large devices (desktops, 992px and up)
     //@media (min-width: 992px) and (max-width: 1199.98px) {column-count: 4;}
     
     // Extra large devices (large desktops, 1200px and up)
     //@media (min-width: 1200px) {column-count: 5;}
+//}
+
+.card-grouping {
+    @extend
+        .container;
 }
 
+.card {
+    @extend
+        .row,
+        .no-gutters,
+        .mb-3,
+        .mt-3;
+    flex-direction: row;
+}
+
+.card-image {
+    @extend
+        .col-sm-12,
+        .col-md-5,
+        .col-lg-4,
+        .mt-4,
+        .mb-4;
+}
+
+.committee-mugshot {
+    @extend
+        .card-img,
+        .img-thumbnail;
+}
+
+.card-body {
+    @extend 
+        .col-sm-12,
+        .col-md-7,
+        .col-lg-8,
+        .mb-4;
+}
