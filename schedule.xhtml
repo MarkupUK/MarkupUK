@@ -1334,21 +1334,11 @@
                           <h4 class="modal-title">Validating @selector: a regular expression adventure</h4>
                         </div>
                         <div class="modal-body">
-                          <p>The TEI recently introduced a new attribute, @selector, whose value (by
-                            default) is “a selector … CSS selector syntax will be used.” The TEI does not
-                            provide any validation constraints on @selector, defining it as teidata.text (which
-                            boils down to the RelaxNG string datatype).</p>
-                          <p>This strikes me as insufficient; formal syntactic validation of @selector is in order.
-                            The TEI does not say which version of CSS to use; I chose CSS3. The only
-                            formal constraint system available in the TEI schema language (other than
-                            enumerated lists of values and XSD datatypes) is the W3C regular expression
-                            language. Thus I set about writing a regular expression to validate CSS3
-                            selectors.</p>
-                          <p>This presentation will be both about the process of creating said regular
-                            expression, and the result. The result is a regular expression that is somewhat
-                            long—just over 18,300 characters—that I believe correctly matches valid CSS3
-                            selectors and correctly fails to match strings that are not valid CSS3 selectors.
-                            If it turns out I am mistaken, I would like to learn that.</p>
+                          <p>I needed a way to validate that the value of
+                            <code>tei:rendition/@selector</code> was a proper CSS3
+                            <strong>selector</strong>. So I wrote a regular expression to
+                            do so. An 18,385 character long regular expression. And it seems to
+                            work.</p>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
