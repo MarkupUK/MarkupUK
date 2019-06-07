@@ -1,50 +1,43 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Datatypes</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar14.html" title="The XForms 2.0 Test Suite" /><link rel="prev" href="ar14s06.html" title="The Generic Structure of the Tests" /><link rel="next" href="ar14s08.html" title="Events" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Domain-specific XML Vocabularies</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar14.html" title="Dispelling Myths About Markup Formats: When What Why Where" /><link rel="prev" href="ar14s06.html" title="Portable Document Format (PDF)" /><link rel="next" href="ar14s08.html" title="XHTML™: The Extensible HyperText Markup Language" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s06.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s08.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5633"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Datatypes</h2></div></div></div><p>To test datatypes, we want to do something similar. We can collect in the
-<code class="literal">test</code> elements a, possibly large, group of values of the datatype
-to be tested, and then see if the system thinks they are valid values for that
-type. For instance for the <code class="literal">date</code> datatype:</p><pre class="programlisting" xml:space="preserve">&lt;test pass="" res="" req="invalid"/&gt;
-&lt;test pass="" res="" req="valid"&gt;2018-01-20&lt;/test&gt;
-&lt;test pass="" res="" req="invalid"&gt;2018/01/20&lt;/test&gt;
-&lt;test pass="" res="" req="valid"&gt;-2018-01-20&lt;/test&gt;
-&lt;test pass="" res="" req="invalid"&gt;+2018-01-20&lt;/test&gt;
-&lt;test pass="" res="" req="invalid"&gt;02018-01-20&lt;/test&gt;
-&lt;test pass="" res="" req="valid"&gt;12018-01-20&lt;/test&gt;</pre><p>and so on, and then calculate with the bind for the results:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="test/@res" calculate="if(valid(.), 'valid', 'invalid')"/&gt;</pre><p>This would work fine, but for our purposes it has a difficulty. The
-<code class="literal">valid()</code> function is an XForms 2.0 addition, and we want as litttle
-as possible of the test suite infrastructure to depend on XForms 2.0 features
--- if anything is likely to fail it is the new features of the language before
-the old features; all the more so since many of the tests will still work with
-older versions of XForms and so can still be used on older implementations.</p><p>In XForms 1.1 (and later), if a control is bound to a value, and its value
-changes, an event is dispatched to the control announcing its validity. The
-standard XForms response is to change the display of the value to make it clear
-that it is now newly valid or invalid, but we can catch the event and record
-that it has happened for that value. The only difficulty that we have to deal
-with is that the event is only generated when the value changes.</p><p>So what we do is initially set the test value to some random value, it
-doesn't matter what it is, nor whether it is a valid or invalid value for the
-datatype, and when the system has initialised, only then change all the values
-to the data we are actually interested in. Then when the value changes, and the
-event is generated, we catch it and save the result. Something along these
-lines:</p><p>Store the value we are interested in in an attribute:</p><pre class="programlisting" xml:space="preserve">&lt;test pass="" res="" req="valid" <span class="bold"><strong>val="2018-01-20"</strong></span>/&gt;</pre><p>Add an attribute to the root element to record whether the system has been
-initialised yet:</p><pre class="programlisting" xml:space="preserve">&lt;tests pass="" <span class="bold"><strong>started=""</strong></span> name="date type" xmlns=""&gt;</pre><p>And then use a bind to calculate the value of the elements:</p><pre class="programlisting" xml:space="preserve">&lt;bind ref="test" type="date" calculate="<span class="bold"><strong>if(../@started='', 'xxx', @val)</strong></span>"/&gt;</pre><p>This ensures that initially the <code class="literal">test</code> elements have the value
-'xxx', until the <code class="literal">started</code> attribute is changed, which we do on
-initialisation, by catching the <code class="literal">xforms-ready</code> event:</p><pre class="programlisting" xml:space="preserve">&lt;action ev:event="xforms-ready"&gt;
-   <span class="bold"><strong>&lt;setvalue ref="@started"&gt;yes&lt;/setvalue&gt;</strong></span>
-&lt;/action&gt;</pre><p>Then in the output section, we can catch the validity events, and record
-them:</p><pre class="programlisting" xml:space="preserve">&lt;repeat ref="test"&gt;
-   &lt;output ref="."&gt;
-      &lt;action ev:event="xforms-valid"&gt;
-         &lt;setvalue ref="@res"&gt;valid&lt;/setvalue&gt;
-      &lt;/action&gt;
-      &lt;action ev:event="xforms-invalid"&gt;
-         &lt;setvalue ref="@res"&gt;invalid&lt;/setvalue&gt;
-      &lt;/action&gt;
-   &lt;/output&gt;
-   ...</pre><p>Which might look like this:</p><p>		<span class="inlinemediaobject"><img src="papers/pemberton/date.png" /></span>
-</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s06.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar14.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s08.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s06.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s08.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e6325"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Domain-specific XML Vocabularies</h2></div></div></div><p>Like RDF, XML is really a framework for one’s own information: it
+			does not come with much in the way of predefined semantics, whether
+			behavioural or extrinsic. Like HTML, XML has a simple tag-based
+			syntax for representing elements, but unlike HTML, XML does not
+			predefine any element names. There is also no single data model for
+			XML, although a few data models predominate in practice, primarily
+			DOM and XDM.</p><p>Since XML does not predefine element names, and also does not
+			support anonymous (unnamed) elements, one needs a set of XML names
+			for elements (and their attributes) to use. A set of element names
+			and constraints on them can loosely be called a
+				<span class="emphasis"><em>vocabulary</em></span>. To make XML useful, there are
+			three common paths people take, depending on their situation and the
+			project context: to use a domain-specific XML vocabulary; to extend
+			an existing XML vocabulary; to develop a custom XML vocabulary.
+			Subsequent sections will describe each of these in turn, including
+			some examples and some exceptions.</p><p>Some frequently-heard complaints about XML should be mentioned
+			here. People say that XML files are large compared to, for example,
+			JSON; this is often true although XML compresses well. But the names
+			repeated in XML end tags and the quotes around attribute values also
+			provide a level of redundancy: experience with SGML minimization
+			showed that the ability to omit these increased support costs
+			considerably, because they created common situations in which the
+			document would parse and even validate, but the interpretation of
+			the parser differed from that of the human user.</p><p>Another common complaint about XML from developers is that the
+			APIs for working with XML are inelegant. Although this was true
+			fifteen years ago, today there are often much more convenient APIs,
+			ranging from XQuery and XPath to JQuery. But in any case the primary
+			question of context for an XML project is whether the document
+			maintainers are in control of the markup or whether the developers
+			are. The former case is a primary use-case for XML. When developers
+			are in control, JSON may be a better fit for short-form key-value or
+			object-like documents. XML remains the format of choice for mixed
+			content, where there is a mixture of text and markup at the same
+			level.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar14s06.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar14.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar14s08.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
                             &lt;oXygen/&gt; XML WebHelp
                         </a></div></body></html>

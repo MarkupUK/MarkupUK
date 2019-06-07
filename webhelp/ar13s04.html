@@ -1,132 +1,26 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Dominant Hierarchy</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar13.html" title="When Overlapping XML Meets Changing XML Does Confusion Reign?" /><link rel="prev" href="ar13s03.html" title="Representing Structural Change without Content Duplication" /><link rel="next" href="ar13s05.html" title="Attributes" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>User experience analysis</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="xmlpaper.html" title="XMLPaper: XML-based Conference Paper Workflow" /><link rel="prev" href="ar13s03s04.html" title="Initial setup" /><link rel="next" href="ar13s05.html" title="Similarities with other content creation workflows" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5433"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Dominant Hierarchy</h2></div></div></div><p>Methods for representing overlapping hierarchy often need to know the dominant
-            hierarchy in order to know which tree structure 'overrides' the others. In this proposed
-            representation, there is no need for a concept of a dominant hierarchy. We are at
-            liberty to create a hierarchy that reduces the fragmentation as far as possible.
-            Therefore it is possible to adopt various different algorithms to generate different
-            results. The format describes how to represent overlapping hierarchy, it does not
-            dictate what the overlap should be. Therefore another valid representation of the
-            example above would be as
-            follows:</p><pre class="programlisting" xml:space="preserve">&lt;book xmlns:dx="xx" dx="A,B"&gt;
-    &lt;p dx="A,B" dxTag="A"&gt;
-        &lt;seg dx="A,B" dxTag="A"&gt;
-            &lt;l dx="A,B" dxTagStart="B"&gt;Scorn not the sonnet;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTagStart="A"&gt;
-            &lt;l dx="A,B" dxTagEnd="B"&gt;critic, you have frowned, &lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTagEnd="A"&gt;
-            &lt;l dx="A,B" dxTagStart="B"&gt;Mindless of its just honours;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTag="A"&gt;
-            &lt;l dx="A,B" dxTagEnd="B"&gt;with this key &lt;/l&gt;
-            &lt;l dx="A,B" dxTagStart="B"&gt;
-                &lt;dx:textGroup dx="A,B"&gt;
-                    &lt;dx:text dx="A"&gt;SHAKESPEARE&lt;/dx:text&gt;
-                    &lt;dx:text dx="B"&gt;Shakespeare&lt;/dx:text&gt;
-                &lt;/dx:textGroup&gt; 
-                unlocked his heart;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTag="A"&gt;
-            &lt;l dx="A,B" dxTagEnd="B"&gt;the melody &lt;/l&gt;
-            &lt;l dx="A,B" dxTag="B"&gt;Of this small lute gave ease to Petrarch's
-                wound.&lt;/l&gt;
-        &lt;/seg&gt;
-    &lt;/p&gt;
-&lt;/book&gt;</pre><p>We can also take this a step further, and look at the representation for what might be
-            called full fragmentation, i.e. each piece of text that has a different set of ancestors
-            is put into a single fragment. It would also be possible to treat the paragraph element
-            in the same way, but ideally this can be kept as a single element around all of the
-            text, providing a clearer and simpler representation.</p><p>
-            </p><pre class="programlisting" xml:space="preserve">&lt;book dx="A,B"&gt;
-    &lt;p dx="A,B" dxTag="A"&gt;
-        &lt;seg dx="A,B" dxTag="A"&gt;
-            &lt;l dx="A,B" dxTagStart="B"&gt;Scorn not the sonnet;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTagStart="A"&gt;
-            &lt;l dx="A,B" dxTagEnd="B"&gt;critic, you have frowned, &lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTagEnd="A"&gt;
-            &lt;l dx="A,B" dxTagStart="B"&gt;Mindless of its just honours;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTagStart="A"&gt;
-            &lt;l dx="A,B" dxTagEnd="B"&gt;with this key &lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTagEnd="A"&gt;
-            &lt;l dx="A,B" dxTagStart="B"&gt;
-                &lt;dx:textGroup dx="A,B"&gt;
-                    &lt;dx:text dx="A"&gt;SHAKESPEARE&lt;/dx:text&gt;
-                    &lt;dx:text dx="B"&gt;Shakespeare&lt;/dx:text&gt;
-                &lt;/dx:textGroup&gt;
-                unlocked his heart;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg dx="A,B" dxTagStart="A"&gt;
-            &lt;l dx="A,B" dxTagEnd="B"&gt;the melody &lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;seg  dx="A,B" dxTagEnd="A"&gt;
-            &lt;l dx="A,B" dxTag="B"&gt;Of this small lute gave ease to Petrarch's wound.&lt;/l&gt;
-        &lt;/seg&gt;
-    &lt;/p&gt;
-&lt;/book&gt;</pre><p>
-        </p><p>The actual hierarchy of the overlapping elements can be determined based on any
-            criteria. One criterion might be to minimise the fragmentation. The results of an
-            automated generation of the above by comparing the two documents and aligning them
-            according to their text content is shown below. In this example the attribute names are
-            shown in full, e.g. dx attribute is shown as deltaxml:deltaV2 and its content indicates
-            whether the two documents are equal, i.e. "A=B" or not equal, i.e. "A!=B". The hierarchy
-            is reconstructed to reduce
-            fragmentation.</p><pre class="programlisting" xml:space="preserve">&lt;book xmlns:deltaxml="http://www.deltaxml.com/ns/well-formed-delta-v1"
-    deltaxml:deltaV2="A!=B"
-    deltaxml:version="2.1" deltaxml:content-type="full-context"&gt;
-    &lt;p deltaxml:deltaV2="A!=B" deltaxml:deltaTag="A"&gt;
-        &lt;seg deltaxml:deltaV2="A!=B" deltaxml:deltaTag="A"&gt;
-            &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagStart="B" 
-                &gt;Scorn not the sonnet;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagMiddle="B"&gt; &lt;/l&gt;
-        &lt;seg deltaxml:deltaV2="A!=B" deltaxml:deltaTag="A"&gt;
-            &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagEnd="B"&gt;critic,
-            you have frowned,&lt;/l&gt;
-            &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagStart="B"&gt;Mindless
-            of its just honours;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagMiddle="B"&gt; &lt;/l&gt;
-        &lt;seg deltaxml:deltaV2="A!=B" deltaxml:deltaTag="A"&gt;
-            &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagEnd="B"&gt;with this key&lt;/l&gt;
-            &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagStart="B"&gt;
-               &lt;deltaxml:textGroup deltaxml:deltaV2="A!=B"&gt;
-                   &lt;deltaxml:text deltaxml:deltaV2="A"
-                        &gt;SHAKESPEARE&lt;/deltaxml:text&gt;
-                   &lt;deltaxml:text deltaxml:deltaV2="B"
-                        &gt;Shakespeare&lt;/deltaxml:text&gt;
-               &lt;/deltaxml:textGroup&gt;
-               unlocked his heart;&lt;/l&gt;
-        &lt;/seg&gt;
-        &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagMiddle="B"&gt; &lt;/l&gt;
-        &lt;seg deltaxml:deltaV2="A!=B" deltaxml:deltaTag="A"&gt;
-            &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTagEnd="B"&gt;the melody&lt;/l&gt;
-            &lt;l deltaxml:deltaV2="A!=B" deltaxml:deltaTag="B"&gt;Of this
-                small lute gave ease to Petrarch's wound.&lt;/l&gt;
-        &lt;/seg&gt;
-    &lt;/p&gt;
-&lt;/book&gt;</pre><p>In addition there are several elements that contain only white space, e.g. the second
-            &lt;l&gt; element. This is because the A document contained a space between the two
-            &lt;seg&gt;
-            elements:</p><pre class="programlisting" xml:space="preserve">&lt;seg&gt;Scorn not the sonnet;&lt;/seg&gt; &lt;seg&gt;critic, you have frowned,
-Mindless of its just honours;&lt;/seg&gt;</pre><p>The
-            B document had this space within the &lt;l&gt;
-            element:</p><pre class="programlisting" xml:space="preserve">&lt;l&gt;Scorn not the sonnet; critic, you have frowned,&lt;/l&gt;</pre><p>As mentioned earlier, correct handling of white space is often very complicated
-            because a careful distinction needs to be made between white space that can be ignored
-            and white space that is part of the content. Element boundaries are not always word
-            separators, for example elements that represent formatting are not considered word
-            separators whereas a new line would be considered a word separator. This is often not
-            clearly specified or represented in the XML schema.</p><p>The overlapping hierarchy representation described here is therefore suited to a
-            number of different situations. </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03s04.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e6107"><div class="titlepage"><div><div><h2 class="title" style="clear: both">User experience analysis</h2></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">Authors</span></dt><dd><p>Authors get an easy-to-setup environment to work on their paper. </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>Inline hints help the create the proper structure.</p></li><li class="listitem"><p>The "as-you-type" validation removes the anxiety of submitting
+									a paper that does not respect the conference constraints.</p><p>Also by integrating a reporting service, the validation errors
+									can be centralized and tracked in case the authors cannot fix
+									them right away.</p><div class="informalfigure"><div class="mediaobject"><img src="papers-2019/cristian/sonar-rule.png" width="278" /><div class="caption"><p>Validation issue presented by a reporting
+												service</p></div></div></div></li><li class="listitem"><p>A preview of the document helps authors tune the paper for the
+									paper publishing format used by the conference. For example,
+									limiting the code-blocks line length to make sure they do not
+									overflow the page for the indent values used when publishing the
+									proceedings.</p></li><li class="listitem"><p>Collaboration is made easy by the Git version system features
+									and the commenting and change-tracking features of the
+									editor.</p></li></ul></div></dd><dt><span class="term">Reviewers</span></dt><dd><p>Reviewers can add comments directly linked to the section that they refer
+						to. Also, in case of multi-round reviews, it is easy to see a difference
+						between the two versions of the paper and to check how their comments were
+						addressed.</p></dd><dt><span class="term">Conference organizers</span></dt><dd><p>Having the papers in a structured format and respecting the imposed
+						constraints, it is easy to publish them in multiple formats. Also, since
+						authors have the opportunity to preview their paper published with the
+						official formatting, the quality of the output should be better.</p></dd></dl></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03s04.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="xmlpaper.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
                             &lt;oXygen/&gt; XML WebHelp
                         </a></div></body></html>

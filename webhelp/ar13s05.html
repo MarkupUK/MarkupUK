@@ -1,50 +1,24 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Attributes</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar13.html" title="When Overlapping XML Meets Changing XML Does Confusion Reign?" /><link rel="prev" href="ar13s04.html" title="Dominant Hierarchy" /><link rel="next" href="ar13s06.html" title="Processing Observations" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Similarities with other content creation workflows</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="xmlpaper.html" title="XMLPaper: XML-based Conference Paper Workflow" /><link rel="prev" href="ar13s04.html" title="User experience analysis" /><link rel="next" href="ar13s06.html" title="Conclusion" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s04.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s06.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5447"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Attributes</h2></div></div></div><p> Attributes are an important part of the XML structure, and have not yet been
-            mentioned. Where an element appears in a particular document variant, and is not
-            fragmented, it is simple to add the attributes onto that element as part of the start
-            tag. When an element has been fragmented, then the attributes for that element will
-            appear in the start tag, i.e. the element with the dxTagStart attribute. This means that
-            any attributes that appear on a middle tag or end tag would not be relevant to a
-            particular document variant.</p><p>This is an example of simple overlap including some attribute
-            data:</p><pre class="programlisting" xml:space="preserve">&lt;p&gt;The quick brown fox. It jumped over the lazy dog.&lt;/p&gt;</pre><pre class="programlisting" xml:space="preserve">&lt;p&gt;The quick brown fox.&lt;/p&gt;&lt;p class="B"&gt; It jumped over the lazy dog.&lt;/p&gt;</pre><p>This is represented
-            as:</p><pre class="programlisting" xml:space="preserve">&lt;p dxTagStart="A" dxTag="B" dx="A,B"&gt;The quick brown fox.&lt;/p&gt;
-&lt;p dxTagEnd="A" dxTag="B" dx="A,B" class="B"&gt; It jumped over the lazy dog.&lt;/p&gt;</pre><p>This shows the class attribute but an attribute applies only to those variants where
-            the tag is a dxTag or dxTagStart. Therefore class="B" applies only to the B document
-            because for A this &lt;p&gt; is an end tag.</p><p>Changes to attributes can also be represented. This is done by converting the
-            attribute into markup as part of a new first child of the element. Although
-            theoretically possible to represent changes to attributes within attributes, this leads
-            to some dedicated syntactic conventions within the attribute string, which is not easy
-            to process. Therefore separating change attributes out into XML markup makes processing,
-            particularly using XSLT, much easier.</p><p>This is an example of simple overlap, including some changed attribute
-            data:</p><pre class="programlisting" xml:space="preserve">&lt;p class="B" align="left"&gt;The quick brown fox. It jumped over the lazy dog.&lt;/p&gt;</pre><p>
-            </p><pre class="programlisting" xml:space="preserve">&lt;p class="B" align="right"&gt;The quick brown fox.&lt;/p&gt;&lt;p&gt; It jumped over the lazy dog.&lt;/p&gt;</pre><p>This is represented
-            as:</p><pre class="programlisting" xml:space="preserve">&lt;p dxTagStart="A" dxTag="B" dx="A,B" class="B"&gt;
-  &lt;deltaxml:attributes&gt;
-    &lt;dxa:align dx="A,B"&gt;
-      &lt;deltaxml:attributeValue dx="A"&gt;left&lt;/deltaxml:attributeValue&gt;
-      &lt;deltaxml:attributeValue dx="B"&gt;right&lt;/deltaxml:attributeValue&gt;
-    &lt;/dxa:align&gt;
-  &lt;/deltaxml:attributes&gt;
-The quick brown fox.&lt;/p&gt;
-&lt;p dxTagEnd="A" dxTag="B" dx="A,B"&gt; It jumped over the lazy dog.&lt;/p&gt;</pre><p>This shows that the unchanged attribute, class="B", remains as an attribute, but the
-            changed align attribute is represented as markup to show the two values. This is a
-            simplified representation and full details can be found in the documentation of the
-            DeltaXML DeltaV2.1 format [<a class="xref" href="bi12.html#DeltaXML2" shape="rect">11</a>].</p><p>The delta representation also allows an alternative representation because the &lt;p&gt;
-            tag in the A document can be wrapped around the two &lt;p&gt; tags in the B document, as
-            shown below:
-            </p><pre class="programlisting" xml:space="preserve">&lt;p dxTag="A" dx="A,B" class="B" align="left"&gt;
- &lt;p dxTag="B" dx="A,B" class="B" align="right"&gt;The quick brown fox.&lt;/p&gt;
- &lt;p dxTag="B" dx="A,B"&gt; It jumped over the lazy dog.&lt;/p&gt;
-&lt;/p&gt;</pre><p>This is, in this case, a shorter representation though it has in effect used
-            duplication of the (unchanged) attributes and tags to show the change. However, this may
-            be a preferred representation for some formatting elements, for example if the class
-            attribute in a &lt;span&gt; is changed then it may be more useful to represent this as a
-            different &lt;span&gt;. Both representations conform to the delta format.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s04.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s06.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s04.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s06.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e6138"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Similarities with other content creation workflows</h2></div></div></div><p>The demand for more XML content has shifted the work of creating it from technical
+			writers to other departments of a company. Since these people work only occasionally on
+			content creation the investment to have them set up the necessary tools does not pay
+			off.</p><p>The idea of having a self-service project template that has all the configuration in
+			place can be applied in other scenarios such as creating similar documentation for
+			multiple products. For example, customizable products whose documentation has a standard
+			format but the parameters can differ, datasheets for microchips or release notes for a
+			software product.</p><p>For cloud-based services, the ease of setup is at odds with other business driving
+			factors such as security, legal compliance, and brand exposure. For example, if a
+			company provides a back-end service as using a freemium pricing model, they want the
+			user to be aware that about that service. So, it is not uncommon that during the setup
+			users will be exposed to a screen presenting that service. </p><p>However, in an enterprise environment, these factors are not that relevant which can
+			provide an even more intuitive user on-boarding experience. For example, a back-end
+			service can is usually licensed by the company and configured by a system administrator
+			and is totally transparent to the end-user. </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s04.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="xmlpaper.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s06.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
                             &lt;oXygen/&gt; XML WebHelp
                         </a></div></body></html>

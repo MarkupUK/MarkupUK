@@ -1,0 +1,101 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>diff3 Format as XML or JSON</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar07.html" title="An Improved diff3 Format for Changes and Conflicts in Tree Structures" /><link rel="prev" href="ar07s03s04.html" title="Representing JSON Separator Change in diff3" /><link rel="next" href="ar07s05.html" title="Nested Changes" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s03s04.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3254"><div class="titlepage"><div><div><h2 class="title" style="clear: both">diff3 Format as XML or JSON</h2></div></div></div><p>An obvious question about diff3, when we are looking at XML and JSON, is whether or
+            not we would get a significantly better result if we used XML or JSON instead of the
+            fairly basic format of diff3. The table below shows an example in diff3 and the
+            corresponding file in XML and JSON using a very simple syntax in each case. The purpose
+            here is just to explore whether or not it makes sense to do this.</p><div class="table" id="d5e3257"><p class="title"><strong>Table 6. diff3 format in XML or JSON</strong></p><div class="table-contents"><table class="table" summary="diff3 format in XML or JSON" border="1"><colgroup span="1"><col width="28%" align="left" class="c1" span="1" /><col width="41%" align="left" class="c2" span="1" /><col width="31%" align="left" class="c3" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1">diff3</th><th align="left" rowspan="1" colspan="1">XML</th><th align="left" rowspan="1" colspan="1">JSON</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">
+                                <pre class="programlisting" xml:space="preserve">1
+4
+5
+2
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; A.txt
+3
+||||||| O.txt
+3
+4
+5
+=======
+4
+5
+3
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; B.txt
+6</pre>
+                            </td><td align="left" rowspan="1" colspan="1">
+                                <pre class="programlisting" xml:space="preserve">&lt;d:diff3&gt;
+1
+4
+5
+2
+&lt;d:change&gt;
+    &lt;d:content origin="A.txt"&gt;
+3
+&lt;/d:content&gt;
+    &lt;d:content origin="O.txt"&gt;
+3
+4
+5
+&lt;/d:content&gt;
+    &lt;d:content origin="B.txt"&gt;
+4
+5
+3
+&lt;/d:content&gt;&lt;/d:change&gt;
+6
+&lt;/d:diff3&gt;</pre>
+                            </td><td align="left" rowspan="1" colspan="1">
+                                <pre class="programlisting" xml:space="preserve">{
+ "diff3": [
+  "1",
+  "4",
+  "5",
+  "2",
+  {
+   "change": {
+    "A.txt": ["3"],
+    "O.txt": [
+     "3",
+     "4",
+     "5"
+    ],
+    "B.txt": [
+     "4",
+     "5",
+     "3"
+    ]
+   }
+  },
+  "6"
+ ]
+}</pre>
+                            </td></tr></tbody></table></div></div><p><br class="table-break" clear="none" /></p><p>For JSON, we have represented the sequence of lines as an array of strings, where each
+            line is a string and a change is an object where each member name is the name of the
+            original file. We could have concatenated the lines with a '\n' delimiter, but this
+            would have been very difficult to read.</p><p>This example shows that JSON changes the look and feel significantly due to the way it
+            represents strings. XML is similar to the original, though some detail is left out here,
+            for example, <code class="code">xml:space="preserve"</code> or <code class="code">&lt;![CDATA[</code> to
+            preserve the formatting. If the original data is XML, then representing the changes in
+            XML in this way would be very confusing and it would be better to embed the changes
+            within the original XML, assuming the original was well-formed.</p><p>The addition of the id (to represent connected changes) would be very simple in XML as
+            an attribute, but a little harder in JSON because it would mean adding another member to
+            the change object. The table below compares some of the characteristics of the three
+            formats, where we use an informal score of three stars for good, two stars for OK and
+            one star for poor.</p><div class="table" id="d5e3281"><p class="title"><strong>Table 7. Characteristics of diff3, XML and JSON</strong></p><div class="table-contents"><table class="table" summary="Characteristics of diff3, XML and JSON" border="1"><colgroup span="1"><col width="30%" align="left" class="c1" span="1" /><col width="11%" align="left" class="c2" span="1" /><col width="12%" align="left" class="c3" span="1" /><col width="9%" align="left" class="c4" span="1" /><col width="38%" align="left" class="c5" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1"><span class="bold"><strong>Characteristic</strong></span></th><th align="left" rowspan="1" colspan="1">diff3</th><th align="left" rowspan="1" colspan="1">XML</th><th align="left" rowspan="1" colspan="1">JSON</th><th align="left" rowspan="1" colspan="1">Comment</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">No processing needed for unchanged file</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1"> </td></tr><tr><td align="left" rowspan="1" colspan="1">Preserve line structure</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1">JSON needs strings or \n</td></tr><tr><td align="left" rowspan="1" colspan="1">Good for text editor (by hand)</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1"> </td></tr><tr><td align="left" rowspan="1" colspan="1">Connected changes</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1"> </td></tr><tr><td align="left" rowspan="1" colspan="1">Nested changes</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1"> </td></tr><tr><td align="left" rowspan="1" colspan="1">Changes within a line</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1"> </td></tr><tr><td align="left" rowspan="1" colspan="1">Show all resolved merges</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1"> </td></tr><tr><td align="left" rowspan="1" colspan="1">Show changes to JSON data</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1">**</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1"> </td></tr><tr><td align="left" rowspan="1" colspan="1">Show changes to XML data</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1">***</td><td align="left" rowspan="1" colspan="1">*</td><td align="left" rowspan="1" colspan="1"> </td></tr></tbody></table></div></div><p><br class="table-break" clear="none" /></p><p>The table does show some potential advantages of having an XML representation of
+            diff3, especially for automated processing. For showing changes to well-formed XML in
+            XML this might require some care to preserve comments, processing instructions and the
+            first line declaration/prolog. Attribute changes could also not be handled as text so
+            again would need some further design thought. One approach would be to treat the XML
+            source file as text and enclose it in CDATA sections. It is likely that embedding the
+            changes in a well-formed XML source would require a different approach to simply using
+            XML to show changes in a text file. Similar issues would occur for showing changes to
+            JSON in JSON.</p><p>This proposal is not intended as an alternative to diff3 and it is clear that there
+            would be issues to resolve if JSON or XML were used. XML does look more appropriate, but
+            it lacks one desirable characteristic of diff3: no processing is needed for an unchanged file (or
+            one with no conflicts).</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s03s04.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar07.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

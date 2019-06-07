@@ -1,0 +1,85 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Self-service project template</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar13s03.html" title="XMLPaper architecture" /><link rel="prev" href="ar13s03s01.html" title="The source format" /><link rel="next" href="ar13s03s03.html" title="Steady-state workflow" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s03s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e5974"><div class="titlepage"><div><div><h3 class="title">Self-service project template</h3></div></div></div><p>The delivery format of XMLPaper is a self-service project template. This project
+				template does not only contain an outline of a paper to be filled in, but also
+				configuration files for all the required tools and services so that authors can
+				start working on the conference paper right away.</p><p>In order to create an affordable solution we reused off-the-shelf tools and
+				services and made them work together without having the author set every up thing.
+				To make it easy to create a portable configuration that works without any software
+				requirements for authors XMLPaper uses mostly cloud services.</p><p>XMLPaper allows authors, just by clicking a button, to copy the project template
+				to their Git account and deploy a web-based dashboard for working on the
+				paper.</p><div class="informalfigure"><div class="mediaobject" align="center"><img src="papers-2019/cristian/dashboard.png" align="middle" width="326" /><div class="caption"><p>XMLPaper Dashboard</p></div></div></div><p>The Dashboard contains buttons to perform the following tasks:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>Preview the latest committed version of the paper in PDF format.
+						</p></li><li class="listitem"><p>A link that can be used to edit the paper in Oxygen XML Web Author. </p><p>The project includes conference-specific editor configuration:</p><div class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>It validates the paper source "as-you-type" according to
+										the conference-specific constraints expressed as Schematron
+										rules.</p><div class="informalfigure"><div class="mediaobject"><img src="papers-2019/cristian/warning_in_editor.png" width="437" /><div class="caption"><p>Editor issues a warning that the abstract is
+												too short</p></div></div></div></li><li class="listitem"><p>It includes inline actions and hints to help authors
+										create the correct XML structure</p><div class="informalfigure"><div class="mediaobject"><img src="papers-2019/cristian/inline-hints.png" width="418" /><div class="caption"><p>Inline hint about how to split the paper in
+												sections. Inline actions to convert a section to
+												subsection and vice versa.</p></div></div></div></li><li class="listitem"><p>The change tracking and commenting features help
+										co-authors collaborate. They can also be used to send
+										document for review before submission.</p><div class="informalfigure"><div class="mediaobject"><img src="papers-2019/cristian/comments.png" width="435" /><div class="caption"><p>Comment added by a reviewer suggesting some
+												additional bibliography items </p></div></div></div></li></ul></div></li><li class="listitem"><p>View the XML source code in the Git repository. Most repository
+							hosting services can be used for collaboration between co-authors - they
+							offer version tracking, issue management, and other collaboration
+							features. </p><p>In this repository, users can find an <code class="filename">.xpr</code>
+							project file for Oxygen XML Editor which configures the editor to match
+							the conference requirements similar with the web editor. It also
+							includes a Transformation Scenario that generates a PDF preview. Using
+							this editor authors can edit and generate a PDF preview of their paper
+							while offline.</p></li><li class="listitem"><p>Download the paper in XML format and all supporting resources
+								(<code class="code">xi:include</code>d files, images, etc.)</p></li></ul></div><p>The back-end of the solution is composed of several services as depicted in the
+				diagram below:</p><div class="informalfigure"><div class="mediaobject" align="center"><img src="papers-2019/cristian/XMLPaper.png" align="middle" width="408" /><div class="caption"><p>XMLPaper back-end services diagram</p></div></div><p>
+					</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The <span class="bold"><strong>Dashboard</strong></span> is a static web
+								page with hyperlinks to the web interfaces of the other services. It
+								is generated during the initial setup since the links depend on the
+								location of the Git repository.</p></li><li class="listitem"><p>The <span class="bold"><strong>Git repository</strong></span> stores the
+								source of the paper together with configuration files and build
+								scripts.</p></li><li class="listitem"><p>The web-based <span class="bold"><strong>editor</strong></span> can be
+								opened using a link on the Dashboard. It connects to the Git
+								repository to read the paper source and to commit it every time the
+								users saves.</p></li><li class="listitem"><p>Every time an user commits a file in the Git repository, a git
+								hook triggers a new job on the <span class="bold"><strong>build
+									server</strong></span>. This job connects back to the Git repository
+								to pull the entire repository and then performs the following
+								tasks:</p><div class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>Generates the PDF preview. </p><p>This task involves downloading several tools such as Saxon
+										6.5, DocBook XSL, XSLT-HL (for syntax highlight in
+										code-blocks), and Apache FOP. It also involves applying some
+										custom XSLT and configuring the above-mentioned tools. </p><div class="example" id="d5e6049"><p class="title"><strong>Example 1. PDF Generation configuration</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">java -cp <strong class="hl-string"><em style="color:red">"bin/saxon.jar:bin/docbook/xsl/extensions/xslthl.jar"</em></strong> \           
+    com.icl.saxon.StyleSheet processed_paper.xml \
+    bin/docbook/xsl/fo/docbook_custom.xsl \
+  admon.graphics=<span class="hl-number">1</span> \
+  admon.graphics.extension=.png \
+  admon.graphics.path=bin/docbook/css/img/ \
+  <strong class="hl-string"><em style="color:red">"body.font.family=Times New Roman, Tahoma, Batang, serif"</em></strong> \
+  callout.graphics.path=bin/docbook/xsl/images/callouts/ \
+  draft.mode=<strong class="hl-string"><em style="color:red">"no"</em></strong> \
+  fop.extensions=<span class="hl-number">0</span> \
+  fop1.extensions=<span class="hl-number">0</span> \
+  highlight.source=<span class="hl-number">1</span> \
+  highlight.xslthl.config=\
+    file://`<strong class="hl-keyword">pwd</strong>`/bin/docbook/xsl/hl/xslthl-config.xml \
+  <strong class="hl-string"><em style="color:red">"monospace.font.family=monospace, Courier New, Consolas, Arial"</em></strong> \
+  paper.<strong class="hl-keyword">type</strong>=A4 \
+  <strong class="hl-string"><em style="color:red">"title.font.family=Arial, Tahoma, Batang, sans-serif"</em></strong> \
+&gt; out/paper.fo</pre></div></div><p><br class="example-break" clear="none" />However, configuring the publishing pipeline is
+										the job of the conference organizers. Authors just save in
+										the editor and then a build starts which in turn uploads the
+										generated PDF to the web server.</p></li><li class="listitem"><p>Generates the deliverable archive containing the XML
+										source and all its referenced files, for example
+										images.</p></li><li class="listitem"><p>Generates the Dashboard web page. This page is static and
+										does not change over time. However, its links depend on the
+										URL of the Git repository, so it has to be generated during
+										the first build.</p></li><li class="listitem"><p>Pushes everything on the <span class="bold"><strong>web
+											hosting</strong></span> service. In the current
+										implementation the <span class="bold"><strong>web
+											hosting</strong></span> and <span class="bold"><strong>build
+											server</strong></span> services are part of the same product.
+									</p></li></ul></div></li></ul></div><p>
+				</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13s03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s03s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

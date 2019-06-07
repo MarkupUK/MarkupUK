@@ -1,13 +1,13 @@
 /*
 
 Oxygen WebHelp Plugin
-Copyright (c) 1998-2018 Syncro Soft SRL, Romania.  All rights reserved.
+Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 
 
-@import "webhelp_topic_elements_styles.css?buildId=2018032809";
-@import "print.css?buildId=2018032809";
+@import "webhelp_topic_elements_styles.css?buildId=2019032613";
+@import "print.css?buildId=2019032613";
 
 /* Start RTL */
 html[dir="rtl"] .navnext {

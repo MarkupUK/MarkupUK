@@ -1,22 +1,88 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Emblematica Online – Linked Open Emblem Data</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar07.html" title="The Wolfenbüttel emblem2rdf Pipeline" /><link rel="prev" href="ar07s01.html" title="Introduction" /><link rel="next" href="ar07s02s01.html" title="Encoding emblems" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>How diff3 Delimits the Extent of Changes and Conflicts</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar07.html" title="An Improved diff3 Format for Changes and Conflicts in Tree Structures" /><link rel="prev" href="ar07s01.html" title="Introduction and Background" /><link rel="next" href="pres.html" title="Preserving Well-Formed Tree Structure in diff3" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02s01.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e2528"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Emblematica Online – Linked Open Emblem Data</h2></div></div></div><p> The latest iteration of the series set out to develop a core ontology for digital emblems
-      and publish the Wolfenbüttel collection of emblems as Linked Open Data. Being an XML-centered
-      library the goal is also to make <span class="quote">“<span class="quote">principled use RDF/XML</span>”</span> (<a class="biblioref" href="bi07.html#dodds_2016" shape="rect">Dodds 2016</a>) and publish the emblems as RDF/XML documents with an accompanying
-      RelaxNG grammar. Early on in the project we chose XProc as language both to recreate a model
-      of the existing publication workflows and to implement the RDF/XML production pipeline. </p><p>
-      XProc is a declarative language for XML-based processing pipelines. It was standardized by the W3C in 2010 and is
-      currently supported by two Open Source implementations, <a class="link" href="http://xmlcalabash.com" target="_top" shape="rect">XML
-      Calabash</a> and <a class="link" href="http://xml-project.com/morganaxproc/" target="_top" shape="rect">Morgana XProc</a>. XProc views a
-      pipeline as <span class="quote">“<span class="quote">a sequence of operations to be performed on zero or more XML documents</span>”</span> (<a class="biblioref" href="bi07.html#walsh_2010" shape="rect">Walsh et al. 2010</a>) and defines control structures as well as a standard library of required and optional steps
-      that perform common operations on XML. A step being an atomic operation that, much like a pipeline, accepts zero
-      or more XML documents as inputs and produces zero or more XML documents as output. XProc also allows for the
-      definition of user-defined steps that combine steps of the standard library into subpipelines.
-    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar07.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02s01.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="pres.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3088"><div class="titlepage"><div><div><h2 class="title" style="clear: both">How diff3 Delimits the Extent of Changes and Conflicts</h2></div></div></div><p>The example is based on this paper, "A Formal Investigation of Diff3" [<a class="xref" href="bi07.html#FormalDiff3" title="A Formal Investigation of Diff3" shape="rect">3</a>]. It explains how the two two-way diffs are aligned. It is
+            useful to understand this in order to see how it might affect tree-structured
+            data.</p><p>The example consists of three text files with numbers on each line, A, B and the 'old'
+            file O, as shown below:</p><div class="table" id="d5e3093"><p class="title"><strong>Table 1. </strong></p><div class="table-contents"><table class="table" summary="" border="1"><colgroup span="1"><col width="33%" align="left" class="c1" span="1" /><col width="33%" align="left" class="c2" span="1" /><col width="34%" align="left" class="c3" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1">A.txt</th><th align="left" rowspan="1" colspan="1">O.txt</th><th align="left" rowspan="1" colspan="1">B.txt</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">
+                                <pre class="programlisting" xml:space="preserve">1 
+4
+5
+2
+3
+6
+                            </pre>
+                            </td><td align="left" rowspan="1" colspan="1">
+                                <pre class="programlisting" xml:space="preserve">1
+2
+3
+4
+5
+6</pre>
+                            </td><td align="left" rowspan="1" colspan="1">
+                                <pre class="programlisting" xml:space="preserve">1
+2
+4
+5
+3
+6
+                            </pre>
+                            </td></tr></tbody></table></div></div><p><br class="table-break" clear="none" />
+        </p><p>The way these numbers are combined into the two diffs, A+O and O+B, is shown in the
+            table below. </p><p>
+            <span class="inlinemediaobject"><img src="papers-2019/robin/MarkupUK2019-submitted2/tables.png" /></span></p><p>The last three columns show how the two diffs are combined. Note that the yellow match
+            shows where all three files align. This alignment is important because it is the data
+            between these alignment points that are considered as units of change. Now we can look
+            at the diff3 output using the -m
+            option:</p><pre class="programlisting" xml:space="preserve">1
+4
+5
+2
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; A.txt
+3
+||||||| O.txt
+3
+4
+5
+=======
+4
+5
+3
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; B.txt
+6</pre><p>This output shows that the '4 5' sequence has been accepted as the only possibility
+            between the '1' and the '2', but between the '2' and the '6' we have three possible
+            choices, which are listed in the output. We do not want to get diverted into a
+            discussion about alignment algorithms, nor whether or not this is appropriate for
+            tree-structured data. The point here is that the positions in the files at which they
+            all three align are considered 'anchor' points, and all of the data between is
+            considered to be a choice - and when there is some kind of conflict, the choice is left
+            for the user to select. </p><p>There is an interesting consequence of this structure: it is not possible to have two
+            consecutive choices without a separator that is due to a commonality between all three
+            files, i.e., an anchor point. Although for structured data it would be natural, for
+            example, to provide choices about attributes in a manner that allows each attribute to
+            be chosen separately, the diff3 format dictates that two adjacent changes are seen as
+            one choice. For structured data such as XML, it may be possible to get round this by
+            artificially creating anchor points that are white space which is not relevant to the
+            result. However, this is not ideal, partly because diff3 would not create such
+            artificial anchor points and, therefore, the subsequent change to the layout of the
+            files would not be expected by the user.</p><p>The diff3 format provides a way to delineate the three choices, though not all of them
+            may be present. Each choice is independent of any other choice, and there is no
+            connection between them. This independence presents a problem for tree-structured data
+            because there is a dependency between, for example, inserting a start tag and inserting
+            the corresponding end tag; unless these insertions are done as a single choice, the
+            result will not be well-formed. This problem can always be overcome by duplicating some
+            of the data, and the argument here is very similar to that presented at this conference
+            last year regarding change to both content and structure [<a class="xref" href="bi07.html#Overlapping" title="When Overlapping XML Meets Changing XML Does Confusion Reign?" shape="rect">4</a>]. Duplication can work well when the span of the change is small because very little
+            data needs to be duplicated, but when the span is larger, more data needs to be
+            duplicated and the nature of the change is lost in this duplication. In the extreme,
+            duplication of the entire contents of an XML file will always yield a choice between
+            well-formed fragments because each fragment is the entire file. This is correct but, of
+            course, of little practical use.</p><p>We will look at some examples of changes to attributes where we can, with some
+            manipulation of the data, present choices where the selection of any one of the two or
+            three choices will provide a well-formed result.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar07.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="pres.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
                             &lt;oXygen/&gt; XML WebHelp
                         </a></div></body></html>

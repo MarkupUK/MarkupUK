@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8"/>
@@ -17,17 +17,24 @@
     
     <header>
       <nav>
-        <a class="navbar-brand" href="index.xhtml"><span class="MUK-title"/></a>
+        <a class="navbar-brand" href="index.html"><span class="MUK-title"/></a>
         <ul>
-          <li><a href="index.xhtml">Home</a><span class="sr-only"> (current)</span></li>
-          <li><a href="registration.xhtml">Registration</a></li>
-          <li><a href="speakers.xhtml">Speakers</a></li>
-          <li class="active"><a href="venue.xhtml">Venue</a></li>
-          <li><a href="schedule.xhtml">Schedule</a></li>
-          <li><a href="webhelp/index_frames.html">Proceedings</a></li>
-          <li><a href="Markup-UK-2018-proceedings.pdf">+PDF</a></li>
-          <li><a href="committee.xhtml">Committee</a></li>
+          <li class="active"><a href="index.html">Home</a><span class="sr-only"> (current)</span></li>
+          <li><a href="registration.html">Registration</a></li>
+          <li><a href="speakers.html">Speakers</a></li>
+          <li><a href="venue.html">Venue</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="committee.html">Committee</a></li>
           <li><a href="2018/index.xhtml">2018</a></li>
+          <li>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Proceedings</button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="webhelp/index_frames.html">HTML</a>
+                <a class="dropdown-item" href="Markup-UK-2019-proceedings.pdf">PDF</a>
+              </div>
+            </div>
+          </li>
         </ul>
       </nav>
     </header>
@@ -104,14 +111,17 @@
       <aside class="events">
         <h2>Sister events</h2>
         <div class="row">
-          <p class="col-md-6">
-            <p>
-              <a href="http://www.xmlprague.cz"><img src="img/xmlprague-top-logo-13.png" alt="XML Prague" width="100%" /></a>
-            </p>
-            <p>
-              <a href="http://www.balisage.net"><img src="img/BalisageLogotype.png" alt="Balisage" width="100%" /></a></p>
-          </p>
-          <p class="col-md-6"><a href="http://www.xmlsummerschool.com"><img src="img/xmlss.svg" alt="XML Summer School" width="85%" /></a></p>
+          <div class="col-md-6">
+            <a href="http://www.xmlprague.cz"><img src="img/xmlprague-top-logo-13.png" alt="XML Prague" width="100%" /></a>
+          </div>
+          <div class="col-md-6">
+            <a href="http://www.balisage.net"><img src="img/BalisageLogotype.png" alt="Balisage" width="100%" /></a>
+          </div>
+          <div class="col-md-6">
+            <a href="http://www.xmlsummerschool.com">
+              <img src="img/xmlss.svg" alt="XML Summer School" width="85%" />
+            </a>
+          </div>
         </div>
       </aside>
 
@@ -129,8 +139,8 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"/>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>

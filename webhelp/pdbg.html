@@ -1,0 +1,37 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Practical</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="dbg.html" title="Rapid cyclic debugging" /><link rel="prev" href="dbg.html" title="Rapid cyclic debugging" /><link rel="next" href="ldbg.html" title="Logical" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="dbg.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ldbg.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="pdbg"><div class="titlepage"><div><div><h4 class="title">Practical</h4></div></div></div><p>As mentioned above, rapid cyclic testing is not
+        particularly difficult: just take an XML file that has a test
+        selector on a <code class="code">tei:rendition/@selector</code>, and
+        validate it against the generated RELAX NG schema or transform
+        it with the generated XSLT stylesheet. But I am personally
+        fond of creating self-testing systems, in part because it
+        takes literate programming to a next step, keeping the test
+        cases in with the original documentation and program, thus
+        keeping all the concerns (as it were) in one file; and in part
+        just because it’s cool.</p><p>Observing that
+        </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>RELAX NG permits elements from namespaces
+          other than the RELAX NG namespace to occur in a grammar
+          (even as a direct child of <code class="sgmltag-element">rng:grammar</code>), and</p></li><li class="listitem"><p>XSLT permits elements from namespaces other
+          than the XSLT namespace to occur in a stylesheet (even as a
+          direct child of <code class="sgmltag-element">xsl:stylesheet</code> or
+          <code class="sgmltag-element">xsl:transform</code>),</p></li></ul></div><p>
+        I could insert the desired tests directly into the
+        <code class="filename">CSS3_selector_regex_generator.perl</code>
+        program such that they would be inserted into the output RELAX
+        NG schema or XSLT program as the value of a
+        <code class="code">tei:rendition/@selector</code>. The regular expression 
+        could then be tested against the test CSS selectors by
+        validating the output RELAX NG grammar <span class="emphasis"><em>against
+        itself</em></span> (that is, use the generated RELAX NG schema
+        as both the grammar and the document instance), or by
+        transforming the XSLT stylesheet <span class="emphasis"><em>with
+        itself</em></span> (that is, use the generated XSLT program as
+        both the stylesheet and the input document).</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="dbg.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="dbg.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ldbg.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

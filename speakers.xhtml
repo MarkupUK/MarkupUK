@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8"/>
@@ -17,17 +17,24 @@
     
     <header>
       <nav>
-        <a class="navbar-brand" href="index.xhtml"><span class="MUK-title"/></a>
+        <a class="navbar-brand" href="index.html"><span class="MUK-title"/></a>
         <ul>
-          <li><a href="index.xhtml">Home</a><span class="sr-only"> (current)</span></li>
-          <li><a href="registration.xhtml">Registration</a></li>
-          <li class="active"><a href="speakers.xhtml">Speakers</a></li>
-          <li><a href="venue.xhtml">Venue</a></li>
-          <li><a href="schedule.xhtml">Schedule</a></li>
-          <li><a href="webhelp/index_frames.html">Proceedings</a></li>
-          <li><a href="Markup-UK-2018-proceedings.pdf">+PDF</a></li>
-          <li><a href="committee.xhtml">Committee</a></li>
+          <li class="active"><a href="index.html">Home</a><span class="sr-only"> (current)</span></li>
+          <li><a href="registration.html">Registration</a></li>
+          <li><a href="speakers.html">Speakers</a></li>
+          <li><a href="venue.html">Venue</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="committee.html">Committee</a></li>
           <li><a href="2018/index.xhtml">2018</a></li>
+          <li>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Proceedings</button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="webhelp/index_frames.html">HTML</a>
+                <a class="dropdown-item" href="Markup-UK-2019-proceedings.pdf">PDF</a>
+              </div>
+            </div>
+          </li>
         </ul>
       </nav>
     </header>

@@ -1,87 +1,21 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2018 Proceedings" /><link rel="up" href="ar12.html" title="An XSD 1.1 Schema Validator Written in XSLT 3.0" /><link rel="prev" href="ar12.html" title="An XSD 1.1 Schema Validator Written in XSLT 3.0" /><link rel="next" href="ar12s02.html" title="The Validation Task" /><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar12.html" title="Documenting XML Structures" /><link rel="prev" href="ar12.html" title="Documenting XML Structures" /><link rel="next" href="ar12s01s01.html" title="About the author and his documenting experience" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2018032809" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect1" id="d5e5006"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction</h2></div></div></div><p>This paper describes the outline design of an XML Schema (XSD 1.1) validator written
-            entirely in XSLT 3.0.</p><p>There were two reasons for undertaking this project:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>Firstly, we see a demand to make implementations of the latest XML standards
-                    from W3C available on a wider variety of platforms. The base standards (XML 1.0,
-                    XPath 1.0, XSLT 1.0, XSD 1.0) that came out between 1998 and 2001 were very
-                    widely implemented, but subsequent refinements of these standards have seen far
-                    less vendor support. One can identify a number of reasons for this: perhaps the
-                    first versions of the standards met 90% of the requirements, and the market for
-                    subsequent enhancements is therefore much smaller; perhaps the early
-                    implementors found that their version 1 products were commercially unsuccessful
-                    and they therefore found it difficult to make a business case for further
-                    investment. In the case of products like libxml/libxslt produced by enthusiasts
-                    working in their spare time, perhaps the enthusiasts are more excited by a brand
-                    new technology than by version 2 of something well established. Whatever the
-                    causes, XSD 1.1 in particular only has three known implementations (Altova,
-                    Saxon, and Xerces) compared with dozens of implementations of XSD 1.0, despite
-                    the fact that there is a high level of consensus in the user community that the
-                    new features are extremely useful.</p></li><li class="listitem"><p>Secondly, as editor of the XSLT 3.0 specification and developer of a leading
-                    implementation of the language, I felt a need to "get my hands dirty" by
-                    developing an application in XSLT 3.0 that would stretch the capabilities of the
-                    language. I am often called on to provide advice to XSLT 3.0 users, and even now
-                    that the language specification is complete, I find myself designing extensions
-                    to meet requirements that go beyond the base standard, and this can only be done
-                    on the basis of personal experience in using the language "in anger" for real
-                    applications. In addition, the usability of a language compiler depends in high
-                    measure on the quality of diagnostics available, and improving the quality of
-                    diagnostics depends entirely on a feedback process: you need to make real
-                    programming mistakes, spot when the diagnostics could be more helpful, and make
-                    the required changes. </p></li></ul></div><p>More specifically, Saxonica has released an implementation of XSLT 3.0 written in
-            Javascript to run in the browser, and an obvious next step is to extend that
-            implementation to run under Node.js on the server. But for the server environment we
-            need to implement a larger subset of the language, and so the question arose, should we
-            write a version of the schema processor in Javascript? However, Javascript is not the
-            only language of interest: we're also seeing demand for our technology from users whose
-            programming environment is C, C++, C#, PHP, or Python. Since (using a variety of tools)
-            we've been trying to deliver XSLT 3.0 capability in all these environments, a natural
-            next step is to try and deliver a schema processor that will run on any of these
-            platforms, by writing it in portable XSLT 3.0 code.</p><p>Architecturally, there are two parts to an XSD schema processor:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The first part is the schema compiler. This takes as input the source XSD
-                    schema documents, and performs as much pre-processing of this input as it can
-                    prior to the validation of actual XML instances against the schema. This
-                    preprocessing includes verification that the schema documents themselves
-                    represent a valid schema, and other tasks such as expanding defaults. The XSD
-                    specification from W3C describes a "schema component model" which is an abstract
-                    description of a data structure that can be used to represent a compiled schema;
-                    and it gives detailed rules for translating source schema documents to this
-                    abstract data model. The Saxon schema processor follows this approach very
-                    closely, and it also defines a concrete XML-based representation of the schema
-                    component model which realises the output of the schema compilation phase in
-                    concrete form. This output in fact contains a little more than the SCM
-                    components and their properties; it also contains a representation of the finite
-                    state machines used to implement the grammar of complex types defined in the
-                    schema.</p></li><li class="listitem"><p>The second part is the instance validator. The instance validator takes two
-                    inputs: the compiled schema (SCM) output by the schema compiler, and an XML
-                    instance document to be validated. In principle its output is a PSVI (post
-                    schema validation infoset) containing the instance document as a tree, decorated
-                    with information derived from schema validation, including information
-                    identifying nodes that are found to be invalid. In practice, in the Saxon
-                    implementation, there are two outputs: a validation report, which in its
-                    canonical form is an XML document listing all the validation errors that were
-                    found, and a tree representation of the instance document with added type
-                    annotations, in the form prescribed by the XDM data model used by XPath, XQuery,
-                    and XSLT. Because the Saxon schema validator is primarily designed to meet the
-                    schema processing requirements of XSLT and XQuery, it only delivers the subset
-                    of PSVI required in that environment: this means that the output XML tree is
-                    only delivered if it is found to be valid, and the only tree decorations added
-                    by the validator are references from valid element and attribute nodes to the
-                    schema types against which they were validated. In effect, if the input is
-                    valid, then the output of the Saxon schema validator is a representation of the
-                    input XML instances with added type annotations; while if the input is invalid,
-                    then the output is a report listing validation errors.</p></li></ul></div><p>The software described in this paper is an XSLT 3.0 implementation of the instance
-            validator. It would certainly be possible to write an XSLT 3.0 implementation of the
-            schema compiler, and we may well do that next, but we haven't tackled this yet. </p><p>Moreover, the only output of the instance validator described here is a validation
-            report showing the validation errors. The software doesn't attempt to produce an XDM
-            representation of the input document with type annotations. In fact, this isn't possible
-            to do using standard XSLT 3.0 without extensions. XSLT 3.0 has no instructions to output
-            elements and attributes with specific type annotations; the only way it can generate
-            typed output is by putting the output through a schema validator, which is assumed to
-            exist as an external component. So to write that part of the validator in XSLT 3.0, we
-            would need to invent some language extensions.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar12.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s01s01.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect1" id="d5e5574"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction</h2></div></div></div><p>We, as XML geeks, all have to do with understanding XML structures we didn't design ourselves. It might be a programming language written as
+      XML, a library configuration file we need to change or data that needs filling. Whatever it is, we need to comprehend the format: the elements,
+      the parent-child relations and the attributes. Most important of course is the <span class="emphasis"><em>meaning</em></span> of it: how can we use this XML
+      structure to bridge the gap between our intend and the workings of the software it's going to be processed by.</p><p>Most of us will probably  have been on the other side of this problem: We designed a nifty XML structure and needed to explain this in such
+      a way that others can and will use it (and, as an important side-effect, are mighty impressed by our elegant, intelligent and beautiful design).
+      How to explain an XML structure so users can make the most of it? More often than not this also has marketing value: A well constructed and
+      intelligible explanation might convince people to use your product/library/programming language.</p><p>Neither side is easy. We probably all have experienced the frustration of wrestling with a half understood and sloppily documented XML
+      format as input for some piece of software that stubbornly refused to do what we wanted it to do. Or, on the other side, the sinking feeling of
+      having to document this nice but complex XML structure, not really knowing how to do this, but realizing it will take a lot of time.</p><p>This paper will look at the problem of documenting XML structures from various angles: consumer, producer, the structures themselves,
+      supporting software, etc. It will then focus on the production side. Spoiler alert: There are no quick and easy solutions and at the end there
+      is, unfortunately, no GitHub repository containing an auto-XML-structure-document-writer-application… sorry. However, with a little thinking
+      upfront and a bit of automation, the task of documenting XML structures can become more manageable and maybe, for some, even enjoyable.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar12.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar12.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar12s01s01.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
                             &lt;oXygen/&gt; XML WebHelp
                         </a></div></body></html>
