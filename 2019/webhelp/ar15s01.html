@@ -1,0 +1,85 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="Syd_selector_regex.html" title="Validating selector" /><link rel="prev" href="Syd_selector_regex.html" title="Validating selector" /><link rel="next" href="ar15s02.html" title="Against all odds" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="Syd_selector_regex.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar15s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e6445"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction</h2></div></div></div><p>Starting with P3 in 1994  (i.e., over two years before CSS1
+    was released), the <span class="orgname">Text Encoding
+    Initiative</span> <em class="citetitle">Guidelines for Text
+    Encoding and Interchange</em> supported a mechanism to
+    indicate a default rendition, a way of saying <span class="quote">“<span class="quote">all <code class="sgmltag-element">emph</code> elements were in bold italics in the
+    original.</span>”</span> The method used to indicate with which element type a
+    
+    particular default rendition was associated was to give the
+    element type as the value of the <code class="sgmltag-attribute">gi</code> attribute of the
+    <code class="sgmltag-element">tagUsage</code> element. The value of this attribute
+    could be validated in broad strokes by giving it a datatype of
+    <span class="symbol">teidata.xmlName</span> (which boils down to xsd:NCName).
+    Furthermore, it could be checked to be of an element type that
+    occurs in the document using some simple Schematron:
+
+      </p><pre class="programlisting" xml:space="preserve">&lt;sch:let name="instanceTypes"
+         value="distinct-values( //tei:TEI/tei:text//tei:*/local-name() )"/&gt;
+  
+&lt;sch:pattern&gt;
+  &lt;sch:rule context="tei:tagUsage[@gi]"&gt;
+    &lt;sch:assert test="@gi = $instanceTypes"&gt;
+      @gi should contain the name of an element that is within the
+      &amp;lt;text&gt; of the document.
+    &lt;/sch:assert&gt;
+  &lt;/sch:rule&gt;
+&lt;/sch:pattern&gt;</pre><p>
+    </p><p>Starting in 2015-10 with [<a class="citation" href="syd-references.html#d5e6751" shape="rect"><span class="citation">P5</span></a>]
+    [<a class="citation" href="syd-references.html#d5e6757" shape="rect"><span class="citation">2.9.0</span></a>], TEI introduced a new method for the
+    same purpose (and then phased out the original method). In this
+    new method, rather than simply giving the element type to which a
+    default rendition applied, a user specifies to which elements a
+    default rendition applies using the <acronym class="acronym" title="Cascading Style Sheets">CSS</acronym> selection mechanism. This allows far
+    greater flexibility and precision in expressing to which instance
+    elements a default rendition applies, at very little to no cost in
+    processing when using CSS to directly render TEI. For example, it
+    is quite common in early modern printed books to have the <a class="link" href="https://en.wikipedia.org/wiki/Signature_mark" target="_top" shape="rect">signatures</a>
+    centered on the bottom of certain pages, and the <a class="link" href="https://en.wikipedia.org/wiki/Catchword" target="_top" shape="rect">catchwords</a>
+    on the bottom right of each page. Each of these phenomena is
+    encoded in TEI using the <a class="link" href="https://tei-c.org/Vault/P5/3.5.0/doc/tei-p5-doc/en/html/ref-fw.html" target="_top" shape="rect"><code class="sgmltag-element">fw</code></a> element, but with different values
+    of its <code class="sgmltag-attribute">type</code> attribute. Thus it would
+    not be surprising to find the declarations in <a class="xref" href="ar15s01.html#fwrends" title="Example 1. Sample renditions" shape="rect">Example 1, “Sample <code class="sgmltag-element">rendition</code>s”</a> in a <code class="sgmltag-element">teiHeader</code>.
+
+    </p><div class="example" id="fwrends"><p class="title"><strong>Example 1. Sample <code class="sgmltag-element">rendition</code>s</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">&lt;rendition selector="fw[type='sig']"&gt;text-align: center;&lt;/rendition&gt;
+&lt;rendition selector="fw[type='catch']"&gt;text-align: right;&lt;/rendition&gt;</pre></div></div><p><br class="example-break" clear="none" />
+      
+      However, there is a significant cost to this improvement in the
+      system with respect to our ability to
+      validate.<a href="#ftn.d5e6472" class="footnote" shape="rect"><sup class="footnote" id="d5e6472">[26]</sup></a> The TEI only defines <code class="sgmltag-attribute">selector</code> as <span class="type">teidata.text</span>
+      (which boils down to the RELAX NG <span class="type">string</span>
+      datatype).</p><p>This struck me as insufficient, and when I found a simple
+    syntactic error in a <code class="sgmltag-attribute">selector</code> in one
+    of our textbase files, I decided to try to improve on the
+    situation. The TEI does not say from which version of CSS the
+    selector syntax should be taken, so I chose level 3 ([<span class="citation">sel3</span>]<a href="#ftn.d5e6480" class="footnote" shape="rect"><sup class="footnote" id="d5e6480">[27]</sup></a>).<a href="#ftn.d5e6484" class="footnote" shape="rect"><sup class="footnote" id="d5e6484">[28]</sup></a> The only formal constraint
+    system available in the TEI schema language<a href="#ftn.d5e6487" class="footnote" shape="rect"><sup class="footnote" id="d5e6487">[29]</sup></a> above and
+    beyond enumerated lists of values and XSD datatypes is the W3C
+    regular expression language. Thus I set about writing a regular
+    expression to validate CSS3 selectors.</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e6472" class="footnote"><p><a href="#d5e6472" class="para" shape="rect"><sup class="para">[26] </sup></a>It is also costly to use this system
+      when one wishes to convey the indicated renditions when
+      converting the TEI to some other markup language, e.g. XHTML or
+      ePUB. That is a topic for another paper,
+      though.</p></div><div id="ftn.d5e6480" class="footnote"><p><a href="#d5e6480" class="para" shape="rect"><sup class="para">[27] </sup></a>Since I did this work, a
+    newer version, [<span class="citation">sel3N</span>], has been released.
+    The new version seems at first blush to be substantially the same
+    as the one I was using; section 4 <em class="citetitle">Selector syntax</em> is word for word
+    identical.</p></div><div id="ftn.d5e6484" class="footnote"><p><a href="#d5e6484" class="para" shape="rect"><sup class="para">[28] </sup></a> I was at the time
+    blissfully ignorant of [<a class="citation" href="syd-references.html#d5e6820" shape="rect"><span class="citation">sel4</span></a>], which is still
+    in Working Draft.</p></div><div id="ftn.d5e6487" class="footnote"><p><a href="#d5e6487" class="para" shape="rect"><sup class="para">[29] </sup></a>Pure ODD. See various discussions
+    including <a class="link" href="https://wiki.tei-c.org/index.php?title=ODD#.22Pure_ODD.22" target="_top" shape="rect">a
+    brief overview</a>, <a class="link" href="http://www.tei-c.org/Support/Learn/odds.xml" target="_top" shape="rect">the TEI
+    introduction</a>, <a class="link" href="http://conferences.idealliance.org/extreme/html/2004/Burnard01/EML2004Burnard01.html" target="_top" shape="rect">an
+    <span class="emphasis"><em>Extreme Markup Languages</em></span> paper on ODD</a>,
+    <a class="link" href="http://jtei.revues.org/842" target="_top" shape="rect">a <span class="emphasis"><em>Journal
+    of the TEI</em></span> paper on Pure ODD</a>, <a class="link" href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TD.html" target="_top" shape="rect">the
+    specification</a>, or <a class="link" href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/USE.html#IM" target="_top" shape="rect">the
+    description of ODD processing</a>.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="Syd_selector_regex.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="Syd_selector_regex.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar15s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
