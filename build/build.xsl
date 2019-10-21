@@ -15,6 +15,7 @@
     
     <xsl:output method="html" version="5"/>
     
+    <!-- entries in a map corresponding to webpage output: see ./sitemap.xml -->
     <xsl:variable name="map" select="/map/page" as="element(page)+"/>
     
     <!-- Outputs a .html page to the parent directory (i.e. the live location).
@@ -35,7 +36,6 @@
     
     <!-- Assembles the page -->
     <xsl:template match="/xh:*" mode="page">
-        <xsl:param name="page-id" tunnel="yes"/>
         <html lang="en">
             
             <xsl:apply-templates select="doc('header.xhtml')"/>
