@@ -10,7 +10,7 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>build/registration.xhtml</String>
+                                    <String>build/speakers.xhtml</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -26,6 +26,21 @@
                             <scenarioAssociation>
                                 <field name="url">
                                     <String>build/index.xhtml</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>build-webpages</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XSL</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>build/registration.xhtml</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
