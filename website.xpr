@@ -10,27 +10,7 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>build/sitemap.xml</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>build-webpages</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>XSL</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioStorageLocations">
-                                    <list>
-                                        <Byte>2</Byte>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>build/speakers.xhtml</String>
+                                    <String>build/schedule.xhtml</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -71,6 +51,46 @@
                             <scenarioAssociation>
                                 <field name="url">
                                     <String>build/registration.xhtml</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>build-webpages</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XSL</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioStorageLocations">
+                                    <list>
+                                        <Byte>2</Byte>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>build/speakers.xhtml</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>build-webpages</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XSL</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioStorageLocations">
+                                    <list>
+                                        <Byte>2</Byte>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>build/sitemap.xml</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
