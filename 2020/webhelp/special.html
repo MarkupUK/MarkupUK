@@ -1,0 +1,38 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Why is XProc Special?</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar03.html" title="xprocedit, A Browser-Based Open-Source XProc Editor" /><link rel="prev" href="ar03s01.html" title="Introduction" /><link rel="next" href="ar03s03.html" title="Selecting a Graph Editing Framework" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="special"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Why is XProc Special?</h2></div></div></div><p>XProc pipelines are basically directed acyclic graphs where the processing steps are the nodes and the input/output
+      connections are the edges. However, when we at le-tex first tried to use generic browser-based graph editing frameworks
+      for XProc in 2014, we discovered that some fundamental XProc properties are not well supported, to wit: Multiple docking
+      ports per node, the distinction between input ports and options, the distinction between parameter and document inputs,
+      encapsulation/sub-graphs, and default readable ports.</p><p>Encapsulation, for example, is a powerful feature of XProc that allows to expose a potentially complex pipeline as an
+      apparently monolithic building block with a well-defined interface and opaque innards. Some graph editing frameworks are
+      able to fold a sub-graph so that it occupies less screen real estate. This is no genuine encapsulation though since it
+      requires folded sub-graphs to be copied and pasted rather than re-used. It does not allow the “write once, use many times”
+      approach that XProc’s language design supports so well.</p><p>This kind of encapsulation can be seen in other functional languages, too, and there are graphical editors for other
+      programming languages. What sets XProc apart is the ability of a processing step to produce many different outputs that
+      don’t need to be consumed at once (or at all). This is useful for example when an encapsulated multi-step conversion
+      pipeline produces the conversion result on one port and intermediate results and validation reports for the input and
+      output on other ports. But this multi-valued, non-simultaneously consumed outputs deviate sufficiently enough from common
+      programming paradigms as to render visual editors for these languages unsuited for editing XProc.</p><p>Another peculiarity, XProc’s concept of “primary” and “default readable ports” is meant to make pipeline authoring
+      less verbose: The primary port of adjacent (in document order) steps connect implicitly, without the need to establish
+      explicit connections. On the two-dimensional canvas of a visual pipeline editor, however, there is no canonical document
+      order. Turning the 2-D representation into a linear XProc XML document, a task that the visual XProc editor needs to
+      perform, will become an optimization problem where a score needs to be attached to multiple possible serializations,
+      rewarding implicit connections via default readable ports. Alternatively, users of the graphical editor could be forced to
+      make XML document order explicit, a thing that we wanted to avoid for usability reasons.</p><p>This means that although XProc seems to be a perfect candidate for visual or dataflow programming, its reliance on XML
+      serialization is an extra challenge when converting the natural graph to an XML representation that actually helps people
+      writing their first pipelines.</p><p>One should acknowledge that a visual XProc programming environment will probably never replace actual coding. To a
+      large extent this is due to the amount of XSLT that many pipelines orchestrate. At least this is what our experience as
+      developers of the transpect framework [<a class="citation" href="marco-references.html#d5e1897" shape="rect"><span class="citation">transpect</span></a>] tells us. In most of our pipelines and libraries, the
+      core tasks will be performed by XSLT stylesheets. This is not a shortcoming of XProc but rather a feature. Apart from
+      ripping apart XSLT micropipelines, we don’t strive at replacing what we do in XSLT with XProc steps. We do see a huge
+      benefit in continuing to use XSLT’s template matching and import mechanisms while encapsulating multi-step XSLT,
+      zip/unzip, HTTP request, validation, etc. pipelines in well-defined XProc step signatures with possibly multiple
+      outputs.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

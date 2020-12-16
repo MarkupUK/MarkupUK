@@ -1,0 +1,133 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Background</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar02.html" title="Software we have lost" /><link rel="prev" href="ar02.html" title="Software we have lost" /><link rel="next" href="sw.html" title="Software" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="sw.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect1" id="bg"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Background</h2></div></div></div><p>Before we had <acronym class="acronym">XML</acronym>, we had
+      <acronym class="acronym">SGML</acronym>, which is the <acronym class="acronym">ISO</acronym>
+      standard <a class="biblioref" href="bi02.html#sgml" shape="rect">techreport</a> on which
+      <acronym class="acronym">XML</acronym> is based. By default,
+      <acronym class="acronym">SGML</acronym> is pointy-bracket markup like
+      <acronym class="acronym">XML</acronym>…but in <acronym class="acronym">SGML</acronym> almost
+      everything can be redefined, including the markup characters
+      themselves, and there are numerous options for additional
+      features and for abbreviations and markup shortcuts to minimise
+      typing. Any changes to syntax or to the configuration value
+      limits have to be made in a Declaration file, and a
+      <acronym class="acronym">DTD</acronym> is compulsory on every document.</p><p>Notice the words <span class="phrase">to minimise typing</span>. In the
+      beginning, there was no software with an editing interface that
+      could use the <acronym class="acronym">DTD</acronym> to provide a contextual
+      menu of available element types; and the idea that the markup
+      would be hidden from the user was counterintuitive — if you
+      couldn’t see the tags, how could you know what was
+      marked?</p><p>In these early stages, therefore, markup was applied by
+      typing it in a plaintext editor, so <span class="emphasis"><em>the</em></span>
+      essential piece of software to begin with was the parser, not
+      the editor, so that you could check that you hadn’t got
+      something wrong. The term <em class="wordasword">parsing</em> was
+      often used to mean
+      <span class="phrase">parsing-and-validating</span>; <a href="#ftn.d5e324" class="footnote" shape="rect"><sup class="footnote" id="d5e324">[1]</sup></a> as there was no concept of well-formed <span class="phrase">tag
+	validity</span> in the sense introduced with
+      <acronym class="acronym">XML</acronym>. There were many early parsers; among the
+      most significant were:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist" id="parserlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p><span class="productname">ARC SGML</span> (Almaden Research
+	  Center) originally by Charles Goldfarb; later developed by
+	  James Clark into <span class="productname">sgmls</span> (see
+	  below)</p></li><li class="listitem"><p><span class="productname">ASP SGML</span> (Amsterdam
+	  <acronym class="acronym">SGML</acronym> Parser), still available <a class="biblioref" href="bi02.html#asp" shape="rect">article</a></p></li><li class="listitem"><p><span class="productname">Exoterica</span> by Sam Wilmott
+	  (later included in
+	  <span class="productname">Omnimark</span>)</p></li><li class="listitem"><p>the parser in
+	  <span class="productname">Framemaker+SGML</span>
+	  by Lynn Price</p></li><li class="listitem"><p>a parser for Boeing (internal only) by Greg O’Connell
+	  and Debbie Lapeyre</p></li><li class="listitem"><p><span class="productname">Mark-It!</span> by Jean-Pierre
+	  Gaspard</p></li><li class="listitem"><p><span class="productname">sgmls</span> by James Clark, the
+	  only one still in widespread use; redeveloped as
+	  <span class="productname">nsgmls</span> for
+	  <span class="productname">SP</span>, and now as
+	  <span class="productname">onsgmls</span> to handle
+	  <acronym class="acronym">XML</acronym> for <span class="productname">OpenSP</span></p></li></ul></div><p>Other software developed rapidly, spurred partly
+      by the adoption of <acronym class="acronym">SGML</acronym> for some military
+      documentation in the <acronym class="acronym">US</acronym> and elsewhere, and
+      partly by its growing use in publishing, research, and
+      academia. Editing software included:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist" id="editorlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>Arbortext <span class="productname">ADEPT</span> (through
+	  several name changes (eg Epic), now <span class="productname">PTC Arbortext
+	    Editor</span>)</p></li><li class="listitem"><p>SoftQuad <span class="productname">Author/Editor</span> and
+	  the editors based on it, <span class="productname">HoTMetaL</span>
+	  (for HTML) and later, <span class="productname">XMetaL</span> (for
+	  XML)</p></li><li class="listitem"><p>STiLO <span class="productname">Document Generator</span>,
+	  with <span class="productname">Arbortext</span> one of the few to
+	  handle mathematics in a general-purpose
+	  <acronym class="acronym">SGML</acronym> editor</p></li><li class="listitem"><p><span class="productname">Emacs</span> with
+	  <span class="productname">psgml-mode</span></p></li><li class="listitem"><p><span class="productname">epcedit</span>, a free SGML and XML
+	  editor from tkSGML</p></li><li class="listitem"><p>the <span class="productname">Euromath Editor</span>, an EU
+	  project built on the GriF editor<a href="#ftn.d5e392" class="footnote" shape="rect"><sup class="footnote" id="d5e392">[2]</sup></a></p></li><li class="listitem"><p>Siemens Nixdorf
+	  <span class="productname">InContext</span></p></li><li class="listitem"><p>Citec <span class="productname">MultiDoc</span> Translating
+	  Editor</p></li><li class="listitem"><p>Microstar <span class="productname">Near&amp;Far
+	    Author for Word</span> and
+	    <span class="productname">Near&amp;Far Designer</span>, a graphical
+	  <acronym class="acronym">DTD</acronym> editor</p></li><li class="listitem"><p>GriF <span class="productname">SGML Editor</span></p></li><li class="listitem"><p>Richard Light’s <span class="productname">SGML Tagger</span>
+	  (OUP), a memory-resident monitor for <acronym class="acronym">MS-DOS</acronym> editors.</p></li><li class="listitem"><p>Corel <span class="productname">WordPerfect</span> had a
+	  built-in <acronym class="acronym">SGML</acronym> editor</p></li><li class="listitem"><p>Sema <span class="productname">Write-It!</span> (using
+	  <span class="productname">Mark-It!</span> as the parser)</p></li></ul></div><p>Documents also need processing in some way: adding to a
+      database, putting on the Web, mining it for data, or converting
+      it for a formatting system for publishing. Conversion or processing
+      (transformation) systems included:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist" id="processorlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p><acronym class="acronym">AIS</acronym> Software
+	  <span class="productname">Balise</span></p></li><li class="listitem"><p><acronym class="acronym">DFN</acronym> <span class="productname">DAPHNE</span>
+	  (VMS only; converted to TeX)</p></li><li class="listitem"><p><acronym class="acronym">EBT</acronym> (later Inso)
+	  <span class="productname">DynaText</span> trainable converter from
+	  <span class="productname">Word</span> to
+	  <acronym class="acronym">SGML</acronym></p></li><li class="listitem"><p>James Clark’s <span class="productname">Jade</span> (using
+	  <acronym class="acronym">DSSSL</acronym>) can convert to TeX and other
+	  formats</p></li><li class="listitem"><p>Exoterica <span class="productname">Omnimark</span>
+	  (<acronym class="acronym">XTRAN</acronym>)</p></li><li class="listitem"><p>Microsoft <span class="productname">SGML Author for
+	    Word</span>, despite its name, this was
+	  <span class="emphasis"><em>not</em></span> an editor, but a converter into and
+	  out of <span class="productname">Word</span></p></li></ul></div><p>There were several standalone viewers, especially for
+      vertical-market applications, but few general-purpose browsers.
+      As with editors, some used <acronym class="acronym">SGML</acronym>-syntax
+      stylesheets to format the display; others used proprietary
+      stylesheet syntax. Formatting systems for printed output
+      typically produced <span class="productname">Postscript</span>
+      (pre-<acronym class="acronym">PDF</acronym> days). Some handled
+      <acronym class="acronym">SGML</acronym> input direct, others via an established
+      conversion route; output was formatted using TeX or a
+      proprietary typesetting engine.</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist" id="formatterlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>Advent <span class="productname">3B2</span> typesetter</p></li><li class="listitem"><p>EBT <span class="productname">DynaWeb</span> NT server for
+	  documents converted with <span class="productname">DynaText</span></p></li><li class="listitem"><p>Adobe <span class="productname">Framemaker+SGML</span>
+	  typesetter (FTC’s
+	  original had no <acronym class="acronym">SGML</acronym> support)</p></li><li class="listitem"><p>LaTeX, typesetter, usually via transformation through
+	  <span class="productname">Omnimark</span>, <span class="productname">Balise</span>,
+	  <span class="productname">Jade</span>, or similar</p></li><li class="listitem"><p>Citec <span class="productname">MultiDoc Pro Publisher</span> standalone
+	  browser</p></li><li class="listitem"><p><span class="productname">Panorama Viewer</span>, an
+	  <acronym class="acronym">SGML</acronym> plugin for the
+	  <span class="productname">Mosaic</span> and
+	  <span class="productname">Netscape</span> browsers; also the
+	  standalone <span class="productname">Panorama
+	    Publisher</span></p></li><li class="listitem"><p>Arbortext <span class="productname">Publisher</span> typesetter</p></li></ul></div><p>There was far more software available which is outside the
+      scope of this report — some of it is now either uncompilable or
+      uninstallable, or was in any case incomplete or experimental at
+      the time. A significant amount was normal commercial software
+      which has suffered the conventional fate of being superseded,
+      falling out of use, or being abandoned when the company failed
+      or was taken over. There are extensive lists of both free and
+      commercial applications in <a class="link" href="http://xml.coverpages.org/index.html" target="_top" shape="rect">Robin
+	Cover’s <acronym class="acronym">SGML</acronym>/<acronym class="acronym">XML</acronym> Web
+	Pages</a>, and some of the <acronym class="acronym">SGML</acronym>
+      Conference <acronym class="acronym">CD</acronym>s have a considerable amount of
+      freely-distributable and commercial-sample software in
+      subdirectories..</p><p>Other categories not covered here include design tools,
+      search engines, and databases. The only three of these of which
+      this author has direct experience (noted below) were Microstar’s
+      <span class="productname">Near&amp;Far Designer</span>, Tim Bray’s
+      <span class="productname">PAT</span> search engine in <a class="xref" href="pat.html" title="PAT  □" shape="rect">the section called “<span class="productname">PAT</span>  □”</a>, and the <span class="productname">SGML DARC</span>
+      document management database in <a class="xref" href="darc.html" title="SGML Darc  ☑" shape="rect">the section called “<span class="productname">SGML Darc</span>  ☑”</a>.</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e324" class="footnote"><p><a href="#d5e324" class="para" shape="rect"><sup class="para">[1] </sup></a>In fact, in the authors’ description of the
+	  <span class="productname">Amsterdam SGML Parser</span>
+	  <a class="biblioref" href="bi02.html#asp" shape="rect">article</a>, the only instances of the term
+	  <em class="wordasword">validation</em> are in the formal
+	  references to <span class="phrase">validation
+	    <span class="emphasis"><em>services</em></span></span> in the
+	  <acronym class="acronym">SGML</acronym> standard itself.</p></div><div id="ftn.d5e392" class="footnote"><p><a href="#d5e392" class="para" shape="rect"><sup class="para">[2] </sup></a>The editor is reputedly being
+	  resuscitated and rebuilt using <acronym class="acronym">INRIA</acronym>’s
+	  <span class="productname">Thot</span> structured editor.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar02.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="sw.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
