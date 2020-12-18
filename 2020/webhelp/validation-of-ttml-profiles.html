@@ -1,0 +1,36 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Validation of TTML Profiles</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar06.html" title="subcheck Article MarkupUK London" /><link rel="prev" href="ttml-and-its-profiles.html" title="TTML and its Profiles" /><link rel="next" href="validation-requirements.html" title="Validation Requirements" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ttml-and-its-profiles.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="validation-requirements.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="validation-of-ttml-profiles"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Validation of TTML Profiles</h2></div></div></div><p> Especially in the introduction phase of a new standard, it is important to make sure that
+      the APIs of different software systems use the standards in the same way and conform to the
+      rules of the specifications. </p><p> Once a workflow is established, the exchanged documents need to conform to the
+      established APIs. </p><p> Take for example the following real-world use case scenario: a freelancer creates
+      subtitles for a media service company which in turn got a contract from a streaming company to
+      deliver subtitles for a complete season of a video series. </p><p> The media service company and the streaming company agree on IMSC as the technical
+      baseline for subtitle XML files, but they may also apply their own set of <span class="quote">“<span class="quote">house style
+        rules</span>”</span>. So at the gateways of the service company and the streaming provider,
+      overlapping but also separate checks are executed. </p><p> The Institute für Rundfunktechnik (IRT) <a href="#ftn.d5e2758" class="footnote" shape="rect"><sup class="footnote" id="d5e2758">[8]</sup></a>was well aware of this and other scenarios such as the <span class="quote">“<span class="quote">in-house</span>”</span>
+      exchange of subtitle files and aimed for a better support for them. </p><p> In 2013, the IRT had already been active in TTML standardization, especially in the
+      definition of the EBU-TT profiles.<a href="#ftn.d5e2762" class="footnote" shape="rect"><sup class="footnote" id="d5e2762">[9]</sup></a> But although W3C XML Schema (XSD) files existed, non-conformant documents were
+      still produced and distributed. </p><p> This was due to a lack of knowledge about the existence of the XSD itself, its
+      application or about the meaning of the implied rules and resulted in the new goal to build a
+      more user-friendly validation alternative. The main inspiration came from the W3C HTML
+      validation service. </p><p> In the process of the installation of their own service, the IRT went through different
+      stages: </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p> A master thesis on the topic was written by Barbara Fichte (supervised by
+          Prof. Dr. Anne Brüggemann-Klein) and a first prototype was implemented. </p></li><li class="listitem"><p>
+          A cooperation with the company BaseX GmbH was started.
+        </p></li><li class="listitem"><p>
+          Full working solutions were implemented.
+        </p></li><li class="listitem"><p>
+          Two different products (<span class="italic">sub</span>check and IMF Analyser) were
+          launched to integrate the solutions.
+        </p></li></ul></div><p> In the following, we describe the implementation of the <span class="italic">sub</span>check service by BaseX GmbH
+      and the IRT. </p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e2758" class="footnote"><p><a href="#d5e2758" class="para" shape="rect"><sup class="para">[8] </sup></a>The Institut für Rundfunktechnik GmbH (IRT) (Institute for Broadcasting Technology
+          Ltd.) is the research centre of the German broadcasters, Austria's broadcaster and the
+          Swiss public broadcaster.</p></div><div id="ftn.d5e2762" class="footnote"><p><a href="#d5e2762" class="para" shape="rect"><sup class="para">[9] </sup></a>see https://tech.ebu.ch/groups/subtitling</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ttml-and-its-profiles.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar06.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="validation-requirements.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,40 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The eArchiving reference model setting</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar01.html" title="Beyond the brick, for the past in the future, you find the archive!" /><link rel="prev" href="ar01s08.html" title="eArchiving Building block Specifications" /><link rel="next" href="ar01s10.html" title="Content specifications" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar01s08.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar01s10.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e174"><div class="titlepage"><div><div><h2 class="title" style="clear: both">The eArchiving reference model setting</h2></div></div></div><p>When we consider the European Commission’s new eArchiving Building Block and that its
+			evident that at its core are specifications based upon formats expressed in XML. The
+			entireBuildingBlockrevolves around transfers of information where the final transfer is
+			to the archives, but nothing prevents these transfers occurring earlier in the
+			information lifecycle. The e-archive is built upon the Reference Model for an Open Archival Information System (OAIS Reference Model)<span id="_ftnref13"></span>[13]and its use of information packages, the Submission
+			Information Package (SIP), the Archival Information Package (AIP) and the Dissemination
+			Information Package (DIP). There are more parts described in the reference model but the
+			core part used in the specifications are the information packages.</p><p>
+			</p><div class="mediaobject"><img src="papers-2019/karin-jaime/Images/CSIP_fig_1_oais_ele_ip.svg" width="270" alt="The OAIS reference model" /><div class="caption"><p>The OAIS reference model.</p></div></div><p>
+		</p><p>The different packages in the OAIS reference model are within the eArchiving Building
+			Block described or get their inventory or manifest stated with the Metadata Encoding and
+			Transmission Standard (METS)<span id="_ftnref14"></span>[14] which uses XML as the format
+			for creating the readable text. (For the AIP it might be a format internal to the
+			archival system you are using but that is another paper.) This way both machines and
+			humans can understand the package (we do have some extra principles which aid with what
+			constitutes a package). METS itself is a rather open standard with only one mandatory
+			element being a structural description of the package. The standards also demand the
+			creation of a profile for the exact use case describing the use of the standard and its
+			elements and attributes. The profile for the eArchiving Building Block requires besides
+			the METS XML-schema an extension XML-schema and validation rules in Schematron. The
+			difficulties occur when the common user doesnot know how to validate the XML in
+			combination with Schematron due to poor or no knowledge of either XML or Schematron and
+			not having access to a person with the knowledge. We must not forget that Schematron
+			adds its owncomplexities when it is combined with a non-relaxNG schema. A complexity
+			that can be overwhelming when you don’t know XML at all or just a basic understanding.
+			This gives that numerousguidance documents need to be created ranging from how to write
+			XML to how to use a specification. And all this since you cannot count on the person
+			implementing the specification and its validation to have the appropriate background
+			knowledge. </p><p>
+			</p><div class="mediaobject"><img src="papers-2019/karin-jaime/Images/CS_IP_overview.png" width="512" alt="The eArchiving building block and the different specifications building up a Information Package" /><div class="caption"><p>The eArchiving building block and the different specifications building up a Information Package. In the image the three different types of packages is seen.</p></div></div><p>
+		</p><p><span id="_ftn13"></span>[13]<a class="link" href="https://www.iso.org/standard/57284.html" target="_top" shape="rect">https://www.iso.org/standard/57284.html</a></p><p><span id="_ftn14"></span>[14]<a class="link" href="http://www.loc.gov/standards/mets/" target="_top" shape="rect">http://www.loc.gov/standards/mets/</a></p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar01s08.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar01.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar01s10.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

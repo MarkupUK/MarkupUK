@@ -1,0 +1,81 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Representing XML Attribute Change in diff3</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="pres.html" title="Preserving Well-Formed Tree Structure in diff3" /><link rel="prev" href="ar07s03s01.html" title="Representing XML Element Tag Change in diff3" /><link rel="next" href="ar07s03s03.html" title="Representing JSON Structure Change in diff3" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s03s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s03s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3161"><div class="titlepage"><div><div><h3 class="title">Representing XML Attribute Change in diff3</h3></div></div></div><p>XML attributes present a particular challenge for diff3 format. Here is an example
+                of a change of value for an attribute.</p><div class="table" id="d5e3164"><p class="title"><strong>Table 3. XML attribute value change</strong></p><div class="table-contents"><table class="table" summary="XML attribute value change" border="1"><colgroup span="1"><col width="33%" align="left" class="c1" span="1" /><col width="32%" align="left" class="c2" span="1" /><col width="35%" align="left" class="c3" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1">A.txt</th><th align="left" rowspan="1" colspan="1">O.txt</th><th align="left" rowspan="1" colspan="1">B.txt</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve">&lt;span 
+    class="two" 
+    dir="rtr" 
+    id="23"&gt;</pre>
+                                </td><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve">&lt;span 
+    class="one" 
+    id="23" 
+    dir="TBA"&gt;</pre>
+                                </td><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve">&lt;span 
+    id="23" 
+    class="three" 
+    dir="ltr"&gt;</pre>
+                                </td></tr></tbody></table></div></div><p><br class="table-break" clear="none" />This could be represented as shown below. Note here that we are not showing
+                the result of running 'diff3 -m' but rather we have run an XML-aware comparison
+                yielding results that we want to express in the diff3 format.
+                </p><pre class="programlisting" xml:space="preserve">&lt;span id="23"
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; A.txt
+class="two" dir="rtr"
+||||||| O.txt
+class="one" dir="TBA"
+=======
+class="three" dir="ltr"
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; B.txt
+&gt;</pre><div class="informaltable"><table class="informaltable" border="0"><colgroup span="1"><col width="100%" class="c1" span="1" /></colgroup><tbody><tr><td rowspan="1" colspan="1">
+                                <div class="figure" id="vscode-screen"><p class="title"><strong>Figure 1. Attribute example in Visual Studio code</strong></p><div class="figure-contents"><div class="mediaobject"><img src="papers-2019/robin/MarkupUK2019-submitted2/vscode-screen.png" alt="Attribute example in Visual Studio code" /></div></div></div><br class="figure-break" clear="none" />
+                            </td></tr></tbody></table></div><p>In <a class="xref" href="ar07s03s02.html#vscode-screen" title="Figure 1. Attribute example in Visual Studio code" shape="rect">Figure 1, “Attribute example in Visual Studio code”</a>, we see how this can be displayed and managed
+                in Microsoft Visual Studio code.</p><p>The above will produce syntactically correct results, though it is not ideal
+                because it would be more natural to choose the attributes separately rather than as
+                a pair. This separation can be achieved by inserting additional white space so that
+                we get two choices as shown
+                below.</p><pre class="programlisting" xml:space="preserve">&lt;span id="23"
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; A.txt
+class="two"
+||||||| O.txt
+class="one"
+=======
+class="three"
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; B.txt
+  
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; A.txt
+dir="rtr"
+||||||| O.txt
+dir="TBA"
+=======
+dir="ltr"
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; B.txt
+&gt;</pre><p>
+                There is another representation that takes the common attribute name out of the
+                choice, but it may be less easy for a user to see what is happening. This
+                representation is shown
+                below.</p><pre class="programlisting" xml:space="preserve">&lt;span class=
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; A.txt
+"two"
+||||||| O.txt
+"one"
+=======
+"three"
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; B.txt
+ dir=
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; A.txt
+"rtr"
+||||||| O.txt
+"TBA"
+=======
+"ltr"
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; B.txt
+&gt;</pre><p>
+            </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s03s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="pres.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s03s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
