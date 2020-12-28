@@ -1,0 +1,168 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Animations</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar08.html" title="&lt;Angle-brackets/&gt; on the Branch Line" /><link rel="prev" href="ar08s05.html" title="Interaction" /><link rel="next" href="ar08s07.html" title="Developments" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s05.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s07.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect1" id="d5e3867"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Animations</h2></div></div></div><p>SVG supports animations based on SMIL event-driven models. Of particular interest in this case is the use of
+                <span class="emphasis"><em>path-based</em></span> animation where a given SVG group can be successively translated along a given path. As trains move
+            along tracks, and in our design tracks are defined by sections from which SVG <code class="code">path</code> definitions can be constructed easily, we
+            should be able to simulate the movement of trains around our tracks. And so it proved.</p><p>The basic animation we used is effectively <span class="quote">“<span class="quote">move this group <span class="emphasis"><em>g</em></span> along this path <span class="emphasis"><em>p</em></span> in a
+                duration of <span class="emphasis"><em>dur</em></span> seconds.</span>”</span> For each section of the layout (i.e. a contiguous run of straight and curves, or
+            the <span class="emphasis"><em>set</em></span> and <span class="emphasis"><em>not set</em></span> short sections of points), we calculate both a path description (the
+                <span class="emphasis"><em>d</em></span> property of <code class="code">svg:path</code>) and the total length. For example the dashed blue line is the defined
+            (single) path for the <span class="emphasis"><em>section2</em></span> track section, for which a total length of 4,256 has been calculated : </p><div class="figure" id="d5e3882"><p class="title"><strong>Figure 16. A track section path</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="80%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/section2Path.PNG" width="100%" alt="A track section path" /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>Assuming we wish our <span class="quote">“<span class="quote">train</span>”</span> to run at 100mm/s (a scale speed of ~ 7km/hr, i.e. a brisk walking pace), then the animation
+            should take 42.5 seconds. This is achieved by forming up an <code class="code">svg:animateMotion</code> definition element:</p><pre class="programlisting" xml:space="preserve">&lt;animateMotion xmlns="http://www.w3.org/2000/svg"
+   id="train.animation" xlink:href="#train"<span id="animation.target"></span><span><img src="images/1_3915598.png" alt="1" border="0" /></span>
+   begin="indefinite"  fill="freeze" repeatCount="1"<span id="animation.start"></span><span><img src="images/2_4839119.png" alt="2" border="0" /></span>
+   calcMode="linear" keyTimes="0;1" keyPoints="0;1"<span id="animation.times"></span><span><img src="images/3_5762640.png" alt="3" border="0" /></span>
+   rotate="auto"<span id="animation.rotate"></span><span><img src="images/4_6686161.png" alt="4" border="0" /></span> 
+   dur="42.5" onend="eventEnded('train;section2.trail')<span id="animation.end"></span><span><img src="images/5_7609682.png" alt="5" border="0" /></span>&gt;
+   &lt;mpath xlink:href="#section2.path"<span id="animation.path"></span><span><img src="images/6_8533203.png" alt="6" border="0" /></span>/&gt;
+&lt;/animateMotion&gt;</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#animation.target" shape="rect"><span><img src="images/1_3915598.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>The graphics group that will be subject to the animation</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#animation.start" shape="rect"><span><img src="images/2_4839119.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>Conditions for the start of the animation — in this case the animation waits until it is triggered explicitly. When the
+                    animation has finished freeze the graphics state, i.e leave the graphics translated to the end of the path and do not
+                    repeat.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#animation.times" shape="rect"><span><img src="images/3_5762640.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>
+                    <code class="code">keyTimes</code> and <code class="code">keyPoints</code> define a piecewise-linear mapping between proportions of the duration and
+                    proportions of the total length — this is used to support moving in reverse and altering <span class="quote">“<span class="quote">speed</span>”</span>.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#animation.rotate" shape="rect"><span><img src="images/4_6686161.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p><code class="code">auto</code> adds a rotation transform to the animated graphics corresponding to the current path tangent direction, so the
+                    graphics object <span class="quote">“<span class="quote">turns</span>”</span> along the path.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#animation.end" shape="rect"><span><img src="images/5_7609682.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>When the animation completes the global function <code class="code">eventEnded()</code> will be executed with an argument containing
+                    information about which train has completed a move and where — in this case arriving at the <span class="emphasis"><em>trail</em></span> port of
+                        <span class="emphasis"><em>section2</em></span>.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#animation.path" shape="rect"><span><img src="images/6_8533203.png" alt="6" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>A reference to the path to be followed.</p></td></tr></table></div><p>The animation is started by invoking the <code class="code">beginElement()</code> function method of the animation element through a minimal global
+            JavaScript function. Thus our <span class="quote">“<span class="quote">train</span>”</span>(in this case a cyan arrow) progresses along <span class="emphasis"><em>section2</em></span> as
+            below:</p><div class="figure" id="d5e3922"><p class="title"><strong>Figure 17. Movement along a track section.</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="80%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/arrow.png" width="100%" alt="Movement along a track section." /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>When the animation finishes, the <code class="code">onend</code> statement is invoked, which is fielded by the global JavaScript function
+                <code class="code">eventEnded()</code>. </p><pre class="programlisting" xml:space="preserve">var ignoreEvent = false;
+function eventEnded(e) { 
+   if(!ignoreEvent) {<span id="event.ignore"></span><span><img src="images/1_3915598.png" alt="1" border="0" /></span>
+      var event = new Event("change",{"bubbles":true});
+      var store = this.document.getElementById("event");<span id="event.store"></span><span><img src="images/2_4839119.png" alt="2" border="0" /></span>
+      store.value = e; 
+      store.dispatchEvent(event);<span id="event.dispatch"></span><span><img src="images/3_5762640.png" alt="3" border="0" /></span>
+  }
+  ignoreEvent = false;
+}</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#event.ignore" shape="rect"><span><img src="images/1_3915598.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>There are cases (described below) when we need to ignore an end event temporarily.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#event.store" shape="rect"><span><img src="images/2_4839119.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>A (hidden) checkbox element in the DOM tree that is used to hold the event information as its <code class="code">value</code>
+                    property.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#event.dispatch" shape="rect"><span><img src="images/3_5762640.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>Propogating an event that the value of the event information store has changed.</p></td></tr></table></div><p>After this function has executed, the checkbox <code class="code">id('event')</code> receives a <span class="emphasis"><em>change</em></span> event which is caught by
+            an XSLT template:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:template match="*:input[@id eq 'event']" mode="ixsl:onchange"&gt; 
+   &lt;xsl:variable name="layout" as="map(*)"
+      select="$layouts(f:radioValue('layouts', .))"/&gt; <span id="event.layout"></span><span><img src="images/1_3915598.png" alt="1" border="0" /></span>
+   &lt;xsl:variable name="parts" select="tokenize(@value, ';')"/&gt; <span id="event.orders"></span><span><img src="images/2_4839119.png" alt="2" border="0" /></span>
+   &lt;xsl:choose&gt;
+      &lt;xsl:when test="exists($parts[3])"&gt; <span id="event.continue"></span><span><img src="images/3_5762640.png" alt="3" border="0" /></span>
+         &lt;!-- There is a new section to enter --&gt;
+         &lt;xsl:call-template name="runTrain"&gt;
+            &lt;xsl:with-param name="engine" select="$parts[1]"/&gt;
+            &lt;xsl:with-param name="trackComponentID" select="$parts[3]"/&gt;
+            &lt;xsl:with-param name="tracks" select="$layout?tracks"/&gt;
+         &lt;/xsl:call-template&gt;
+      &lt;/xsl:when&gt;
+      &lt;xsl:otherwise&gt; <span id="event.stop"></span><span><img src="images/4_6686161.png" alt="4" border="0" /></span>
+          &lt;!-- There is a no new section to enter - end of the line --&gt;
+          &lt;xsl:for-each select="id($parts[1])"&gt;
+              &lt;ixsl:set-attribute name="position" select="$parts[2]"/&gt;
+          &lt;/xsl:for-each&gt;
+          &lt;xsl:variable name="engine" select="$parts[1]"/&gt;
+          &lt;xsl:call-template name="stopEngine"&gt;
+             &lt;xsl:with-param name="engine" select="$engine"/&gt;
+          &lt;/xsl:call-template&gt;
+          &lt;xsl:call-template name="reverseEngine"&gt;
+              &lt;xsl:with-param name="engine" select="$engine"/&gt;
+          &lt;/xsl:call-template&gt;
+      &lt;/xsl:otherwise&gt;
+   &lt;/xsl:choose&gt;      
+&lt;/xsl:template&gt;</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#event.layout" shape="rect"><span><img src="images/1_3915598.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>There are a number of possible layouts, held as a named map global variable. Which is the active one is determined by the value
+                    of the <span class="emphasis"><em>layouts</em></span> radio button set.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#event.orders" shape="rect"><span><img src="images/2_4839119.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>This template expects the value of the <code class="code">event</code> checkbox to be a string of the form
+                        <span class="emphasis"><em><code class="code">train</code></em></span><code class="code">;</code><span class="emphasis"><em><code class="code">current
+                            port</code></em></span><code class="code">[;</code><span class="emphasis"><em><code class="code">next port</code></em></span><code class="code">]</code>.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#event.continue" shape="rect"><span><img src="images/3_5762640.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p> If there is a next port, then the train is run on that new section from that port, on the current layout.</p></td></tr><tr><td width="5%" valign="top" align="left" rowspan="1" colspan="1"><p><a href="#event.stop" shape="rect"><span><img src="images/4_6686161.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left" rowspan="1" colspan="1"><p>If not then the train is assumed to have reached the end of the line. It is stopped and the direction reversed, so that, as a
+                    convenience to the driver, <span class="quote">“<span class="quote">opening the throttle again</span>”</span> again will cause the train to move back along the
+                    section.</p></td></tr></table></div><p>The trains are controlled by a simple interactive XHTML control group (obviously of class <span class="emphasis"><em>cab</em></span>):</p><div class="figure" id="d5e3973"><p class="title"><strong>Figure 18. The Engine Cab</strong></p><div class="figure-contents"><div class="informaltable"><table frame="void"><col width="35%" align="left" span="1" /><col width="65%" align="left" span="1" /><tbody><tr><td rowspan="1" colspan="1">
+                            <span class="inlinemediaobject"><img src="papers-2019/john/figures/arrowCab.PNG" width="100%" alt="The Engine Cab" /></span>
+                        </td><td rowspan="1" colspan="1">
+                            <pre class="programlisting" xml:space="preserve">&lt;div id="Arrow.cab" class="cab arrow"&gt;
+  &lt;div class="toggler"&gt;
+    &lt;input class="run" type="checkbox"
+       value="Arrow" /&gt;
+    &lt;label class="text"&gt;Arrow&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;label class="title"&gt;Speed 
+        &lt;span class="value"&gt;0&lt;/span&gt;&lt;/label&gt;
+  &lt;div name="direction" class="direction"&gt;
+     &lt;div class="toggler"&gt;
+        &lt;input class="direction" type="checkbox"
+           value="reverse"/&gt;
+        &lt;label class="text"&gt;reverse&lt;/label&gt;
+      &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;input type="range" min="0" max="1200"
+       value="0" list="tickmarks" /&gt;
+  &lt;div class="radio speed"&gt;
+     ...
+     &lt;div class="toggler"&gt;
+        &lt;input class="speed" type="radio"
+          value="200" /&gt;
+        &lt;label class="text"&gt;slow&lt;/label&gt;
+     &lt;/div&gt;
+     ...
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+                        </td></tr></tbody></table></div></div></div><br class="figure-break" clear="none" /><p>Apart from selecting a locomotive to run, the only current action is to <span class="emphasis"><em>change its speed or direction of travel.</em></span> A
+            number of XSLT templates detect changes in the cab input controls such as:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:template match="input[contains-token(@class, 'speed')]" 
+   mode="ixsl:onchange"&gt;
+   &lt;xsl:variable name="cab" 
+      select="ancestor::div[contains-token(@class, 'cab')]"/&gt;
+   &lt;xsl:variable name="run" select="$cab//input[@class eq 'run']"/&gt;
+   &lt;xsl:variable name="value" select="@value"/&gt;
+   &lt;ixsl:set-property object="$cab//input[@type eq 'range']"
+       name="value" select="number($value)"/&gt;
+   &lt;xsl:for-each select="$cab//span[contains-token(@class, 'value')]"&gt;
+      &lt;xsl:result-document href="?." method="ixsl:replace-content"&gt;
+         &lt;xsl:sequence select="string($value)"/&gt;
+      &lt;/xsl:result-document&gt;
+   &lt;/xsl:for-each&gt;
+   &lt;xsl:if test="ixsl:get($run,'checked')"&gt;
+      &lt;xsl:variable name="engine" select="$run/@value"/&gt;
+      &lt;xsl:for-each select="id($engine)"&gt;
+         &lt;ixsl:set-attribute name="speed" select="$value"/&gt;
+      &lt;/xsl:for-each&gt;
+      &lt;xsl:call-template name="changeVelocity"&gt;
+         &lt;xsl:with-param name="engine" select="$engine"/&gt;
+      &lt;/xsl:call-template&gt;
+   &lt;/xsl:if&gt;
+&lt;/xsl:template&gt;</pre><p>which detects a change in the <span class="emphasis"><em>stop, slow, cruise, fast</em></span> radio button set. The selected speed is the
+                <code class="code">@value</code> of the set, which is written into a <code class="code">span</code> element within the cab <code class="code">div</code> and used to set the
+            slider to a suitable point. If the engine is running (the top left checkbox checked), then the demanded speed is written as an attribute
+            onto the selected engine object and then the <span class="emphasis"><em>changeVelocity</em></span> template is invoked. </p><p>The key idea here is to determine <span class="emphasis"><em>how far the current animation has progressed</em></span>, from which the remaining distance
+            to travel can be determined. This is computed by a global JavaScript function with the animation object <span class="emphasis"><em>a</em></span> as
+            argument:</p><pre class="programlisting" xml:space="preserve">function animProgress(a) {
+  if(a.getAttribute("dur")==0 ||
+     a.getAttribute("dur")=="indefinite") {
+    return 0;
+  }
+  var startTime;
+  try{
+    startTime = a.getStartTime();
+  } catch(e) {
+    return 0;
+  }
+  var t_ratio=(a.getCurrentTime() - startTime)/a.getSimpleDuration();
+  return t_ratio;
+}  </pre><p>which calculates the ratio of elapsed to total animation duration. In cases where the animation is not active (for which I can't find a
+            simple test), the exception on finding start time is caught. Given the remaining distance and desired speed, a new duration can be
+            determined and the animation restarted using the <code class="code">keyPoints</code> property to start somewhere down the animation path, e.g.
+                <code class="code">keyPoints="0.5;1"</code> would be used for a speed change halfway along the track section<a href="#ftn.d5e4002" class="footnote" shape="rect"><sup class="footnote" id="d5e4002">[21]</sup></a>. </p><p>The animation is restarted by invoking the <code class="code">beginElement()</code> method — the <code class="code">ignoreEvent</code> flag is used to prevent the
+            implicit <code class="code">endElement()</code> event, triggered before the restart, that would normally be used to signal completion of traversal of a
+            section, propagating to the XSLT templates. In the case that the locomotive is running in reverse, the key points are reversed, e.g.
+                <code class="code">keyPoints="0.66;0"</code> would be used for a speed change one-third of the way backwards through a section.</p><p>In the absence of such speed changes a running locomotive involves animation movement along the current section until the end event is
+            executed, fielded by the XSLT template shown earlier, which then starts animation along the next specified section. In the case of
+            entering points, the state of the point is examined (from the status of the point control in the signal box!) and the correct path and
+            next section determined for the animation<a href="#ftn.d5e4014" class="footnote" shape="rect"><sup class="footnote" id="d5e4014">[22]</sup></a>. When a locomotive enters a <span class="emphasis"><em>swap</em></span> section, described above, its internal <span class="emphasis"><em>running in the wrong
+                direction</em></span> flag is inverted and it passes on to the following section.</p><p>A small number off other animation effects have been added. Firstly locomotives have wheels, which can be animated to rotate at a rate
+            and direction suitable for their diameter and the locomotive's speed, using the animation element: </p><pre class="programlisting" xml:space="preserve">&lt;animateTransform type="rotate" begin="indefinite" 
+   attributeName="transform" from="0" to="360" 
+   dur="…." attributeType="XML" repeatCount="indefinite"/&gt;</pre><p>Secondly, locomotives can be given running sound effects by invoking <code class="code">play()</code> method on an <code class="code">audio</code> element when
+            they start movement, and can<span class="quote">“<span class="quote">whistle</span>”</span> when they enter a (zero length) <span class="emphasis"><em>whistle</em></span> pseudo-track section. The
+            end point of this development was a case where multiple engines could be run on a layout, stopping, starting , reversing and changing
+            their speed independently and altering points to move them to different sections of the layout:</p><div class="figure" id="d5e4025"><p class="title"><strong>Figure 19. Three engines running simultaneously</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/threeEngines.JPG" width="100%" alt="Three engines running simultaneously" /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>But there is a problem with the isometric view <span class="quote">“<span class="quote">trick</span>”</span> and automatic path tangent rotation:</p><div class="figure" id="d5e4032"><p class="title"><strong>Figure 20. On the ceiling</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="80%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/upsideDown.JPG" width="100%" alt="On the ceiling" /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>The animation rotation transformation is applied before the isometric projection and our 3D trick no longer works with significant
+            rotations. How this may be overcome is discussed in the next section. </p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e4002" class="footnote"><p><a href="#d5e4002" class="para" shape="rect"><sup class="para">[21] </sup></a>The current animation may itself already involve a <span class="quote">“<span class="quote">partial</span>”</span> path, as a consequence of a previous change in speed —
+                    this is determined from the existing <code class="code">@keyPoints</code> value on the <code class="code">animateMotion</code> element to determine the
+                        <span class="quote">“<span class="quote">distance to go</span>”</span>. </p></div><div id="ftn.d5e4014" class="footnote"><p><a href="#d5e4014" class="para" shape="rect"><sup class="para">[22] </sup></a>Changing a point while a locomotive is moving through it will not effect the locomotive's path.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s05.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar08.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s07.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

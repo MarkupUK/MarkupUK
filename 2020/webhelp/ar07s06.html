@@ -1,0 +1,49 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Conclusions</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar07.html" title="An Improved diff3 Format for Changes and Conflicts in Tree Structures" /><link rel="prev" href="ar07s05.html" title="Nested Changes" /><link rel="next" href="bi07.html" title="References" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s05.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="bi07.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3396"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Conclusions</h2></div></div></div><p>In this paper, we have explored whether we can integrate more modern structure-aware
+            comparison tools with the existing diff3 format so that there is minimal change for
+            users. We have shown that by laying out comparison results for structured
+            representations such as XML or JSON, we can make them easier to process and more likely
+            to provide well-formed or valid results. We have shown that there are limitations, in
+            particular the representation of connected changes, where some more intelligence in the
+            diff format is needed to ensure the result is well-formed. Nested changes can also be
+            represented with amendments to the diff format, but this is more complicated and is
+            likely to be easier using XML rather than a variant of diff3.</p><p>Even if these things are possible, that does not necessarily mean we should go down this
+            route. It is worth considering some of the history and how we got here. Early version
+            control systems were in use with 24 line, 80 column VDUs and with editing tools such as
+            vi and emacs. In those days, developers intimately understood the representation and
+            manipulated it directly. We are now used to using IDEs that directly support version
+            control operations in their graphical user interfaces. In many cases, these interfaces
+            hide the change markers that we have been discussing and instead present the user with
+            side-by-side alternatives and GUI control buttons to resolve differences. We could
+            consider the display of the diff3 style change-markers akin to the concept of 'tag
+            display' modes in word-processors and XML editors. In many of these systems, either it
+            is impossible to see any underlying markup or it is a feature for advanced (or perhaps
+            'older'?) users that needs to be explicitly turned on, with the growing trend for the
+            default being to hide the markup from the user. Is there a similar trend with change and
+            conflict markers? This implies that the actual syntax used to represent the changes and
+            conflicts is less important than it used to be, and there is less need to try to
+            preserve it.</p><p>In our recent paper [<a class="xref" href="bi07.html#git-prague" title="Merge and Graft: Two Twins That Need To Grow Apart" shape="rect">5</a>], we identified some issues in version
+            control systems that caused inconsistency and confusion to users. One solution to those
+            issues relies on separating the merge driver from subsequent conflict resolution
+            tools or 'merge tools'. In pursuit of the best way forward, we have further explored
+            these possibilities and we have implemented the layout approaches discussed earlier.</p><p>We have shown that improvements to the representation of change for structured data is
+            possible and desirable. Changing the existing diff3 format is awkward and limited, so it
+            might be better to move directly to a markup representation using XML because the text
+            will not be directly edited by users and mature tools are available to process the XML.
+            Arguably it would be simpler to avoid these issues and present users with a merge user
+            interface that understood structured content and provided operations which preserved the
+            well-formed nature or validity directly. However, the value of a standard format for
+            such conflicts and changes is that the merge tool is primarily a GUI and the user can
+            choose the merge algorithm and the merge tool independently.</p><p>We have presented this paper to explore these ideas, but we are not suggesting that the
+            best approach is extending or enhancing the current diff3 representation. An XML
+            alternative to diff3 would have some advantages and should be explored as a longer-term
+            improvement for representing and processing conflicts and changes in structured
+            data.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s05.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar07.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="bi07.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
