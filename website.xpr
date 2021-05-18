@@ -565,10 +565,10 @@
                                     <String></String>
                                 </field>
                                 <field name="inputXSLURL">
-                                    <String>file:/home/ari/Documents/repos/MarkupUK/build/build.xsl</String>
+                                    <String>${pdu}/build/build.xsl</String>
                                 </field>
                                 <field name="inputXMLURL">
-                                    <String>file:/home/ari/Documents/repos/MarkupUK/build/sitemap.xml</String>
+                                    <String>${pdu}/build/sitemap.xml</String>
                                 </field>
                                 <field name="defaultScenario">
                                     <Boolean>false</Boolean>
