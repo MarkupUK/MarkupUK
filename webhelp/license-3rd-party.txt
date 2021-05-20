@@ -15,28 +15,24 @@ oxygen-webhelp/search/nwSearchFnt.js                                BSD 3-Clause
 oxygen-webhelp/search/stemmers/de_stemmer.js                        BSD 2-Clause (FormBlitz AG)
 oxygen-webhelp/search/stemmers/fr_stemmer.js                        BSD 2-Clause (Kasun Gajasinghe)
 oxygen-webhelp/search/stemmers/en_stemmer.js                        BSD 2-Clause (http://tartarus.org/~martin/PorterStemmer/)
-oxygen-webhelp/resources/skins/mobile/jquery.mobile-1.4.0           MIT License (http://jquery.org/license)
 oxygen-webhelp/resources/js/splitter.js                             MIT License (author Kristaps Kukurs)
 oxygen-webhelp/resources/js/parseuri.js                             MIT License (author Steven Levithan)
-oxygen-webhelp/resources/js/jquery-1.11.3.min.js                    MIT License (https://jquery.org/license/, see oxygen-webhelp/resources/js/jquery.MIT-License.txt)
-oxygen-webhelp/resources/js/jquery-3.1.1.min.js                     MIT License (https://jquery.org/license/, see oxygen-webhelp/resources/js/jquery.MIT-License.txt)
+oxygen-webhelp/resources/js/jquery-3.4.1.min.js                     MIT License (https://jquery.org/license/, see oxygen-webhelp/resources/js/jquery.MIT-License.txt)
 oxygen-webhelp/resources/js/jquery.highlight-3.js                   MIT License (Johann Burkard <http://johannburkard.de>)
 oxygen-webhelp/resources/js/jquery.cookie.js                        MIT License (https://github.com/carhartl/jquery-cookie)
 oxygen-webhelp/resources/js/jquery.ba-hashchange.min.js             MIT License (http://benalman.com/projects/jquery-hashchange-plugin/
 oxygen-webhelp/resources/css/commonltr.css                          Apache-2.0 (part of DITA-OT, http://www.dita-ot.org/)
 oxygen-webhelp/resources/css/commonrtl.css                          Apache-2.0 (part of DITA-OT, http://www.dita-ot.org/)
-oxygen-webhelp/resources/css/jquery.realperson.css                  MIT License (http://keith-wood.name/licence.html)
-oxygen-webhelp/resources/css/jquery.cleditor.css                    MIT License (Chris Landowski, Premium Software, LLC)
 oxygen-webhelp/feedback/resources/bootstrap/                        MIT License (CTwitter, https://github.com/twbs/bootstrap/blob/master/LICENSE)
 oxygen-webhelp/feedback/resources/js/base64.js                      CC BY 2.0 UK (http://www.webtoolkit.info/)
 oxygen-webhelp/feedback/resources/js/jquery.cleditor.min.js         MIT License (Chris Landowski, Premium Software, LLC)
-oxygen-webhelp/feedback/resouces/js/jquery.plugin.min.js            MIT License (http://keith-wood.name/licence.html)
-oxygen-webhelp/feedback/resouces/js/jquery.quicksearch.js           MIT License (Deux Huit Huit (http://deuxhuithuit.com/))
-oxygen-webhelp/feedback/resouces/js/jquery.realperson.min.js        MIT License (Keith Wood, http://keith-wood.name/licence.html)
-oxygen-webhelp/feedback/resouces/js/jquery-1.11.3.min.js            MIT License (https://jquery.org/license/)
-oxygen-webhelp/feedback/resouces/js/jquery-3.1.1.min.js             MIT License (https://jquery.org/license/)
-oxygen-webhelp/feedback/resouces/js/parseuri.js                     MIT License (author Steven Levithan)
-oxygen-webhelp/feedback/resouces/css/jquery.realperson.css          MIT License (Keith Wood, http://keith-wood.name/licence.html)
+oxygen-webhelp/feedback/resources/js/jquery.plugin.min.js           MIT License (http://keith-wood.name/licence.html)
+oxygen-webhelp/feedback/resources/js/jquery.quicksearch.js          MIT License (Deux Huit Huit (http://deuxhuithuit.com/))
+oxygen-webhelp/feedback/resources/js/jquery.realperson.min.js       MIT License (Keith Wood, http://keith-wood.name/licence.html)
+oxygen-webhelp/feedback/resources/js/jquery-3.4.1.min.js            MIT License (https://jquery.org/license/)
+oxygen-webhelp/feedback/resources/js/parseuri.js                    MIT License (author Steven Levithan)
+oxygen-webhelp/feedback/resources/js/require.js                     MIT License (author Steven Levithan)
+oxygen-webhelp/feedback/resources/css/jquery.realperson.css         MIT License (Keith Wood, http://keith-wood.name/licence.html)
 oxygen-webhelp/feedback/resources/css/jquery.cleditor.css           MIT License (Chris Landowski, Premium Software, LLC)
 
 Additional Third Party Code in Oxygen WebHelp Plug-In (inside Oxygen XML) distribution:
@@ -48,25 +44,21 @@ dtd/xhtml1-lat1.ent                                            W3C (the original
 dtd/xhtml1-special.ent                                         W3C (the original at https://www.w3.org/TR/xhtml1/)
 dtd/xhtml1-symbol.ent                                          W3C (the original at https://www.w3.org/TR/xhtml1/)
 
-lib/xhtml-indexer.jar                                          BSD 3-Clause (see lib/xhtml-indexer.LICENSE.txt)
-
 xsl/dita/original/dita-utilities.xsl                           Apache-2.0 (part of DITA-OT, http://www.dita-ot.org/)
-xsl/dita/original/output-messages.xsl                          Apache-2.0 (part of DITA-OT, http://www.dita-ot.org/)
 xsl/dita/original/relpath_util.xsl                             Apache-2.0 (part of DITA4Publishers, http://www.dita4publishers.org/)
 
 Additional Third Party Code in standalone Oxygen WebHelp distribution:
 
-lib/ant-contrib-1.0b3.jar                                      Apache-2.0 (see lib/ant.LICENSE.txt)
-lib/log4j.jar                                                  Apache-2.0 (see lib/log4j.LICENSE.txt) 
-lib/lucene-analyzer-common-4.0.0.jar                           Apache-2.0  with additional 3rd party licenses (see lib/lucene-4.0.LICENSE.txt)     
-lib/lucene-core-4.0.0.jar                                      Apache-2.0  with additional 3rd party license (see lib/lucene-4.0.LICENSE.txt)     
-lib/resolver.jar                                               Apache-2.0 (see lib/resolver.LICENSE.txt)     
-lib/xercesImpl.jar                                             Apache-2.0 (see lib/xerces.LICENSE.txt)     
-lib/xhtml-indexer.jar                                          BSD 3-Clause (see lib/xhtml-indexer.LICENSE.txt)    
-lib/xml-apis.jar                                               Apache-2.0 (see lib/xml-apis.LICENSE.txt)
-lib/xml-apis-ext.jar                                           Apache-2.0 (see lib/xml-apis.LICENSE.txt)
-lib/xslthl.jar                                                 zlib/libpng License (see lib/xslthl.LICENSE.txt)
-
+../com.oxygenxml.common/lib/ant-contrib-1.0b3.jar              					Apache-2.0 (see ../com.oxygenxml.common/lib/ant.LICENSE.txt)
+../com.oxygenxml.common/lib/log4j-core-2.14.0.jar                   					Apache-2.0 (see ../com.oxygenxml.common/lib/log4j.LICENSE.txt)
+../com.oxygenxml.common/lib/log4j-1.2-api-2.14.0.jar                   					Apache-2.0 (see ../com.oxygenxml.common/lib/log4j.LICENSE.txt) 
+../com.oxygenxml.common/lib/lucene-analyzers-common-4.7.2.jar   					Apache-2.0  with additional 3rd party licenses (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)     
+../com.oxygenxml.common/lib/lucene-analyzers-kuromoji-4.7.2.jar					Apache-2.0  with additional 3rd party licenses (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)
+../com.oxygenxml.common/lib/lucene-core-4.7.2.jar              					Apache-2.0  with additional 3rd party license (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)     
+../com.oxygenxml.highlight/lib/xslthl-2.1.1.jar                					zlib/libpng License (see ../com.oxygenxml.highlight/lib/xslthl.LICENSE.txt)
+../com.oxygenxml.common/lib/jakarta.activation-1.2.2.jar 						EDL 1.0 (see: ../com.oxygenxml.common/lib/jakarta.activation-1.2.2.jar/META-INF/LICENSE.md)
+../com.oxygenxml.common/lib/jaxb-impl-2.3.3.jar 								EDL 1.0 (see: ../com.oxygenxml.common/lib/jaxb-impl-2.3.3/META-INF/LICENSE.md)
+../com.oxygenxml.common/lib/jakarta.xml.bind-api-2.3.3.jar 						EDL 1.1 (see: ../com.oxygenxml.common/lib/jakarta.xml.bind-api-2.3.3.jar/META-INF/LICENSE.md)
 
 
 ========================= W3C ==================================================

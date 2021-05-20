@@ -1,84 +1,60 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Computing the geometry</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar08s03.html" title="Layout Topology and Geometry" /><link rel="prev" href="ar08s03s01.html" title="Representing the topology" /><link rel="next" href="ar08s04.html" title="Drawing pictures" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Representing XML Attribute Change in diff3x</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="pres.html" title="Preserving well-formed tree structure in diff3x" /><link rel="prev" href="ar08s03s01.html" title="Representing XML Element Tag Change in diff3x" /><link rel="next" href="ar08s04.html" title="Nested Changes" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s03s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect2" id="d5e3721"><div class="titlepage"><div><div><h3 class="title">Computing the geometry</h3></div></div></div><p>The original intention of the design tool was to automate the calculation of track geometry. This proved to be relatively easy,
-                using a simple vector arithmetic package with a triple vector datatype of <code class="code">x,y,orientation</code><a href="#ftn.d5e3725" class="footnote" shape="rect"><sup class="footnote" id="d5e3725">[19]</sup></a>, and the <code class="code">xsl:iterate</code> instruction processing the track component sequences through template application as the
-                track is <span class="quote">“<span class="quote">constructed</span>”</span>. For example here is the code to process a <code class="code">straight</code> element:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:template match="straight" as="map(*)" mode="makeTrack"&gt;
-   &lt;xsl:param name="start" as="map(*)"/&gt;
-   &lt;xsl:param name="options" as="map(*)" select="map{}" tunnel="true"/&gt;
-   &lt;xsl:variable name="length" select="@length" as="xs:double"/&gt;
-   &lt;xsl:variable name="straight" 
-       select="v:new($length, 0) =&gt; v:rotateDeg($start?orient)"/&gt;
-   &lt;xsl:variable name="end" select="v:add($start, $straight)"/&gt;
-   &lt;xsl:variable name="path" select="p:line($start, $end)"/&gt;
-   &lt;xsl:variable name="pieces" as="element()*"&gt;
-     &lt;g class="straight"&gt;
-       &lt;g class="schematic"&gt;
-         &lt;path d="{$path}"/&gt;
-         &lt;xsl:sequence select="r:join($end)"/&gt;
-       &lt;/g&gt;
-       &lt;g class="way" 
-          transform="translate({$start?x},{$start?y}) 
-                     rotate({$start?orient})"&gt;
-          &lt;xsl:if test="$options?layTrack"&gt;
-            &lt;xsl:sequence select="r:straight($length)"/&gt;
-          &lt;/xsl:if&gt;
-       &lt;/g&gt;
-     &lt;/g&gt;
-   &lt;/xsl:variable&gt;
-   &lt;xsl:sequence select="map{
-        'type':string(name()),
-        'orient.start' : $start?orient,
-        'orient.end' : $start?orient,
-        'pieces': $pieces,
-        'length': $length,
-        'path': $path, 
-        'start' : $start,
-        'end': $end, 
-        'name': string((@name,
-                        'S-'||string(accumulator-before('trackNo')))[1])
-        }"
-   /&gt;
-&lt;/xsl:template&gt;</pre><p><code class="code">$start</code> is an input parameter which is a map whose principal members are <code class="code">x</code>, <code class="code">y</code> and
-                    <code class="code">orient</code><a href="#ftn.d5e3739" class="footnote" shape="rect"><sup class="footnote" id="d5e3739">[20]</sup></a>. The new end point, including its orientation, is calculated effectively by</p><pre class="programlisting" xml:space="preserve">v:add($start, v:new($length,0) =&gt; v:rotateDeg($start?orient))</pre><p>where <code class="code">v:rotateDeg($in,$rot)</code> rotates a vector (and its end orientation) by <code class="code">$rot</code> degrees. During this
-                operation the (SVG) graphic pieces for the schematic and the track pictures are constructed (see below) and added to the resulting map
-                as well as other needed information, such as track section length. Each piece is named, using an <code class="code">xsl:accumulator</code> to
-                generate something suitable in the absence of a specific <code class="code">@name</code> value.</p><p>This template is executed from an <code class="code">xsl:iterate</code> instruction processing the children of a <code class="code">layout</code> or a
-                    <code class="code">spur</code>:</p><pre class="programlisting" xml:space="preserve">&lt;xsl:template match="rail|spur|layout" as="map(*)*" mode="makeTrack"&gt;
-   &lt;xsl:param name="start" as="map(*)"&gt;
-      &lt;xsl:apply-templates select="start" mode="#current"/&gt;
-   &lt;/xsl:param&gt;
-   &lt;xsl:iterate select="* except (start | link)"&gt;
-      &lt;xsl:param name="start" select="$start" as="map(*)"/&gt;
-      &lt;xsl:choose&gt;
-         &lt;xsl:when test="not(self::break)"&gt;
-            &lt;xsl:variable name="part" as="map(*)"&gt;
-               &lt;xsl:apply-templates select="." mode="#current"&gt;
-                  &lt;xsl:with-param name="start" select="$start"/&gt;
-               &lt;/xsl:apply-templates&gt;
-            &lt;/xsl:variable&gt;
-            &lt;xsl:sequence select="$part"/&gt;
-            &lt;xsl:next-iteration&gt;
-               &lt;xsl:with-param name="start" select="$part?end"/&gt;
-            &lt;/xsl:next-iteration&gt;
-        &lt;/xsl:when&gt;
-        &lt;xsl:otherwise&gt;
-           &lt;xsl:break/&gt;
-        &lt;/xsl:otherwise&gt;
-     &lt;/xsl:choose&gt;
-   &lt;/xsl:iterate&gt;
-&lt;/xsl:template&gt;</pre><p>For each subsequent iteration the <code class="code">$start</code> parameter becomes the <code class="code">end</code> property of the <code class="code">$part</code> just
-                generated. Needless to say processing a <code class="code">curve</code> is similar to that for <code class="code">straight</code>, though the calculation of the
-                chord, end point and the appropriate SVG ellipitical arc are more complex. For the <code class="code">point</code> we need to construct
-                    <span class="emphasis"><em>two</em></span> sections: the <span class="emphasis"><em>not set</em></span> (straight on) track section and its end point, and the
-                    <span class="emphasis"><em>set</em></span> section with its attached branch line, which is constructed by a recursive call on the iteration above,
-                with the branch <code class="code">spur</code> element as context and the spur position and orientation as the <code class="code">$start</code>
-                parameter.</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e3725" class="footnote"><p><a href="#d5e3725" class="para" shape="rect"><sup class="para">[19] </sup></a>Adding a <code class="code">z</code> (height) component would be simple, being altered by <code class="code">length * gradient</code>. It is safe to
-                        assume that gradients will never be steep enough to make significant effects on planar (<code class="code">x,y</code>) positions. </p></div><div id="ftn.d5e3739" class="footnote"><p><a href="#d5e3739" class="para" shape="rect"><sup class="para">[20] </sup></a>Orientation is held in degrees and converted to radians as required. SVG describes its rotations in degrees and I know
-                        fairly closely what 30°, 45° and 225° look like, but not 1.5 radians.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s03s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar08s03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s03s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3395"><div class="titlepage"><div><div><h3 class="title">Representing XML Attribute Change in diff3x</h3></div></div></div><p>XML attributes present a particular challenge for diff3 format, and this can be
+                improved using an XML representation. </p><p>It is worth noting an issue with the diff3 format in this situation, because it is
+                quite subtle but one that we can resolve in diff3x. The lines in the input files at
+                which all three files align (the lines are all equal) are considered 'anchor'
+                points. All of the lines between anchor points is considered to be a single choice -
+                and when there is some kind of conflict then the choice is left for the user to
+                select. The interesting consequence of this structure is that it is not possible to
+                have two consecutive choices without a separator which requires a commonality
+                between all three files, i.e. an anchor point. For structured data it would be
+                natural, for example, to provide choices about attributes in a manner that allows
+                each attribute to be chosen separately, but the diff3 format dictates that two
+                adjacent changes are seen as one choice. </p><p>We can improve this with diff3x because we can easily have adjacent choices
+                without any ambiguity.</p><p>
+                </p><div class="table" id="d5e3401"><p class="title"><strong>Table 6. XML Attribute value change</strong></p><div class="table-contents"><table class="table" summary="XML Attribute value change" border="1"><colgroup span="1"><col width="33%" align="left" class="c1" span="1" /><col width="32%" align="left" class="c2" span="1" /><col width="35%" align="left" class="c3" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1">A.txt</th><th align="left" rowspan="1" colspan="1">O.txt</th><th align="left" rowspan="1" colspan="1">B.txt</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;span</strong> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"two"</span> 
+  <span class="hl-attribute" style="color: #F5844C">dir</span>=<span class="hl-value" style="color: #993300">"rtr"</span> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"23"</span><strong class="hl-tag" style="color: #000096">&gt;</strong></pre>
+                                </td><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;span</strong> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"one"</span> 
+  <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"23"</span> <span class="hl-attribute" style="color: #F5844C">dir</span>=<span class="hl-value" style="color: #993300">"TBA"</span><strong class="hl-tag" style="color: #000096">&gt;</strong></pre>
+                                </td><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;span</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"23"</span> 
+  <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"three"</span> <span class="hl-attribute" style="color: #F5844C">dir</span>=<span class="hl-value" style="color: #993300">"ltr"</span><strong class="hl-tag" style="color: #000096">&gt;</strong></pre>
+                                </td></tr></tbody></table></div></div><p><br class="table-break" clear="none" />
+            </p><p>These changes can be represented in diff3x as shown
+        below.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;diff3x</strong> <span class="hl-attribute" style="color: #F5844C">a</span>=<span class="hl-value" style="color: #993300">"A.txt"</span> <span class="hl-attribute" style="color: #F5844C">b</span>=<span class="hl-value" style="color: #993300">"B.txt"</span> <span class="hl-attribute" style="color: #F5844C">o</span>=<span class="hl-value" style="color: #993300">"O.txt"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;span id="23"<strong class="hl-tag" style="color: #000096">]]&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;choice3&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;a&gt;</strong>class="two"<strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;o&gt;</strong>class="one"<strong class="hl-tag" style="color: #000096">&lt;/o&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;b&gt;</strong>class="three"<strong class="hl-tag" style="color: #000096">&lt;/b&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/choice3&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;choice3&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;a&gt;</strong>dir="rtr"<strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;o&gt;</strong>dir="TBA"<strong class="hl-tag" style="color: #000096">&lt;/o&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;b&gt;</strong>dir="ltr"<strong class="hl-tag" style="color: #000096">&lt;/b&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/choice3&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;/span&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/diff3x&gt;</strong></pre><p>There
+        is another representation that takes the common attribute name out of the choice but this
+        may be less easy for a user to see what is happening by inspection of the diff3x but a GUI
+        could provide an intuitive interface. For illustration, in the first class attribute we have
+        included the attribute value quotation marks in the options, and for the dir attribute we
+        have put them outside - this is a matter of choice, either approach can be represented by
+        diff3x.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;diff3x</strong> <span class="hl-attribute" style="color: #F5844C">a</span>=<span class="hl-value" style="color: #993300">"A.txt"</span> <span class="hl-attribute" style="color: #F5844C">b</span>=<span class="hl-value" style="color: #993300">"B.txt"</span> <span class="hl-attribute" style="color: #F5844C">o</span>=<span class="hl-value" style="color: #993300">"O.txt"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;span 
+class=<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;choice3&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;a&gt;</strong>"two"<strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong>
+                <strong class="hl-tag" style="color: #000096">&lt;o&gt;</strong>"one"<strong class="hl-tag" style="color: #000096">&lt;/o&gt;</strong>
+                <strong class="hl-tag" style="color: #000096">&lt;b&gt;</strong>"three"<strong class="hl-tag" style="color: #000096">&lt;/b&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/choice3&gt;</strong>
+dir="<strong class="hl-tag" style="color: #000096">&lt;choice3&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;a&gt;</strong>rtr<strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;o&gt;</strong>TBA<strong class="hl-tag" style="color: #000096">&lt;/o&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;b&gt;</strong>ltr<strong class="hl-tag" style="color: #000096">&lt;/b&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/choice3&gt;</strong>"
+<strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;/span&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/diff3x&gt;</strong></pre><p>
+      </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s03s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="pres.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
                             &lt;oXygen/&gt; XML WebHelp
                         </a></div></body></html>

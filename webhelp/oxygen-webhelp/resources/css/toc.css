@@ -1,11 +1,11 @@
 /*
 
 Oxygen WebHelp Plugin
-Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
+Copyright (c) 1998-2021 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 
-@import "fonts.css?buildId=2019032613";
+@import "fonts.css?buildId=2021022614";
 
 /* Start RTL */
 html[dir="rtl"] .topic, html[dir="rtl"] .hasSubMenuOpened, html[dir="rtl"] .hasSubMenuClosed{

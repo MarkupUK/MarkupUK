@@ -1,77 +1,122 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Representing the topology</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2019 Proceedings" /><link rel="up" href="ar08s03.html" title="Layout Topology and Geometry" /><link rel="prev" href="ar08s03.html" title="Layout Topology and Geometry" /><link rel="next" href="ar08s03s02.html" title="Computing the geometry" /><!--  Generated with Oxygen version 21.0, build number 2019032613.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Representing XML Element Tag Change in diff3x</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="pres.html" title="Preserving well-formed tree structure in diff3x" /><link rel="prev" href="pres.html" title="Preserving well-formed tree structure in diff3x" /><link rel="next" href="ar08s03s02.html" title="Representing XML Attribute Change in diff3x" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.1.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2019032613" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s03s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect2" id="d5e3613"><div class="titlepage"><div><div><h3 class="title">Representing the topology</h3></div></div></div><p>If we want to use a layout for any purpose other than design (such as interactive animation), we don't just need the geometry of the
-                layout: we also need to represent the topology — which sections are joined when points are in a given state? If a train leaves one
-                section, which is the one it will enter, if any? To do this we represent contiguous sections of track and points as components with
-                two or three <span class="emphasis"><em>ports</em></span>:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">face</span></dt><dd><p>The port which faces against an oncoming vehicle in normal travel, i.e. trains usually start from the face port. For
-                                <span class="emphasis"><em>points</em></span> this is the entry from which the exit track (<span class="emphasis"><em>trail</em></span> or
-                                <span class="emphasis"><em>spur</em></span>) depends upon the state of the point.</p></dd><dt><span class="term">trail</span></dt><dd><p>The port from which a vehicle emerges in normal travel, i.e. trains usually end a section leaving the trail port. For
-                            points entered in the normal switched direction this is the exit when the point is <span class="emphasis"><em>not set.</em></span></p></dd><dt><span class="term">spur</span></dt><dd><p>Only defined for points, the exit port when the point has been <span class="emphasis"><em>set</em></span>
-                            <a href="#ftn.d5e3635" class="footnote" shape="rect"><sup class="footnote" id="d5e3635">[17]</sup></a>.</p></dd></dl></div><p>Using these definitions we can describe the topological relations between component sections in a simple map:</p><div class="figure" id="d5e3646"><p class="title"><strong>Figure 6. Topology of a two-point layout</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/twoPointsTopology.PNG" width="100%" alt="Topology of a two-point layout" /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>This map has an entry for each component describing its type and its port connections in terms of a component/port pair to which
-                that port attaches. Note however that <span class="emphasis"><em>branch2</em></span> (the <span class="quote">“<span class="quote">backward</span>”</span> spur from point
-                    <span class="emphasis"><em>P2</em></span>) is labelled <code class="code">down=false</code>. This means that the <span class="quote">“<span class="quote">main</span>”</span> direction (i.e. proceeding
-                from <span class="emphasis"><em>P2</em></span> along <span class="emphasis"><em>branch2</em></span>) of that section of track is in a reversed sense to the rest of the
-                layout — the importance of this will become apparent later.</p><p>Thus far we have a layout that has no loops or paths of multiple connection, and whilst totally representable by a tree is not
-                completely useful, especially if one wants to leave a train running around the layout indefinitely. Suppose we have a simple oval
-                loop:</p><div class="figure" id="d5e3660"><p class="title"><strong>Figure 7. An oval becomes a loop</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="80%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/oval.PNG" width="100%" alt="An oval becomes a loop" /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>which starts at 2000,1000, and loops back through two straights and two curves to an end point co-incident in position <span class="emphasis"><em>and
-                    orientation</em></span> with the start. To <span class="quote">“<span class="quote">close the loop</span>”</span>, we have to convert our tree to a graph, in this case with
-                    <span class="quote">“<span class="quote">self-pointers</span>”</span> by adding a specific link directive</p><div class="example" id="d5e3669"><p class="title"><strong>Example 4. Describing a graph linkage</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">&lt;layout name="oval" start="A"&gt;
-    &lt;start x="2000" y="1000" orient="20"/&gt;
-    &lt;straight name="A" length="2000"/&gt;
-    &lt;curve r="1000" angle="180"/&gt;
-    &lt;straight length="2000"/&gt;
-    &lt;curve r="1000" angle="180"/&gt;
-    &lt;link&gt;A.trail A.face&lt;/link&gt;
-&lt;/layout&gt;</pre><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/ovalGraph.PNG" width="100%" /></td></tr></table></div></div></div><br class="example-break" clear="none" /><p>Now a vehicle finishing at <span class="emphasis"><em>A.trail</em></span> can proceed happily into <span class="emphasis"><em>A</em></span> again through
-                    <span class="emphasis"><em>A.face</em></span> and similarly in a reverse direction. Of course in this case we could infer from the geometrical
-                co-incidence that such a link may be required, but sometimes the geometry isn't quite accurate enough. Here is a passing loop:</p><div class="example" id="d5e3679"><p class="title"><strong>Example 5. A passing loop</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">&lt;layout name="passingLoop" start="main-line1"&gt;
-    &lt;start x="400" y="400" orient="30"/&gt;
-    &lt;straight name="main-line1" length="500"/&gt;
-    &lt;point id="passing1" radius="small" turn="left"&gt;
-        &lt;spur&gt;                
-           &lt;curve  name="passing-loop" r="1000" angle="-22.5"/&gt;                
-           &lt;straight length="1200"/&gt;
-           &lt;curve r="1000" angle="-22.5"/&gt;
-        &lt;/spur&gt;
-    &lt;/point&gt;
-    &lt;straight name="main-line2" length="1960"/&gt;
-    &lt;point id="passing2" radius="small" dir="trailing" turn="right"/&gt;
-    &lt;straight name="main-line3" length="500"/&gt;
-    &lt;link&gt;passing-loop.trail passing2.spur&lt;/link&gt;
-&lt;/layout&gt;</pre></div></div><br class="example-break" clear="none" /><p> Where now we have specifically linked the passing loop component onto the trailing point spur:</p><div class="figure" id="d5e3683"><p class="title"><strong>Figure 8. Passing loop graphically and topologically</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="80%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/PassingLoop.PNG" width="100%" alt="Passing loop graphically and topologically" /></td></tr></table></div><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/PassingLoopInfo.PNG" width="100%" alt="Passing loop graphically and topologically" /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>But linking isn't quite as straightforward. Suppose in our earlier example we consider the <span class="quote">“<span class="quote">small gap</span>”</span> between
-                    <span class="emphasis"><em>section2</em></span> and <span class="emphasis"><em>branch3</em></span> is joinable, and we specifically add a link declaration:</p><div class="example" id="d5e3695"><p class="title"><strong>Example 6. Linking arbitrary branches</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve"> &lt;layout name="twoPointsLinked" start="section1"&gt;
-    &lt;start x="400" y="400" orient="30"/&gt;
-    ...
-    &lt;point id="P1" radius="small" turn="left"&gt;
-        &lt;spur&gt;
-            ...
-            &lt;point id="P2" radius="small" dir="trailing" turn="left"&gt;
-                &lt;spur&gt;
-                    &lt;curve name="branch2" r="400" angle="155"/&gt;
-                &lt;/spur&gt;
-            &lt;/point&gt;
-            &lt;straight name="branch3" length="500"/&gt;
-        &lt;/spur&gt;
-    &lt;/point&gt;
-    &lt;curve name="section2" r="1500" angle="-45"/&gt;
-    ...
-    &lt;curve r="500" length="1400"/&gt;
-    &lt;link&gt;section2.trail branch3.trail&lt;/link&gt;
-&lt;/layout&gt;</pre></div></div><br class="example-break" clear="none" /><p>This link introduces a requirement for a <span class="quote">“<span class="quote">polarity shift</span>”</span> — a locomotive proceeding <span class="emphasis"><em>forwards</em></span> from
-                    <span class="emphasis"><em>section2</em></span> would find itself running in the <span class="emphasis"><em>reverse</em></span> direction in
-                    <span class="emphasis"><em>branch2</em></span>. To permit smooth continuous operations, our <span class="quote">“<span class="quote">cyber-locomotives</span>”</span> have a <span class="quote">“<span class="quote">running
-                    in the wrong-direction</span>”</span> property (which is <span class="emphasis"><em>xored</em></span> with <span class="emphasis"><em>reverse</em></span>), and when similar
-                ports are connected with similar <span class="quote">“<span class="quote">down-line</span>”</span> properties, a dummy <span class="emphasis"><em>swap</em></span> component is inserted in the
-                link, which will invert this property as a vehicle transits<a href="#ftn.d5e3710" class="footnote" shape="rect"><sup class="footnote" id="d5e3710">[18]</sup></a>:</p><div class="figure" id="d5e3713"><p class="title"><strong>Figure 9. Swapping direction across links.</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2019/john/figures/swappingPolarity.PNG" width="100%" alt="Swapping direction across links." /></td></tr></table></div></div></div><br class="figure-break" clear="none" /><p>(<span class="emphasis"><em>swap1</em></span> and <span class="emphasis"><em>swap2</em></span> could in theory be the same, but the implementation is easier to use one
-                for each direction, and the additional cost minimal.)</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e3635" class="footnote"><p><a href="#d5e3635" class="para" shape="rect"><sup class="para">[17] </sup></a>In theory an engine entering a set of points from the <span class="emphasis"><em>trail</em></span> or
-                                        <span class="emphasis"><em>spur</em></span> direction, when the points are set <span class="emphasis"><em>against</em></span> that direction, i.e.
-                                    when <span class="emphasis"><em>set</em></span> from <span class="emphasis"><em>trail</em></span> or <span class="emphasis"><em>not set</em></span> from
-                                        <span class="emphasis"><em>spur</em></span>, may be able to <span class="quote">“<span class="quote">force</span>”</span> an automatic points switch, but this is not
-                                    recommended practice.</p></div><div id="ftn.d5e3710" class="footnote"><p><a href="#d5e3710" class="para" shape="rect"><sup class="para">[18] </sup></a>Such an issue is faced by two-rail electric power systems on railways with such <span class="quote">“<span class="quote">re-entrancy</span>”</span></p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar08s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar08s03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s03s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="pres.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s03s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3366"><div class="titlepage"><div><div><h3 class="title">Representing XML Element Tag Change in diff3x</h3></div></div></div><p>XML tags present a problem for diff3 format in that it is in general not possible
+        to ensure a well-formed result without unacceptable duplication of content. To handle tag
+        changes in diff3x we need to treat the XML payload, i.e. the XML that is the subject of
+        change, as text and so escape it with CDATA markers. Later in this paper we look at treating
+        an XML payload as XML, which is more natural but as we shall see, it is not possible to
+        represent tag changes in that approach.</p><p>Here is an example of a change of structure.</p><div class="table" id="d5e3370"><p class="title"><strong>Table 5. XML tag change</strong></p><div class="table-contents"><table class="table" summary="XML tag change" border="1"><colgroup span="1"><col width="33%" align="left" class="c1" span="1" /><col width="32%" align="left" class="c2" span="1" /><col width="35%" align="left" class="c3" span="1" /></colgroup><thead><tr><th align="left" rowspan="1" colspan="1">A.txt</th><th align="left" rowspan="1" colspan="1">O.txt</th><th align="left" rowspan="1" colspan="1">B.txt</th></tr></thead><tbody><tr><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p&gt;</strong>This is a long
+paragraph where
+<strong class="hl-tag" style="color: #000096">&lt;strong&gt;</strong>most of
+it has been made 
+either bold or 
+italic, but the rest 
+of the paragraph 
+remains unchanged - 
+there is no change 
+to the text so
+we do not want it 
+duplicated<strong class="hl-tag" style="color: #000096">&lt;/strong&gt;</strong>.
+<strong class="hl-tag" style="color: #000096">&lt;/p&gt;</strong></pre>
+                                </td><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p&gt;</strong>This is a long
+paragraph where
+most of
+it has been made 
+either bold or 
+italic, but the rest 
+of the paragraph 
+remains unchanged - 
+there is no change 
+to the text so
+we do not want it 
+duplicated.
+<strong class="hl-tag" style="color: #000096">&lt;/p&gt;</strong></pre>
+                                </td><td align="left" rowspan="1" colspan="1">
+                                    <pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p&gt;</strong>This is a long
+paragraph where
+<strong class="hl-tag" style="color: #000096">&lt;italic&gt;</strong>most of
+it has been made 
+either bold or 
+italic, but the rest 
+of the paragraph 
+remains unchanged - 
+there is no change 
+to the text so
+we do not want it 
+duplicated<strong class="hl-tag" style="color: #000096">&lt;/italic&gt;</strong>.
+<strong class="hl-tag" style="color: #000096">&lt;/p&gt;</strong></pre>
+                                </td></tr></tbody></table></div></div><p><br class="table-break" clear="none" />This could be represented as shown below, but there is duplication of
+                unchanged text which is confusing because if there had been a small change the user
+                would have found it difficult to see. Note that in this example the payload is XML
+                but this is not seen as part of the XML of the carrier, the payload is treated as
+                text because it is enclosed in the CDATA
+                sections.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;diff3x</strong> <span class="hl-attribute" style="color: #F5844C">a</span>=<span class="hl-value" style="color: #993300">"A.txt"</span> <span class="hl-attribute" style="color: #F5844C">b</span>=<span class="hl-value" style="color: #993300">"B.txt"</span> <span class="hl-attribute" style="color: #F5844C">o</span>=<span class="hl-value" style="color: #993300">"O.txt"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;p&gt;This is a long paragraph 
+where <strong class="hl-tag" style="color: #000096">]]&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;choice3&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;a&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;strong&gt;most of it has 
+been made either bold or
+italic, but the rest of 
+the paragraph remains 
+unchanged - there is no 
+change to the text so
+we do not want it 
+duplicated&lt;/strong&gt;
+<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;o&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>most of it has 
+been made either bold or
+italic, but the rest of 
+the paragraph remains 
+unchanged - there is no 
+change to the text so
+we do not want it 
+duplicated<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/o&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;b&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;italic&gt;most of it has 
+been made either bold or
+italic, but the rest of 
+the paragraph remains 
+unchanged - there is no 
+change to the text so
+we do not want it 
+duplicated&lt;/italic&gt;
+<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/b&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/choice3&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>. &lt;/p&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/diff3x&gt;</strong></pre><p>
+            </p><p>We can improve this significantly and use the id attributes as described above to
+                ensure consistent choices. In this case we have given the options within the two
+                connected choices an id value. Thus if option <code class="code">&lt;a&gt;</code> is selected in one choice with
+                id="a42" then the choice with id="a420" is automatically selected. We have also
+                added 'vice versa' attributes so that the same would happen the other way round: if
+                the end tag was selected then the corresponding start tag would also be
+                selected.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;diff3x</strong> <span class="hl-attribute" style="color: #F5844C">a</span>=<span class="hl-value" style="color: #993300">"A.txt"</span> <span class="hl-attribute" style="color: #F5844C">b</span>=<span class="hl-value" style="color: #993300">"B.txt"</span> <span class="hl-attribute" style="color: #F5844C">o</span>=<span class="hl-value" style="color: #993300">"O.txt"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;p&gt;This is a long paragraph 
+where <strong class="hl-tag" style="color: #000096">]]&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;choice3 &gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;a</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"a42"</span> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"a420"</span> <span class="hl-attribute" style="color: #F5844C">include</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;strong&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;o/&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;b</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"b43"</span> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"b430"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;italic&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/b&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/choice3&gt;</strong>
+most of it has 
+been made either bold or
+italic, but the rest of 
+the paragraph remains 
+unchanged - there is no 
+change to the text so
+we do not want it 
+duplicated
+<strong class="hl-tag" style="color: #000096">&lt;choice3&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;b</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"b43"</span> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"b430"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;/italic&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/b&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;o/&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;a</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"a42"</span> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"a420"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>&lt;/strong&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/choice3&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;![CDATA[</strong>. &lt;/p&gt;<strong class="hl-tag" style="color: #000096">]]&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/diff3x&gt;</strong></pre><p>If
+                the GUI tool allowed multiple options to be selected, then both <code class="code">&lt;strong&gt;</code> and
+                <code class="code">&lt;italic&gt;</code> could be selected - provided of course they appeared in the correct
+                nested order. We have assumed that the user would need to have the knowledge to know
+                if the selection of two options was appropriate.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="pres.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="pres.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar08s03s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
                             &lt;oXygen/&gt; XML WebHelp
                         </a></div></body></html>

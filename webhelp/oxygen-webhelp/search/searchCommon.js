@@ -49,8 +49,6 @@ function preprocessSearchResult(searchResult, whDistribution) {
     lastSearchResult = searchResult;
     lastSearchResultItems = [];
 
-    var wh_mobile =
-        (typeof whDistribution != 'undefined') && whDistribution == 'wh-mobile';
     var wh_Classic =
         (typeof whDistribution != 'undefined') && whDistribution == 'wh-classic';
 
@@ -106,7 +104,7 @@ function preprocessSearchResult(searchResult, whDistribution) {
             );
 
             // Similar pages
-            var similarPages = !wh_mobile && similarPage(allPages[page], allPages[page - 1]);
+            var similarPages = similarPage(allPages[page], allPages[page - 1]);
             if (!similarPages) {
                 currentSimilarPage = csri;
                 lastSearchResultItems.push(csri);
@@ -121,7 +119,7 @@ function preprocessSearchResult(searchResult, whDistribution) {
 /**
  * Compute the HTML to be displayed in the search results page.
  *
- * @param whDistribution The string with WebHelp distribution. One of wh-classic, wh-mobile or wh-responsive.
+ * @param whDistribution The string with WebHelp distribution. One of wh-classic or wh-responsive.
  * @param pageNumber The page number to display.
  * @param totalPageNumber The total page number.
  * @param itemsPerPage The number of items to display on a page.
@@ -255,8 +253,6 @@ function computeSearchItemHTML(searchItem, whDistribution, hasSimilarPages, simi
     // New empty jQuery element
     var htmlResult = $();
 
-    var wh_mobile =
-        (typeof whDistribution != 'undefined') && whDistribution == 'wh-mobile';
     var wh_Classic =
         (typeof whDistribution != 'undefined') && whDistribution == 'wh-classic';
 
@@ -272,7 +268,7 @@ function computeSearchItemHTML(searchItem, whDistribution, hasSimilarPages, simi
     var starWidth = searchItem.starWidth;
     var rankingHTML = $();
 
-    if (!wh_mobile && (typeof webhelpSearchRanking != 'undefined') && webhelpSearchRanking) {
+    if ((typeof webhelpSearchRanking != 'undefined') && webhelpSearchRanking) {
         // Add rating values for scoring at the list of matches
         rankingHTML =  $("<div/>", {
             id: 'rightDiv'
@@ -315,7 +311,7 @@ function computeSearchItemHTML(searchItem, whDistribution, hasSimilarPages, simi
     arrayString = arrayStringAux.toString();
 
     // Add highlight param
-    if (!wh_Classic && !wh_mobile) {
+    if (!wh_Classic) {
         tempPath += '?hl=' + encodeURIComponent(arrayString);
     }
 
@@ -402,7 +398,7 @@ function computeSearchItemHTML(searchItem, whDistribution, hasSimilarPages, simi
     searchItemInfo.append(relPathStr);
 
     // Missing words
-    if (!wh_mobile && allSearchWords.length != searchItem.words.length) {
+    if (allSearchWords.length !== searchItem.words.length) {
         var missingWords = [];
         allSearchWords.forEach(function (word) {
             if (searchItem.words.indexOf(word) == -1) {
@@ -426,7 +422,7 @@ function computeSearchItemHTML(searchItem, whDistribution, hasSimilarPages, simi
         searchItemInfo.append(missingHTML);
     }
 
-    if (!wh_mobile && hasSimilarPages) {
+    if (hasSimilarPages) {
         var $similarHTML = $('<a/>', {
             class: 'showSimilarPages',
             onclick: 'showSimilarResults(this)'
