@@ -1,7 +1,7 @@
 /*
 
 Oxygen WebHelp Plugin
-Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
+Copyright (c) 1998-2021 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 /**
@@ -49,11 +49,11 @@ $(document).ready(function () {
 
     if (!notLocalChrome) {
         var warningMsg = 'Chrome limits JavaScript functionality when a page is loaded from the local disk. This prevents the normal help viewer from loading.\nYou will be redirected to the frameset version of the help.';
-        if (confirm(warningMsg)) {
+        if (confirm(warningMsg)) { // NOSONAR javascript:S1442 Notify user that Chrome limits the WebHelp functionality
             // using Chrome to read local files
             redirect('index_frames.html');
         } else {
-            alert ("Not all features are enabled when using Google Chrome for webhelp loaded from local file system!");
+            alert ("Not all features are enabled when using Google Chrome for webhelp loaded from local file system!"); // NOSONAR javascript:S1442 Notify user that Chrome limits the WebHelp functionality
             var warningSign = '<span id="warningSign"><img src="oxygen-webhelp/resources/img/warning.png" alt="warning" border="0"></span>';
             $('#productTitle .framesLink').append(warningSign);
             $('#warningSign').mouseenter(function () {
@@ -96,7 +96,7 @@ $(document).ready(function () {
  */
 function loadSearchResources() {
     if (typeof window.indexerLanguage == 'undefined') {
-        var scripts = ["oxygen-webhelp/search/htmlFileInfoList.js?uniqueId=20190607040825", "oxygen-webhelp/search/index-1.js?uniqueId=20190607040825", "oxygen-webhelp/search/index-2.js?uniqueId=20190607040825", "oxygen-webhelp/search/index-3.js?uniqueId=20190607040825"];
+        var scripts = ["oxygen-webhelp/search/htmlFileInfoList.js?uniqueId=20210520111625", "oxygen-webhelp/search/index-1.js?uniqueId=20210520111625", "oxygen-webhelp/search/index-2.js?uniqueId=20210520111625", "oxygen-webhelp/search/index-3.js?uniqueId=20210520111625"];
         for (var entry in scripts) {
             var scriptTag = document.createElement("script");
             scriptTag.type = "text/javascript";
@@ -724,7 +724,7 @@ $(function () {
         }
 
         if(textAreaContent!='' && textAreaContent!==undefined && $("#frm").contents().find("#newComment").is(":visible") && currentHref!=newHref) {
-            if (confirm(getLocalization("label.Unsaved"))) {
+            if (confirm(getLocalization("label.Unsaved"))) { // NOSONAR javascript:S1442 Notify user that has some comments that will be loosed
                 currentHref = window.location.href;
                 load(window.location.href);
             } else {

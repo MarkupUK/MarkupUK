@@ -1,0 +1,39 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Server</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="helloder.html" title="On the Design of a Self-Referential Tutorial" /><link rel="prev" href="exercises.html" title="Exercises" /><link rel="next" href="experience.html" title="Experience" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="exercises.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="experience.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="server"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Server</h2></div></div></div><p>
+      One of the requirements for following the tutorial is that the
+      user have access to an HTTP server, and furthermore, one that
+      supports the PUT method [<a class="link" href="pemberton-references.html#put" title="Hypertext Transfer Protocol -- HTTP/1.0 (appendix D.1.1)" shape="rect">put</a>], since
+      several of the exercises use it. For reasons that are not entirely
+      clear, most HTTP servers available don’t support PUT at all, or
+      otherwise only with a lot of extra work. So the options for the
+      tutorial apparently are: require the attendees to locate and
+      install an existing server that accepts PUT; run a server and then
+      require anybody who wants to use the tutorial to acquire a
+      username and login for it; or supply a minimal server that the
+      user can easily install and use. We opted for the third.
+    </p><p>
+      Luckily, writing a simple server without the normal
+      industrial-strength requirements of large-scale servers is fairly
+      easy, and since we had already written one for the XForms Test
+      Suite [<a class="link" href="pemberton-references.html#ts" title="The XForms 2.0 Test Suite" shape="rect">ts</a>], XContents
+      [<a class="link" href="pemberton-references.html#xc" title="XContents Minimal Web Server" shape="rect">xc</a>], we used that, a few hundred lines
+      of C code, which we then compiled for a number of standard
+      platforms. Unfortunately, during testing, we discovered that on
+      Windows, one virus scanner falsely identified the server as
+      malware, and so for the people who ran against that problem we
+      also wrote a JavaScript version which runs under Node.
+    </p><p>
+      Since the tutorial demands a server that uses PUT, the tutorial
+      itself could use it for its own purposes. In particular whenever
+      the user navigates to a new chapter, the current state is saved so
+      that should the user stop and log out, on return the tutorial is
+      restarted at the last-used location.
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="exercises.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="helloder.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="experience.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

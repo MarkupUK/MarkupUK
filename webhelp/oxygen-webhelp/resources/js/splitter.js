@@ -231,9 +231,6 @@
                 
                 //A.attr('title','- '+sizeA);  B.attr('title','- '+sizeB);
                 // oXygen patch start
-                if (typeof eval(debug) == 'function') {
-                  //debug('Resize splitter to; A:'+sizeA+' B:'+sizeB);
-                }
 //                if (sizeA==0){
 //                  A.css('overflow','hidden');
 //                  A.css('overflow-y','hidden');

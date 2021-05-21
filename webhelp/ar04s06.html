@@ -1,0 +1,124 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>XSLT Considerations</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="ar04.html" title="&lt;transpile from=&#34;Java&#34; to=&#34;C#&#34; via=&#34;XML&#34; with=&#34;XSLT&#34;/&gt;" /><link rel="prev" href="ar04s05s07.html" title="Exceptions" /><link rel="next" href="ar04s07.html" title="Conclusions" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s05s07.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s07.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1667"><div class="titlepage"><div><div><h2 class="title" style="clear: both">XSLT Considerations</h2></div></div></div><p>In this section I'll try to draw out some observations about the XSLT implementation.
+</p><p>Like most XSLT code, it has been developed incrementally: rules are added as the 
+      need for them is discovered. This is one of the strengths of XSLT as an implementation 
+      language for this kind of task: the program can grow very organically, with little need 
+      for structural refactoring. At the same time, uncontrolled growth can easily result in a 
+      lack of structure. How many modes should there be, and how do we decide? How should 
+      the code be split into modules? How should template rule priorities be allocated?
+</p><p>Again, like most XSLT applications, it's not just template rules: there are also 
+      quite a few functions. And as in other programming languages, the set of functions you 
+      end up with, and their internal complexity and external API, can grow rather arbitrarily.
+</p><p>It's worth looking a little bit at the nature of the XML we're dealing with. Here's a sample:
+</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;member</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"MethodDeclaration"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+ <strong class="hl-tag" style="color: #000096">&lt;body</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"BlockStmt"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;statements&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;statement</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"ReturnStmt"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;expression</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"BinaryExpr"</span> 
+                <span class="hl-attribute" style="color: #F5844C">operator</span>=<span class="hl-value" style="color: #993300">"PLUS"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;left</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"MethodCallExpr"</span> 
+           <span class="hl-attribute" style="color: #F5844C">RETURN</span>=<span class="hl-value" style="color: #993300">"double"</span>
+           <span class="hl-attribute" style="color: #F5844C">RESOLVED_TYPE</span>=<span class="hl-value" style="color: #993300">"net.sf.saxon.expr.Expression"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;name</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"SimpleName"</span> <span class="hl-attribute" style="color: #F5844C">identifier</span>=<span class="hl-value" style="color: #993300">"getCost"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;scope</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"MethodCallExpr"</span> 
+             <span class="hl-attribute" style="color: #F5844C">RETURN</span>=<span class="hl-value" style="color: #993300">"net.sf.saxon.expr.Expression"</span>
+             <span class="hl-attribute" style="color: #F5844C">DECLARING_TYPE</span>=<span class="hl-value" style="color: #993300">"net.sf.saxon.expr.BinaryExpression"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;name</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"SimpleName"</span> <span class="hl-attribute" style="color: #F5844C">identifier</span>=<span class="hl-value" style="color: #993300">"getLhsExpression"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/scope&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;/left&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;right</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"BinaryExpr"</span> <span class="hl-attribute" style="color: #F5844C">operator</span>=<span class="hl-value" style="color: #993300">"DIVIDE"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;left</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"MethodCallExpr"</span> <span class="hl-attribute" style="color: #F5844C">RETURN</span>=<span class="hl-value" style="color: #993300">"double"</span>
+            <span class="hl-attribute" style="color: #F5844C">RESOLVED_TYPE</span>=<span class="hl-value" style="color: #993300">"net.sf.saxon.expr.Expression"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+       <strong class="hl-tag" style="color: #000096">&lt;name</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"SimpleName"</span> <span class="hl-attribute" style="color: #F5844C">identifier</span>=<span class="hl-value" style="color: #993300">"getCost"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;scope</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"MethodCallExpr"</span>
+               <span class="hl-attribute" style="color: #F5844C">RETURN</span>=<span class="hl-value" style="color: #993300">"net.sf.saxon.expr.Expression"</span>
+               <span class="hl-attribute" style="color: #F5844C">DECLARING_TYPE</span>=<span class="hl-value" style="color: #993300">"net.sf.saxon.expr.BinaryExpression"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+         <strong class="hl-tag" style="color: #000096">&lt;name</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"SimpleName"</span> 
+               <span class="hl-attribute" style="color: #F5844C">identifier</span>=<span class="hl-value" style="color: #993300">"getRhsExpression"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/scope&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/left&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;right</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"IntegerLiteralExpr"</span> 
+             <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"2"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;/right&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/expression&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;/statement&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/statements&gt;</strong>
+ <strong class="hl-tag" style="color: #000096">&lt;/body&gt;</strong>
+ <strong class="hl-tag" style="color: #000096">&lt;type</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"PrimitiveType"</span> 
+       <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"DOUBLE"</span> 
+       <span class="hl-attribute" style="color: #F5844C">RESOLVED_TYPE</span>=<span class="hl-value" style="color: #993300">"double"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+ <strong class="hl-tag" style="color: #000096">&lt;modifiers&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;modifier</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"Modifier"</span> 
+            <span class="hl-attribute" style="color: #F5844C">keyword</span>=<span class="hl-value" style="color: #993300">"PUBLIC"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+ <strong class="hl-tag" style="color: #000096">&lt;/modifiers&gt;</strong>
+ <strong class="hl-tag" style="color: #000096">&lt;annotations&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;annotation</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"MarkerAnnotationExpr"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;name</strong> <span class="hl-attribute" style="color: #F5844C">nodeType</span>=<span class="hl-value" style="color: #993300">"Name"</span> <span class="hl-attribute" style="color: #F5844C">identifier</span>=<span class="hl-value" style="color: #993300">"Override"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/annotation&gt;</strong>
+ <strong class="hl-tag" style="color: #000096">&lt;/annotations&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/member&gt;</strong></pre><p>This represents the Java code </p><pre class="programlisting" xml:space="preserve"><em><span class="hl-annotation" style="color: gray">@Override</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">double</strong> getCost() {
+    <strong class="hl-keyword">return</strong> getLhsExpression().getCost() 
+           + getRhsExpression().getCost() / <span class="hl-number">2</span>;
+}</pre><p>It's interesting to look at the values used (a) for the element name (e.g. 
+      <code class="code">body</code>, <code class="code">left</code>, <code class="code">right</code>, <code class="code">expression</code>, <code class="code">statement</code>), 
+      and (b) for the <code class="code">nodeType</code> attribute 
+      (e.g. <code class="code">ReturnStmt</code>, <code class="code">BinaryExpr</code>, <code class="code">SimpleName</code>). 
+      Generally, the <code class="code">nodeType</code> attribute says 
+      what kind of thing the element represents, and the element name indicates what 
+      role it plays relative to the parent. (Reminiscent of SGML architectural forms, perhaps?)
+</p><p>As an aside, the same dichotomy is present in the design of Saxon's SEF file, 
+     which represents a compiled stylesheet, but there we do it the other way around: if an 
+     integer literal is used as the right hand side of an addition, the JavaParser 
+     format expresses this as <code class="code">&lt;right nodeType="IntegerLiteral"&gt;</code>, whereas the SEF 
+     format expresses it as <code class="code">&lt;IntegerLiteral role="right"&gt;</code>. Of course, neither 
+     design is intrinsically better (though the SEF choice works better with XSD validation, 
+     since XSD likes the content model of an element to depend only on the element name, 
+     not the value of one of its attributes). But the choice does mean that most of our 
+     template rules in the transpiler are matching on the <code class="code">nodeType</code> attribute, not on the 
+     element name, and this perhaps makes the rules a bit more complicated.
+</p><p>Performance hasn't been a concern. I'm pleased to be able to report that 
+      of the various phases of processing, the phases written in XSLT are an order 
+      of magnitude faster than the phase written in Java; which means that there's 
+      no point worrying about speeding the XSLT up. This is despite the fact that 
+      (as the above example demonstrates) the XML representation of the code is 
+      about 10 times the size of the Java representation.
+</p><p>(Actually, the Java code is 29Mb, the XML is 120Mb, and the generated C# 
+      is 18Mb. The C# is smaller than the Java mainly because we drop all comments, and also 
+      because the Java total includes modules we don't (yet) convert, for example 
+      a lot of code dealing with SAX parsers, localisation, and optional extras such 
+      as the XQJ API and SQL extension functions).
+</p><p>But I would like to think that one reason performance hasn't been a concern 
+      is that the code was sensibly written. We've got about 200 template rules here, 
+      most of them with quite complicated match patterns, and we wouldn't want to be 
+      evaluating every match pattern for every element that's processed.  In fact, a 
+      lot of the time we're doing three levels of matching:
+</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>If we find that we're processing a method call (which is rather common), 
+          we have a single template rule in the top-level mode that matches 
+          <code class="code">*[@nodeType='MethodCallExpr']</code>.
+        </p></li><li class="listitem"><p>This template rule then does <code class="code">&lt;xsl:apply-templates select="." mode="MethodCall"/&gt;</code>, 
+          which searches for a more specific template rule, but only needs to search the set of 
+          rules for handling method calls, because they are all in this mode.
+        </p><p>To make the code manageable and maintainable, we put all the template rules for a mode
+        in the same module, and use the XSLT 3.0 construct <code class="code">default-mode="M"</code> to reduce
+        the risk of accidentally omitting a <code class="code">mode</code> attribute on a template rule
+        or <code class="code">xsl:apply-templates</code> instruction.</p></li><li class="listitem"><p>Most of the template rules for method calls are structured as one rule 
+          per target class; as described earlier, this uses a microsyntax for defining 
+          the formatting of each possible method, using XSLT maps.
+          
+          </p></li></ul></div><p>So it's not a flat set of hundreds of rules; we've used modes (and the microsyntax) 
+      to create a hierarchic decision tree. This both improves performance, and keeps the rules 
+      simpler and more manageable. It also makes debugging considerably easier: as with any XSLT 
+      stylesheet, working out which rules are firing to handle each input element can be difficult, 
+      but the splitting of rules into modes certainly helps.
+</p><p>(A little known Saxon trick here is the <code class="code">saxon:trace</code> attribute on <code class="code">xsl:mode</code>, which allows 
+      tracing of template rule selection on a per-mode basis).
+</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s05s07.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s07.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

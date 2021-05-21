@@ -1,7 +1,7 @@
 /*
 
 Oxygen WebHelp Plugin
-Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
+Copyright (c) 1998-2021 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 
@@ -60,21 +60,19 @@ function rewriteTitle() {
 
 $(document).ready(function () {
     $('#permalink').show();
-    if ($('#permalink').length > 0) {
-        if (window.top !== window.self) {
-            try {
-                if (window.parent.location.protocol != 'file:' && typeof window.parent.location.protocol != 'undefined') {
-                    $('#permalink>a').attr('href', window.parent.location.pathname + '?q=' + window.location.pathname);
-                    $('#permalink>a').attr('target', '_blank');
-                } else {
-                    $('#permalink').hide();
-                }
-            } catch (e) {
-                error(e);
+    if (window.top !== window.self) {
+        try {
+            if (window.parent.location.protocol != 'file:' && typeof window.parent.location.protocol != 'undefined') {
+                $('#permalink>a').attr('href', window.parent.location.pathname + '?q=' + window.location.pathname);
+                $('#permalink>a').attr('target', '_blank');
+            } else {
+                $('#permalink').hide();
             }
-        } else {
-            window.location.href=getPath(location.pathname);
+        } catch (e) {
+            error(e);
         }
+    } else {
+        window.location.href=getPath(location.pathname);
     }
     
     // Expand toc in case there are frames.

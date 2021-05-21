@@ -1,4 +1,4 @@
-// Search implementation used by WebHelp Classic and Mobile distributuions
+// Search implementation used by WebHelp Classic distributuion
 
 var txt_browser_not_supported = "Your browser is not supported. Use of Mozilla Firefox is recommended.";
 

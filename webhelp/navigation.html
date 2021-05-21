@@ -1,0 +1,78 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Navigation</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="helloder.html" title="On the Design of a Self-Referential Tutorial" /><link rel="prev" href="structure.html" title="Structure" /><link rel="next" href="chapters.html" title="Chapters" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="structure.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="chapters.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="navigation"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Navigation</h2></div></div></div><p>
+      This document of chapters was then used as the basis of the
+      navigation part of the tutorial. This was modelled on the
+      navigation used in an earlier XForms application, the XForms 2.0
+      test suite [<a class="link" href="pemberton-references.html#ts" title="The XForms 2.0 Test Suite" shape="rect">ts</a>].
+    </p><p>
+      A navigation instance was created containing
+    </p><div class="orderedlist"><ol class="orderedlist compact" type="1"><li class="listitem"><p>
+          a value <code class="literal">base</code> that defines where the chapter
+          files are stored,
+        </p></li><li class="listitem"><p>
+          a value for the filename of the chapter that is currently
+          being read,
+        </p></li><li class="listitem"><p>
+          a value that constructs the required URL from the base and the
+          filename:
+        </p></li></ol></div><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;instance</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"nav"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;nav</strong> <span class="hl-attribute" style="color: #F5844C">xmlns</span>=<span class="hl-value" style="color: #993300">""</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;base&gt;</strong>chapters/<strong class="hl-tag" style="color: #000096">&lt;/base&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;file/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;url/&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;/nav&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/instance&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;bind</strong> <span class="hl-attribute" style="color: #F5844C">ref</span>=<span class="hl-value" style="color: #993300">"instance('nav')/url"</span> <span class="hl-attribute" style="color: #F5844C">calculate</span>=<span class="hl-value" style="color: #993300">"concat(../base, ../file)"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong></pre><p>
+      To set the filename, a <code class="literal">select1</code> control is
+      populated using the tutorial chapters instance: the labels are the
+      title of the chapter, and the value is the file name of that
+      chapter:
+    </p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;select1</strong> <span class="hl-attribute" style="color: #F5844C">ref</span>=<span class="hl-value" style="color: #993300">"instance('nav')/file"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;itemset</strong> <span class="hl-attribute" style="color: #F5844C">ref</span>=<span class="hl-value" style="color: #993300">"instance('tut')/entry"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+       <strong class="hl-tag" style="color: #000096">&lt;label</strong> <span class="hl-attribute" style="color: #F5844C">ref</span>=<span class="hl-value" style="color: #993300">"title"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+       <strong class="hl-tag" style="color: #000096">&lt;value</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"file"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;/itemset&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/select1&gt;</strong></pre><p>
+      Either side of this control, are triggers that decrement and
+      increment this value (with judicious use of
+      <code class="literal">preceding-sibling</code> and
+      <code class="literal">following-sibling</code>):
+    </p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;trigger</strong> 
+      <span class="hl-attribute" style="color: #F5844C">ref</span>=<span class="hl-value" style="color: #993300">"instance('tut')/entry[file=instance('nav')/file]/preceding-sibling::entry[1]"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;label&gt;</strong>←<strong class="hl-tag" style="color: #000096">&lt;/label&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;hint&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;output</strong> <span class="hl-attribute" style="color: #F5844C">ref</span>=<span class="hl-value" style="color: #993300">"title"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/hint&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;setvalue</strong> <span class="hl-attribute" style="color: #F5844C">ref</span>=<span class="hl-value" style="color: #993300">"instance('nav')/file"</span>
+             <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"context()/file"</span>
+             <span class="hl-attribute" style="color: #F5844C">ev:event</span>=<span class="hl-value" style="color: #993300">"DOMActivate"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/trigger&gt;</strong></pre><p>
+      In this way, the user can select a chapter either from the drop
+      down, or by navigating from chapter to chapter using the arrows.
+      </p><div class="screenshot"><p class="title"><strong>Selecting a chapter</strong></p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2021/pemberton/pemberton/nav1.png" height="474" /></td></tr></table></div></div><p>
+    </p><p>
+      Note that thanks to how the <code class="literal">ref</code> on the trigger
+      works in XForms, in this case referencing the previous chapter, if
+      there is no previous chapter, the trigger will not be displayed.
+      </p><div class="screenshot"><p class="title"><strong>The initial chapter, with no previous</strong></p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2021/pemberton/pemberton/nav2.png" height="193" /></td></tr></table></div></div><p>
+    </p><p>
+      To display the content of the chapter, an html iframe is used:
+    </p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;html:iframe</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"chapter"</span> <span class="hl-attribute" style="color: #F5844C">src</span>=<span class="hl-value" style="color: #993300">"{instance('nav')/url}"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/html:iframe&gt;</strong></pre><p>
+      Thanks to how XForms works, whenever the <code class="literal">file</code>
+      value gets changed, the <code class="literal">url</code> value automatically
+      gets updated, and so the new chapter is displayed.
+    </p><p>
+      The upshot of all this is that the tutorial instance doesn’t
+      <span class="emphasis"><em>describe</em></span> the structure of the tutorial but
+      actually <span class="emphasis"><em>defines</em></span> it. If a chapter needs to be
+      moved, you just move it in the tutorial instance; if a new chapter
+      is written, add it to the tutorial document. The navigation will
+      consequently automatically be updated, and the chapter can be
+      displayed.
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="structure.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="helloder.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="chapters.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
