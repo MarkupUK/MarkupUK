@@ -1,0 +1,90 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Content</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="helloder.html" title="On the Design of a Self-Referential Tutorial" /><link rel="prev" href="xforms-tutorials.html" title="XForms Tutorials" /><link rel="next" href="structure.html" title="Structure" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="xforms-tutorials.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="structure.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="content"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Content</h2></div></div></div><p>
+      The first task in designing a tutorial is to identify the topics
+      to be taught. This was a fairly easy job in this case, since it
+      only involved running through the headings of the XForms
+      specification, and selecting topics. Naturally enough, a
+      structured XML document listing those topics, and their relative
+      structure was created as part of this process:
+    </p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;learn</strong> <span class="hl-attribute" style="color: #F5844C">title</span>=<span class="hl-value" style="color: #993300">"What you will learn"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"Structure of an XForm"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"&amp;lt;model&gt;"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"content"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;/topic&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"Instance data"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"internal &amp;lt;instance&gt;"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"external &amp;lt;instance @resource&gt;"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"&amp;lt;bind&gt;"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"@ref"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"@type"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"@calculate"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"@relevant"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"@required"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"@readonly"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;topic</strong> <span class="hl-attribute" style="color: #F5844C">done</span>=<span class="hl-value" style="color: #993300">""</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"@constraint"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/topic&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;/topic&gt;</strong>
+   ...</pre><p>
+      In fact this one document ended up being used in three ways:
+      firstly and primarily as the list of topics that needed to be
+      covered, that could then be checked off one by one as the tutorial
+      was written, as a check for completeness. But additionally it
+      ended up displayed in two different ways in the tutorial itself:
+      once at the beginning as an overview of what would be taught in
+      the course, and again at the end of the course, though displayed
+      in a different way, as a summary of what had been taught, allowing
+      the reader to check each topic off as a reminder of what had been
+      learned (a correspondent had indicated that tutorials that
+      included such a check-list on average were evaluated by attendees
+      10% higher). In fact this last section, allowing the attendee to
+      check off topics learned, was the first written, so that as the
+      tutorial was developed, the topics could be checked off.
+    </p><p>
+      The next step is to decide the <span class="emphasis"><em>order</em></span> these
+      topics need to be taught. This was done by creating a dependency
+      graph: to understand this topic, you need to know about these
+      topics, to understand <span class="emphasis"><em>those</em></span> topics, you need
+      to know about these other topics, and so on. This gives a partial
+      ordering of topics, which can then be ordered linearly at will.
+    </p><p>
+      For example, to understand the <code class="literal">alert</code> element,
+      you need to know about validity; to understand validity, you need
+      to know about <code class="literal">type</code>,
+      <code class="literal">constraint</code>, and <code class="literal">required</code>, to
+      know about those, you need to know about <code class="literal">bind</code>,
+      and <code class="literal">ref</code>, to know about those you need to know
+      about <code class="literal">instance</code>.
+      </p><div class="figure" id="d5e3672"><p class="title"><strong>Figure 1. A simplified partial dependency graph</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td rowspan="1" colspan="1"><img src="papers-2021/pemberton/pemberton/dependency.png" height="463" alt="A simplified partial dependency graph" /></td></tr></table></div></div></div><p><br class="figure-break" clear="none" />
+    </p><p>
+      It is worth pointing out that there is some leeway in even the
+      partial ordering that the dependency graph generates, because
+      rather than completely covering all the  antecedents of a topic
+      first, you can use progressive disclosure
+      [<a class="link" href="pemberton-references.html#pd" title="Progressive Disclosure, in Soegaard and Dam (eds.), The Glossary of Human Computer Interaction, Chapter 44" shape="rect">pd</a>]; for instance you could partially
+      cover validity, talking only about types, and then extend it later
+      with constraints and <code class="literal">required</code>. What the graph
+      does reveal though is the order the partial disclosure has to
+      happen.
+    </p><p>
+      This then leads to a fundamental decision: should the topics be
+      taught top-down, or bottom-up? Bottom-up starts at the leaves of
+      the dependency graph and works upwards building higher
+      abstractions out of the lower-level ones; top-down works in the
+      other direction, starting with the high-level abstractions, and
+      working down towards the leaves. I am not aware of studies of the
+      relative effectiveness of the two methods, nor whether one is more
+      effective than the other with certain types of audience. I
+      personally believe, based on experience of teaching, that top-down
+      works better in general, especially with knowledgeable audiences,
+      since it gives more opportunity to see the wood for the trees:
+      each new thing you learn, you understand how it fits in the larger
+      picture.
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="xforms-tutorials.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="helloder.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="structure.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

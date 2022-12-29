@@ -1,0 +1,73 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Preliminaries</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="ar04.html" title="&lt;transpile from=&#34;Java&#34; to=&#34;C#&#34; via=&#34;XML&#34; with=&#34;XSLT&#34;/&gt;" /><link rel="prev" href="ar04s01.html" title="Introduction" /><link rel="next" href="ar04s03.html" title="Examples of Converted Code" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1332"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Preliminaries</h2></div></div></div><p>Our initial investigations explored a number of available tools for source code conversion. 
+      The only one that looked at all promising was a commercial product, 
+      Tangible<a href="#ftn.d5e1335" class="footnote" shape="rect"><sup class="footnote" id="d5e1335">[6]</sup></a>. We bought a license 
+      to evaluate its capabilities, and the exercise taught us a lot about where the difficulties were 
+      going to arise. It was immediately apparent that we would have considerable difficulties with Java 
+      generics, with anonymous inner classes, and with our extensive use of the Java <code class="code">CharSequence</code> interface, 
+      which has no direct equivalent in .NET. The exercise also taught us that Tangible, on its own, wasn't 
+      up to the job. (Having said that, the conversions performed by Tangible helped us greatly in defining 
+      our own rules.)
+</p><p>Our next step was to reduce our dependence on the constructs that were going to prove difficult 
+      to convert: especially generics, and the use of <code class="code">CharSequence</code>. I have described in more detail how we 
+      achieved this in blog postings: <a href="#ftn.d5e1341" class="footnote" shape="rect"><sup class="footnote" id="d5e1341">[7]</sup></a>
+      <a href="#ftn.d5e1344" class="footnote" shape="rect"><sup class="footnote" id="d5e1344">[8]</sup></a>.
+</p><p>Generics are difficult because although Java and C# use superficially-similar syntax (for example 
+      <code class="code">List&lt;String&gt;</code>) the semantics are very different. 
+  In C# instances are annotated at run-time with the full expanded type, and one can therefore write 
+  run-time tests such as x is <code class="code">List&lt;String&gt;</code>. Writing <code class="code">x is List</code> will return false: <code class="code">List&lt;String&gt;</code> 
+  is not a subtype of <code class="code">List</code>. By contrast, with Java, the type parameters are used only at compile time 
+  and are discarded at run time (the process is called <span class="emphasis"><em>Type Erasure</em></span>). This means that on Java, 
+  <code class="code">x instanceof List&lt;String&gt;</code> is not allowed, while <code class="code">x instanceof List</code> returns true.
+</p><p>We decided to reduce the scale of the problem by dropping some of our use of generics 
+      from the product. In particular, in Saxon 9.9, two key interfaces, <code class="code">Sequence</code> and <code class="code">SequenceIterator</code>, 
+      were defined with type parameters restricting the type of items contained in an XDM sequence, 
+      and we dropped this in Saxon 10.0. The use of type parameters here had always been somewhat 
+      unsatisfactory, for two reasons:
+</p><p>Most of the time, the code has to deal with sequences-of-anything: we don't know statically, 
+      when we write the Saxon code, what type of input it is going to be dealing with (that depends on 
+      the user-written stylesheet). So providing the type parameter (<code class="code">Sequence&lt;Item&gt;</code>) simply doesn't 
+      add any value.
+</p><p>The XDM model for sequences has the property that an item is a sequence of length one. So 
+      <code class="code">Item</code> implements <code class="code">Sequence&lt;Item&gt;</code>. Which means that a subclass of <code class="code">Item</code>, such as <code class="code">DateTimeValue</code>, 
+      implements <code class="code">Sequence&lt;DateTimeValue&gt;</code>. Which followed to its logical conclusion mans that a 
+      <code class="code">DateTimeValue</code> is an <code class="code">Item&lt;DateTimeValue&gt;</code>, and a generic item is therefore an <code class="code">Item&lt;Item&gt;</code> 
+      (or is it an <code class="code">Item&lt;Item&lt;Item&lt;...&gt;&gt;&gt;</code>?). Modelling the XDM structure accurately using 
+      Java generics proved very difficult, and in the end, it introduced a whole load of complexity 
+      without adding much value. Getting rid of it was welcome.
+</p><p>As far as the <code class="code">CharSequence</code> interface is concerned, we used this extensively in interfaces 
+      where strings are passed around, to enable us to use implementations of strings other than the 
+      Java <code class="code">String</code> class. For example, the whitespace that often occurs between elements in an XML document 
+      is compressed using run-length encoding as a <code class="code">CompressedWhitespace</code> object, which implements the 
+      <code class="code">CharSequence</code> interface, and can therefore be substituted in many cases for a Java <code class="code">String</code>.
+</p><p>The use of <code class="code">CharSequence</code> isn't perfect for this purpose, however. Firstly, it has the same problem 
+      as a Java <code class="code">String</code> in that it models a string as a sequence of 16-bit UTF-16 char values, using a 
+      surrogate pair to represent Unicode astral codepoints. In XPath, strings need to be codepoint-addressible 
+      (at least for the purposes of functions such as <code class="code">substring()</code> and <code class="code">translate()</code>), and neither <code class="code">String</code> nor 
+      <code class="code">CharSequence</code> meets this requirement. There are also issues concerning comparison across different 
+      implementations of the <code class="code">CharSequence</code> interface, plus the fact that many commonly used methods in the 
+      standard Java class library require the <code class="code">CharSequence</code> to be converted to a <code class="code">String</code>, which generally 
+      involves copying the content. In addition, the <code class="code">CharSequence</code> interface doesn't guarantee immutability. 
+      For these reasons, we had already introduced another string representation, the <code class="code">UnicodeString</code>, which 
+      we were using in many corners of the code, notably when processing regular expressions.
+</p><p>C# has no direct equivalent of <code class="code">CharSequence</code>: that is, an interface which is implemented by the 
+      standard String class, but which also allows for other implementations. The interface <code class="code">IEnumerable&lt;Char&gt;</code> 
+      comes close, but that doesn't allow for direct addressing to get the <span class="emphasis"><em>N</em></span>th character in a string.
+</p><p>So we decided to scrap our extensive use of <code class="code">CharSequence</code> throughout the product, and replace it with 
+      our own <code class="code">UnicodeString</code> interface – which allows for direct codepoint addressing, rather than <code class="code">char</code> 
+      addressing with surrogate pairs. There is a performance hit in doing this, because there's a lot 
+      of conversion between <code class="code">String</code> and <code class="code">UnicodeString</code> when data crosses the boundary between Saxon and 
+      third-party software (notably the XML parser, but also library routines such as <code class="code">upperCase()</code> and 
+      <code class="code">lowerCase()</code>). However, it's sufficiently small that most users won't notice the difference, and 
+      we can mitigate it – for example we have our own UTF-8 Writer used by the Saxon serializer, and 
+      it was easy to extend the UTF-8 Writer to accept a <code class="code">UnicodeString</code> as input, bypassing the conversion 
+      of <code class="code">UnicodeString</code> to <code class="code">String</code> prior to UTF-8 encoding.
+</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e1335" class="footnote"><p><a href="#d5e1335" class="para" shape="rect"><sup class="para">[6] </sup></a><code class="uri"><a class="uri" href="https://www.tangiblesoftwaresolutions.com" target="_top" shape="rect">https://www.tangiblesoftwaresolutions.com</a></code></p></div><div id="ftn.d5e1341" class="footnote"><p><a href="#d5e1341" class="para" shape="rect"><sup class="para">[7] </sup></a><code class="uri"><a class="uri" href="https://dev.saxonica.com/blog/mike/2020/07/string-charsequence-ikvm-and-net.html" target="_top" shape="rect">https://dev.saxonica.com/blog/mike/2020/07/string-charsequence-ikvm-and-net.html</a></code></p></div><div id="ftn.d5e1344" class="footnote"><p><a href="#d5e1344" class="para" shape="rect"><sup class="para">[8] </sup></a><code class="uri"><a class="uri" href="https://dev.saxonica.com/blog/mike/2020/01/java-generics-revisited.html" target="_top" shape="rect">https://dev.saxonica.com/blog/mike/2020/01/java-generics-revisited.html</a></code></p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

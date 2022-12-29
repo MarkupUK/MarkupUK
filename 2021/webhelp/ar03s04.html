@@ -1,0 +1,66 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>XQuery/XPath parser in Javascript</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="ar03.html" title="XSLTForms for the ‘20s" /><link rel="prev" href="ar03s03.html" title="HTML5 notation for XForms elements and CSS styling" /><link rel="next" href="ar03s05.html" title="XQueryX 3.1 to Javascript transpiler" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1172"><div class="titlepage"><div><div><h2 class="title" style="clear: both">XQuery/XPath parser in Javascript</h2></div></div></div><p>XForms is evaluating most XPath expressions in forms repeatedly. So,
+    it is much more efficient, especially in browsers, to parse them once and
+    preserve some compiled form for repeated evaluations.</p><p>Previously, XSLTForms was using XSLT to parse XPath 1.0 expressions
+    into Javascript code to create objects with a <code class="code">.run()</code> method. Performance
+    was good enough but with some unexpected delays for very long node names
+    in XML instances…</p><p>This XPath parser has been rewritten in Javascript to be executed
+    just-in-time when an expression is to be evaluated for the first time.
+    Again, the XSLT stylesheet is lighter and the blank page wait is
+    reduced.</p><p>Because the previous parser was targeting XPath 1.0, the new one has
+    been extended to support XQuery 3.1 and generate XQueryX [<a class="citation" href="references.html#d5e1266" shape="rect"><span class="citation">XQueryX</span></a>] stored in
+    Javascript arrays (each element or attribute as an array of name and
+    value).</p><p>For example,</p><pre class="programlisting" xml:space="preserve">concat('Hello ', PersonGivenName, '. We hope you like XForms!')</pre><p>Becomes</p><pre class="programlisting" xml:space="preserve">[Fleur.XQueryX.functionCallExpr,[
+  [Fleur.XQueryX.functionName,[<strong class="hl-string"><em style="color:red">'concat'</em></strong>]],
+  [Fleur.XQueryX.arguments,[
+    [Fleur.XQueryX.stringConstantExpr,[[Fleur.XQueryX.value,[<strong class="hl-string"><em style="color:red">'Hello '</em></strong>]]]],
+    [Fleur.XQueryX.pathExpr,[
+      [Fleur.XQueryX.stepExpr,[
+        [Fleur.XQueryX.xpathAxis,[<strong class="hl-string"><em style="color:red">'child'</em></strong>]],
+        [Fleur.XQueryX.nameTest,[<strong class="hl-string"><em style="color:red">'PersonGivenName'</em></strong>]]
+      ]]
+    ]],
+    [Fleur.XQueryX.stringConstantExpr,[[Fleur.XQueryX.value,[<strong class="hl-string"><em style="color:red">'. We hope you like XForms!'</em></strong>]]]]
+  ]]
+]]</pre><p>Which can be serialized in XQueryX as</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;xqx:functionCallExpr&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;xqx:functionName&gt;</strong>concat<strong class="hl-tag" style="color: #000096">&lt;/xqx:functionName&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;xqx:arguments&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xqx:stringConstantExpr&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;xqx:value&gt;</strong>Hello <strong class="hl-tag" style="color: #000096">&lt;/xqx:value&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/xqx:stringConstantExpr&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xqx:pathExpr&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;xqx:stepExpr&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;xqx:xpathAxis&gt;</strong>child<strong class="hl-tag" style="color: #000096">&lt;/xqx:xpathAxis&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;xqx:nameTest&gt;</strong>PersonGivenName<strong class="hl-tag" style="color: #000096">&lt;/xqx:nameTest&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/xqx:stepExpr&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/xqx:pathExpr&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xqx:stringConstantExpr&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;xqx:value&gt;</strong>. We hope you like XForms!<strong class="hl-tag" style="color: #000096">&lt;/xqx:value&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/xqx:stringConstantExpr&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/xqx:arguments&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/xqx:functionCallExpr&gt;</strong></pre><p>On Node.js, the XQueryX structure is, then, the input for a new
+    XQuery engine, named Fleur [<a class="citation" href="references.html#d5e1246" shape="rect"><span class="citation">Fleur</span></a>], which also includes a DOM3 engine. It has to
+    run asynchronous calls on functions such as <code class="code">fn:doc()</code>, <code class="code">http:send-request()</code>,
+    <code class="code">file:write()</code>, <code class="code">prof:sleep()</code>,…</p><p>Because <code class="code">async</code>/<code class="code">await</code> feature was not yet being supported in Node.js and
+    old browsers, current version Fleur is still struggling with callbacks hell,
+    call stack overflow. Using this version from XSLTForms would have needed a
+    massive reorganization of sources: a converter from XQueryX to old XPath
+    1.0 objects of XSLTForms has, temporarily, been added to remove the
+    previous XPath 1.0 parser written in XSLT 1.0.</p><p>The <code class="code">fleur()</code> Javascript function has been added to be used within the
+    Console in the browser debugger to evaluate XPath expressions.</p><p>For example,</p><pre class="programlisting" xml:space="preserve">fleur(<strong class="hl-string"><em style="color:red">"instance()"</em></strong>)</pre><p>Returns</p><pre class="programlisting" xml:space="preserve"><strong class="hl-string"><em style="color:red">"&lt;data xmlns=\"\"&gt;&lt;PersonGivenName/&gt;&lt;/data&gt;"</em></strong></pre><p>Because rendering in Javascript console is rather limited, an XForms
+    console has been created (accessible with F1 key). Currently limited to
+    expression evaluation, it will be enriched to render, with HTML, Model
+    Item Properties (<code class="computeroutput">type</code>, <code class="computeroutput">relevant</code>,
+    <code class="computeroutput">required</code>, <code class="computeroutput">valid</code>,
+    <code class="computeroutput">read-only</code>,...) bound to
+    XForms instance data nodes.</p><p>With Node.js easily allowing to run an http server, Fleur is also a
+    nice XQuery Web server for XSLTForms to generate inline XML instances,
+    manipulate files, REST APIs,…</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

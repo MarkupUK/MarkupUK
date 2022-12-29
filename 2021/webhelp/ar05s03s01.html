@@ -1,0 +1,45 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Convention yourself</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="ar05s03.html" title="What can we do?" /><link rel="prev" href="ar05s03.html" title="What can we do?" /><link rel="next" href="sect-rhythm-of-the-code.html" title="The rhythm of the code" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar05s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="sect-rhythm-of-the-code.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="sect2" id="d5e1782"><div class="titlepage"><div><div><h3 class="title">Convention yourself</h3></div></div></div><p>If there's one thing you can do yourself a lot of fun with, it's
+          <span class="emphasis"><em>conventions</em></span>. Huh, conventions? Aren’t that these long and
+        boring lists of things you need to comply with, from variable names to comment structure?
+        Which you never ever seem to be able to adhere to in full? Yes, that’s what I
+        mean!</p><p class="keep-with-next">There are two main reasons why conventions are important:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>They provide more “thinking space”. What if you had to come up with a
+            variable naming convention every time you created one? What if you had to decide how to
+            format a function header on every occasion you started one? You don’t want that.
+            Following a pattern, aka convention, is way easier to your working memory, already
+            filled with the many intricate details of a program’s logic.</p></li><li class="listitem"><p>It boosts comprehensibility. Being able to see what this variable name stands for,
+            where a functions starts and ends, what <code class="code">else</code> belongs to what
+              <code class="code">if</code>, helps a lot in understanding a piece of software. </p></li></ul></div><p>I admit, conventions have a bad name. Sometimes they’re used to wrap long red
+        tapes around programming efforts, which reduces all the fun. But applied properly they can
+        absolutely help improving the comprehensibility of the code. How can we make them
+        effective?</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>There should’t be too many of them. It must easily fit in your head. So maybe
+            a list of one or two pages long?</p></li><li class="listitem"><p>They should’t be regarded as <span class="emphasis"><em>absolute</em></span>. When following a
+            convention leads to ridiculous long names/indenting/indecipherable code/overly long
+            functions/… (cross out what does not apply), either change the convention or decide that
+            this is an exceptional case and break the rules.</p></li><li class="listitem"><p>And yes, you have to get used to them. If the list isn’t too long and the
+            conventions more or less make sense, they’ll soon become a habit.</p></li></ul></div><p>With respect to comprehensibility, what are the basic things important enough to have a
+        convention about?</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>Names of variables, functions, data structures, etc.: Pick something and stick to
+            it. I personally prefer the <code class="code">lower-case-with-hyphens</code> convention but
+            there’s nothing sacred about it. The <code class="code">lowerMixedCase</code>,
+              <code class="code">UpperMixedCase</code>, <code class="code">lower_case_with_underscores</code> or whatever are
+            just as good. You can also use multiple naming styles for different things in your
+            program, but don’make choosing the right one too complicated!</p><p>The only thing I would definitely <span class="emphasis"><em>not</em></span> recommend is using
+            something without some kind of word separation. The worst example probably being
+              <code class="code">ALLCAPSWITHOUTANYSEPARATORS</code>: too hard to read and understand.</p></li><li class="listitem"><p>Layout: Things like indentation, whitespace, empty lines, separators, comment
+            styling, etc. Choose something and try to keep the code consistent. More about this in
+              <a class="xref" href="sect-rhythm-of-the-code.html" title="The rhythm of the code" shape="rect">the section called “The rhythm of the code”</a>.</p><p>You can make it easy on yourself here: find out what the pretty-print functionality
+            of your IDE is capable of, and use <span class="emphasis"><em>that</em></span> as (part of) your layout
+            convention…</p></li><li class="listitem"><p>Commenting: What to write comments about, how they’re formatted, etc. See
+              <a class="xref" href="sect-comments.html" title="Comments? What comments?" shape="rect">the section called “Comments? What comments?”</a>.</p></li><li class="listitem"><p>Filenames and directory structures: Again, pick some naming convention. Don’t
+            forget to standardize the <span class="emphasis"><em>extensions</em></span> (is an XQuery script
+              <code class="code">*.xq</code>, <code class="code">*.xql</code> or <code class="code">*.xquery</code>?). If there
+            isn’t already one, try to invent a convenient directory structure, using
+            standardized names, that fits the bill.</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar05s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar05s03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="sect-rhythm-of-the-code.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

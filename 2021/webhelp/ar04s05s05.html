@@ -1,0 +1,53 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Generics</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="ar04s05.html" title="Difficulties" /><link rel="prev" href="ar04s05s04.html" title="Overriding, Covariance, Contravariance" /><link rel="next" href="ar04s05s06.html" title="Lambda Expressions and Delegates" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s05s04.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s05s06.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1614"><div class="titlepage"><div><div><h3 class="title">Generics</h3></div></div></div><p>I've already mentioned that we identified early on that generics would be a 
+        problem, and one of the steps we took was to reduce unnecessary and unproductive 
+        use of generic types. In fact, we have almost totally eliminated all use of 
+        generics in Saxon-defined classes, which was the major problem. That leaves 
+        generics in system-defined classes (notably the collection classes such as 
+        <code class="code">List&lt;T&gt;</code>) which we can't easily manage without.
+</p><p>In fact, most uses of these classes translate from Java to C# without 
+        trouble. But there are still a few difficulties:
+</p><p><span class="emphasis"><em>Diamond Operators</em></span></p><p>Java allows you to write <code class="code">List&lt;X&gt; list = new ArrayList&lt;&gt;()</code> (referred 
+        to as a diamond operator, though it's not technically an operator). In C# it has 
+        to be <code class="code">new ArrayList&lt;X&gt;()</code>. So we need to work out what X is – essentially by 
+        applying the same type inferencing rules that the Java compiler applies. The way 
+        we do this is by recognising common cases: object instantiation on the right-hand 
+        side of an assignment, in a return clause, in an argument to a non-polymorphic 
+        method, etc. The logic is quite complex, and it catches perhaps 95% of cases. The 
+        remainder are handled by changing the Java code: either by introducing a variable, 
+        or by adding the type redundantly within the diamond.
+</p><p>XSLT template rules really come into their own here. We handle about a dozen 
+        patterns where the type of the parameter can be inferred, and each of these is 
+        represented by a template rule. As we get smarter or discover more cases, we can 
+        simply add more template rules. Here's an example of one of the rules:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;xsl:template</strong> <span class="hl-attribute" style="color: #F5844C">match</span>=<span class="hl-value" style="color: #993300">"*[@nodeType='ReturnStmt']
+        [ancestor::member[1]/type/@RESOLVED_TYPE]/*"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;xsl:variable</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"type"</span> 
+                 <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"ancestor::member[1]/type/@RESOLVED_TYPE"</span> 
+                 <span class="hl-attribute" style="color: #F5844C">as</span>=<span class="hl-value" style="color: #993300">"xs:string"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;xsl:value-of</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"f:extract-type-arguments($type)"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/xsl:template&gt;</strong></pre><p>This rule detects a diamond operator appearing in a return statement (the rule appears
+      in a module with default mode <code class="code">diamond</code>, which is only used to process expressions
+      that have already been recognised as containing a diamond operator). It finds the ancestor
+      method declaration (<code class="code">ancestor::member[1]</code>), determines the declared type of the
+      method result, and inserts that into the C# code as the type parameter in place of the
+      diamond operator.</p><p><span class="emphasis"><em>Wildcards</em></span></p><p>The Java wildcard constructs <code class="code">&lt;? extends T&gt;</code> and <code class="code">&lt;? super T&gt;</code> have no direct equivalent 
+in C#. The way we handle these depends on where they are used. The default action of the 
+converter is just to replace them with <code class="code">&lt;T&gt;</code>, which often works. But in class and method 
+declarations we generate a C# <code class="code">where</code> clause to constrain the type bounds, so 
+</p><pre class="programlisting" xml:space="preserve"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> GroundedValueAsIterable&lt;T <strong class="hl-keyword">extends</strong> Item&gt; 
+     <strong class="hl-keyword">implements</strong> Iterable&lt;T&gt; {...}</pre><p>becomes</p><pre class="programlisting" xml:space="preserve"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> GroundedValueAsIterable&lt;T&gt; : IEnumerable&lt;T&gt; 
+     <strong class="hl-keyword">where</strong> T : Item {...}</pre><p>One issue we face is that the default type <code class="code">Object</code> in Java is less all-embracing 
+        than the object type in C#: the former does not include primitive types such as int 
+        or double, the latter does. This means that where the required type is <code class="code">Object</code>, the 
+        supplied value can be null; but this is not so in C#, because primitive types do 
+        not allow a null. This permeates the design of collection classes. Often the solution 
+        is to constrain the C# class to handle reference types only, using the clause <code class="code">where T : class</code>.
+</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s05s04.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04s05.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s05s06.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

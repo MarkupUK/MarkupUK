@@ -1,0 +1,42 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Examples of Converted Code</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2021 Proceedings" /><link rel="up" href="ar04.html" title="&lt;transpile from=&#34;Java&#34; to=&#34;C#&#34; via=&#34;XML&#34; with=&#34;XSLT&#34;/&gt;" /><link rel="prev" href="ar04s02.html" title="Preliminaries" /><link rel="next" href="ar04s04.html" title="Architecture of the Converter" /><!--  Generated with Oxygen version 23.1, build number 2021022614.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021022614" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1404"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Examples of Converted Code</h2></div></div></div><p>To set the scene, it might be useful to provide a couple of examples of converted code, illustrating the
+    challenges.</p><p>Here's a rather simple method in Java:</p><pre class="programlisting" xml:space="preserve"><em><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong class="hl-keyword">public</strong> AtomicSequence atomize() <strong class="hl-keyword">throws</strong> XPathException {
+        <strong class="hl-keyword">return</strong> tree.getTypedValueOfElement(<strong class="hl-keyword">this</strong>);
+    }</pre><p>And here is the C# code that we generate:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">override</strong> net.sf.saxon.om.AtomicSequence atomize() {
+    <strong class="hl-keyword">return</strong> tree.getTypedValueOfElement(<strong class="hl-keyword">this</strong>);
+}</pre><p>Nothing very remarkable there, but it actually requires a fair bit of analysis of the Java code
+    to establish that the conversion in this case is fairly trivial. For example:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The class name <code class="code">AtomicSequence</code> has been expanded; this requires analysis
+      of the <code class="code">import</code> declarations in the module, and it can't be done without knowing the full
+      set of packages and classes available.</p></li><li class="listitem"><p>The <code class="code">@Override</code> declaration is optional in Java, but <code class="code">optional</code>
+      is mandatory in C#; moreover they don't mean quite the same thing, for example when overriding
+      methods defined in an interface or abstract class.</p></li><li class="listitem"><p>The conversion of Java <code class="code">this</code> to C# <code class="code">this</code> works here,
+      but there are other contexts where it doesn't work.</p></li></ul></div><p>Now let's take a more complex example. Consider the following Java code:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-keyword">public</strong> Map&lt;String, Sequence&gt; getDefaultOptions()  {
+    Map&lt;String, Sequence&gt; result = <strong class="hl-keyword">new</strong> HashMap&lt;&gt;();
+    <strong class="hl-keyword">for</strong> (Map.Entry&lt;String, Sequence&gt; entry : defaultValues.entrySet()) {
+        result.put(entry.getKey(), entry.getValue());
+    }
+    <strong class="hl-keyword">return</strong> result;
+}</pre><p>In C# this becomes (with abbreviated namespace qualifiers, for readability):</p><pre class="programlisting" xml:space="preserve"><strong class="hl-keyword">public</strong> S.C.G.IDictionary&lt;<strong class="hl-keyword">string</strong>, n.s.s.o.Sequence&gt; getDefaultOptions() {
+    S.C.G.IDictionary&lt;<strong class="hl-keyword">string</strong>, n.s.s.o.Sequence&gt; result = 
+            <strong class="hl-keyword">new</strong> S.C.G.Dictionary&lt;<strong class="hl-keyword">string</strong>, n.s.s.o.Sequence&gt;();
+    <strong class="hl-keyword">foreach</strong> (S.C.G.KeyValuePair&lt;<strong class="hl-keyword">string</strong>, n.s.s.o.Sequence&gt; entry <strong class="hl-keyword">in</strong> defaultValues) {
+        result<em><span class="hl-annotation" style="color: gray">[entry.Key]</span></em> = entry.Value;
+    }
+    <strong class="hl-keyword">return</strong> result;
+}</pre><p>There's a lot going on here:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>We've replaced the Java <code class="code">Map</code> with a C# <code class="code">Dictionary</code>, and its <code class="code">put()</code>
+        method has been replaced with an indexed assignment;</p></li><li class="listitem"><p>The Java iterable <code class="code">defaultValues.entrySet()</code> has been replaced with the C# enumerable
+        <code class="code">defaultValues</code>;</p></li><li class="listitem"><p>The references to <code class="code">entry.getKey()</code> and <code class="code">entry.getValue()</code>
+          have been replaced with property accessors <code class="code">entry.Key</code> and <code class="code">entry.Value</code>.</p></li><li class="listitem"><p>The replacement of <code class="code">result.put(key, value)</code> by <code class="code">result[key] = value</code>
+          is fine in this context, but it needs care, because if the return value of the expression is used,
+          the Java code returns the previous value associated with the key, while the C# code returns the new
+          value. The rewrite works here only because the expression appears in a context where its result
+          is discarded.</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
