@@ -1,0 +1,60 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Pandoc</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="Chap4.html" title="Methods to Convert XML to LaTeX" /><link rel="prev" href="Sec2.html" title="PassiveTeX" /><link rel="next" href="Sec4.html" title="XSLT" /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="Sec2.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="Sec4.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="Sec3"><div class="titlepage"><div><div><h3 class="title">Pandoc</h3></div></div></div><p>Pandoc is a popular Haskell library for converting markup formats into one another<a href="#ftn.Fn11" class="footnote" shape="rect"><sup class="footnote" id="Fn11">[15]</sup></a>. Pandoc can be invoked via an easy command line client and supports a variety of input and output formats, among others also XML formats like DocBook and JATS. Pandoc supports also LaTeX as output format and uses the Haskell library texmath<a href="#ftn.Fn12" class="footnote" shape="rect"><sup class="footnote" id="Fn12">[16]</sup></a> for converting MathML formulas to TeX. </p><p>With these features, Pandoc can be also used to convert from XML to LaTeX. In contrast to xmltex and PassiveTeX, you don't have to be a programmer to use Pandoc. Basic knowledge of how to use the command line is sufficient. To test Pandoc, I prepared a small DocBook test document.</p><pre class="programlisting" xml:space="preserve">&amp;lt;?xml version="1.0" encoding="UTF‑8"?&amp;gt;&lt;br/&gt;
+&amp;lt;article xmlns="&lt;link xlink:href="http://docbook.org/ns/docbook"&gt;http://docbook.org/ns/docbook&lt;/link&gt;"
+  xmlns:xlink="&lt;link xlink:href="http://www.w3.org/1999/xlink"&gt;http://www.w3.org/1999/xlink&lt;/link&gt;"
+  version="5.0"&amp;gt;
+  &amp;lt;title/&amp;gt;
+  &amp;lt;section&amp;gt;
+    &amp;lt;title&amp;gt;Area of a Triangle&amp;lt;/title&amp;gt;
+    &amp;lt;equation&amp;gt;
+      &amp;lt;math xmlns="&lt;link xlink:href="http://www.w3.org/1998/Math/MathML"&gt;http://www.w3.org/1998/Math/MathML&lt;/link&gt;" display="block"&amp;gt;
+        &amp;lt;mi&amp;gt;A&amp;lt;/mi&amp;gt;
+        &amp;lt;mo&amp;gt;=&amp;lt;/mo&amp;gt;
+        &amp;lt;mfrac&amp;gt;
+          &amp;lt;msup&amp;gt;
+            &amp;lt;mi fontstyle="italic"&amp;gt;a&amp;lt;/mi&amp;gt;
+            &amp;lt;mn&amp;gt;4&amp;lt;/mn&amp;gt;
+          &amp;lt;/msup&amp;gt;
+          &amp;lt;mn&amp;gt;4&amp;lt;/mn&amp;gt;
+        &amp;lt;/mfrac&amp;gt;
+        &amp;lt;mo&amp;gt;&amp;amp;#x22c5;&amp;lt;/mo&amp;gt;
+        &amp;lt;mroot&amp;gt;
+          &amp;lt;mn&amp;gt;3&amp;lt;/mn&amp;gt;
+          &amp;lt;mrow/&amp;gt;
+        &amp;lt;/mroot&amp;gt;
+      &amp;lt;/math&amp;gt;
+    &amp;lt;/equation&amp;gt;
+  &amp;lt;/section&amp;gt;
+  &amp;lt;bibliography&amp;gt;
+    &amp;lt;biblioentry&amp;gt;
+      &amp;lt;citetitle&amp;gt;Geometry Workbook For Dummies&amp;lt;/citetitle&amp;gt;
+      &amp;lt;author&amp;gt;
+        &amp;lt;personname&amp;gt;&amp;lt;firstname&amp;gt;Mark&amp;lt;/firstname&amp;gt;&amp;lt;surname&amp;gt;Ryan&amp;lt;/surname&amp;gt;&amp;lt;/personname&amp;gt;
+      &amp;lt;/author&amp;gt;
+      &amp;lt;biblioid role="isbn"&amp;gt;978–0471799405&amp;lt;/biblioid&amp;gt;
+      &amp;lt;pubdate&amp;gt;2006&amp;lt;/pubdate&amp;gt;
+      &amp;lt;publisher&amp;gt;
+        &amp;lt;publishername&amp;gt;For Dummies&amp;lt;/publishername&amp;gt;
+      &amp;lt;/publisher&amp;gt;
+    &amp;lt;/biblioentry&amp;gt;
+  &amp;lt;/bibliography&amp;gt;
+&amp;lt;/article&amp;gt;</pre><p>The results that Pandoc delivered were not very promising. Pandoc failed to convert MathML to TeX, even though it worked in other attempts. Moreover, Pandoc was not able to convert the bibliographical entry. While the MathML was quietly removed from the output, the contents of the bibliography were just printed as plain text but with an empty \section{} above. Pandoc’s output is shown below:</p><pre class="programlisting" xml:space="preserve">\section{Area of a Triangle}
+\section{}
+Geometry Workbook For Dummies MarkRyan 978–0471799405 2006 For Dummies</pre><p>On the Pandoc website, the tool is described as a Swiss army knife for markup formats. What applies to Swiss Army Knives applies to Pandoc, too: If the built‐in tools are not suitable for the purpose, you have to get another tool yourself.</p><p>
+            <span class="phrase">Pandoc provides an interface for users to write their own transformations, called filters. These are small programs that convert to or from Pandoc’s intermediate abstract syntax tree</span>
+            <span class="phrase"> (AST). Traditional Pandoc filters work on a JSON representation of the Pandoc AST and can be written in any programming language</span>
+            <a href="#ftn.Fn13" class="footnote" shape="rect"><sup class="footnote" id="Fn13">[17]</sup></a>
+            <span class="phrase">. But the whole thing is very cumbersome: JSON has to be written to stdout and read from stdin and the filter only works if the programming language is also available on the user’s system. Starting with version 2.0, Pandoc allows to write filters entirely in Lua which requires no external software to be installed.</span>
+         </p><p>Apart from the less declarative and time‐consuming method of programming filters, Pandoc offers not very much extensibility. Unfortunately, there are also just a few configuration options to customize the output. Another downside is that you don't always get an error message when Pandoc is unable to process content. That leads me to the conclusion that Pandoc may <span class="rynqvb">not be suitable for professional scenarios, but might be useful for occasional conversions of lightweight documents where the users can fix the output themselves if necessary.</span>
+         </p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.Fn11" class="footnote"><p><a href="#Fn11" class="para" shape="rect"><sup class="para">[15] </sup></a>
+                  Pandoc (2023) Pandoc. A universal document converter. Available at <a class="link" href="https://pandoc.org/" target="_top" shape="rect">https://pandoc.org/</a> (Accessed: May 30, 2023)</p></div><div id="ftn.Fn12" class="footnote"><p><a href="#Fn12" class="para" shape="rect"><sup class="para">[16] </sup></a>
+                  John MacFarlane, Matthew Pickering (2023) texmath. Available at <a class="link" href="https://hackage.haskell.org/package/texmath" target="_top" shape="rect">https://hackage.haskell.org/package/texmath</a> (Accessed: May 30, 2023)</p></div><div id="ftn.Fn13" class="footnote"><p><a href="#Fn13" class="para" shape="rect"><sup class="para">[17] </sup></a>
+                  Pandoc (2023) Pandoc Lua Filters. Available at <a class="link" href="https://pandoc.org/lua-filters.html" target="_top" shape="rect">https://pandoc.org/lua-filters.html</a> (Accessed: May 30, 2023)</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="Sec2.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="Chap4.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="Sec4.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

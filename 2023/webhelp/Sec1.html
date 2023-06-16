@@ -1,0 +1,59 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>xmltex</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="Chap4.html" title="Methods to Convert XML to LaTeX" /><link rel="prev" href="Chap4.html" title="Methods to Convert XML to LaTeX" /><link rel="next" href="Sec2.html" title="PassiveTeX" /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="Chap4.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="Sec2.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="Sec1"><div class="titlepage"><div><div><h3 class="title">xmltex</h3></div></div></div><p>xmltex is a simple, non‐validating XML parser implemented in TeX by David Carlisle that allows to use LaTeX's typesetting capabilities not just for LaTeX documents but for XML documents as well. xmltex can associate TeX code with XML elements, attributes, processing instructions, and entities as well. However, xmltex can neither validate the XML document with a DTD nor resolve external DTD entities but is able to process local entity declarations.<a href="#ftn.Fn3" class="footnote" shape="rect"><sup class="footnote" id="Fn3">[7]</sup></a>
+         </p><p>Because xmltex is written in TeX, you need TeX to invoke xmltex with LaTeX. Here is an example that loads doc.xml with xmltex from a TeX document.</p><pre class="programlisting" xml:space="preserve">\def\xmlfile{doc.xml} % xml file
+\input xmltex.tex % load xmltex</pre><p>The parser supports XML namespaces to some extent and can be configured for arbitrary XML, for example a TEI document that contains MathML. For this purpose, namespaces can be defined within a separate macro file, usually with an xmt extension<a href="#ftn.Fn4" class="footnote" shape="rect"><sup class="footnote" id="Fn4">[8]</sup></a>. For each XML document type, a separate xmt file is required. Whenever xmltex processes an XML element with a particular namespace, it loads the corresponding xmt file. The following command can be added to a catalogue configuration (cfg extension) to associate a namespace with a particular xmt file:</p><pre class="programlisting" xml:space="preserve">\NAMESPACE{URL}{xmt‐file}</pre><p>The xmltex catalogue configuration allows to associate XML contexts with TeX instructions. For example, you can specify with </p><pre class="programlisting" xml:space="preserve">\XMLelement{element‐qname}{attribute‐spec} {begin‐code}{end‐code}</pre><p> a TeX command for an element. Whenever xmltex encounters the element with this name, the begin and end code are inserted. A minimal xmltex catalogue configuration for TEI is shown in the code listing below.</p><pre class="programlisting" xml:space="preserve">\DeclareNamespace{tei}{http://www.tei-c.org/ns/1.0}
+\XMLelement{tei:TEI}
+{}
+  {\documentclass{article}
+     \begin{document}
+  }
+  {\end{document}}
+\XMLelement{tei:teiHeader}
+{}
+  {}{}
+\XMLelement{tei:title}
+{}
+  {\xmlgrab}
+  {\title{#1}
+     \maketitle}
+\XMLelement{tei:p}
+{}
+{\par}
+  {\par}</pre><p>An xmltex project would usually include a TeX file, a configuration, xmt files for each namespace, and the input XML file. Below is what a typical xmltex project directory structure would look like:</p><pre class="programlisting" xml:space="preserve">MyProject/
+  |--main.tex 
+  |--main.cfg (xmltex‐configuration)
+  |--doc.xml (XML input)
+  |--tei.xmt (xmltex‐mapping for TEI)</pre><div class="figure" id="d5e1618"><p class="title"><strong>Figure 1. xmltex inputs and outputs</strong></p><div class="figure-contents"><div class="mediaobject"><img src="papers-2023/kraetke/images/xmltex.svg" alt="xmltex inputs and outputs" /></div></div></div><br class="figure-break" clear="none" /><p>To configure xmltex for an XML schema like TEI, you need to know the nesting depth of a &lt;head/&gt; element to determine whether it is mapped to \chapter{} or \section{}. The xmltex syntax only provides TeX statements that can be mapped to specific XML node names, but does not take into account their actual position in the XML. To address this issue with xmltex, you need to introduce a counter that counts the number of ancestor &lt;div&gt; elements:</p><pre class="programlisting" xml:space="preserve">\newcount\div@counter \div@counter=0
+\XMLelement{tei:head}
+  {}
+  {\xmlgrab}
+  {%
+\ifnum\div@counter=1\relax
+  \chapter{#1}%
+\else
+  \ifnum\div@counter=2\relax
+    \section{#1}%
+  \fi
+\fi
+}
+\XMLelement{tei:dvi}
+  {}
+  {\global\advance\div@counter1}
+  {\global\advance\div@counter‑1}</pre><p>xmltex does not offer a powerful query language like XPath, on the contrary, you can only associate plain element and attribute names to TeX instructions. More complex context queries represent a programming task that can prove very daunting, given TeX’s macro‐expanding processing model. The code is less declarative and hard to maintain.</p><p>If this method is getting too complicated, xmtex allows also to modify the output by placing TeX commands directly into the XML source. The xmltex documentation suggests to use elements either with the xmltex namespace or a custom namespace to inject TeX instructions<a href="#ftn.Fn5" class="footnote" shape="rect"><sup class="footnote" id="Fn5">[9]</sup></a>. Another mechanism is provided by using xmltex processing instructions:</p><p>
+            </p><pre class="programlisting" xml:space="preserve">&lt;?xmltex TeX commands ?&gt;</pre><p>
+         </p><p>Furthermore, error reporting is virtually nonexistent and various constraints on XML are not enforced. For example, you can configure element names with characters that are not allowed in XML. Another problem is that xmltex isn’t actively maintained. The code was last modified in 2000 and moved to GitHub in 2012 without any notable changes except the initial commit<a href="#ftn.Fn6" class="footnote" shape="rect"><sup class="footnote" id="Fn6">[10]</sup></a>.</p><p>
+            <span class="phrase">Within a TeX environment, xmltex can be a useful tool for XML processing. It offers a lightweight and declarative (apart from programmatic content manipulation where necessary, as mentioned above) syntax that TeX users should not be unfamiliar with. For XML users, not only the syntactical differences might prove to be a stumbling block</span>
+            <span class="phrase">.</span>
+         </p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.Fn3" class="footnote"><p><a href="#Fn3" class="para" shape="rect"><sup class="para">[7] </sup></a>
+                   David Carlisle (2000) xmltex: A non validating (and not 100% conforming) namespace aware XML parser implemented in TeX. Available at <a class="link" href="https://ctan.space-pro.be/tex-archive/macros/xmltex/base/manual.html" target="_top" shape="rect">https://ctan.space-pro.be/tex-archive/macros/xmltex/base/manual.html</a> (Accessed: May 24, 2023)</p></div><div id="ftn.Fn4" class="footnote"><p><a href="#Fn4" class="para" shape="rect"><sup class="para">[8] </sup></a>
+                  The null namespace, the XML namespace (<a class="link" href="http://www.w3.org/1998/xml" target="_top" shape="rect">http://www.w3.org/1998/xml</a>) and the xmltex namespace (<a class="link" href="http://www.dcarlisle.demon.co.uk/xmltex" target="_top" shape="rect">http://www.dcarlisle.demon.co.uk/xmltex</a>) are predeclared.</p></div><div id="ftn.Fn5" class="footnote"><p><a href="#Fn5" class="para" shape="rect"><sup class="para">[9] </sup></a>
+                  David Carlisle (2000) Xml2tex. Accessing TeX. Available at <a class="link" href="https://ftp.agdsn.de/pub/mirrors/latex/dante/macros/xmltex/base/manual.html#manualN1059" target="_top" shape="rect">https://ftp.agdsn.de/pub/mirrors/latex/dante/macros/xmltex/base/manual.html#manualN1059</a> (Accessed May 30, 2023)</p></div><div id="ftn.Fn6" class="footnote"><p><a href="#Fn6" class="para" shape="rect"><sup class="para">[10] </sup></a>
+                  David Carlisle (2012) xm2tex source code on GitHub. Available at <a class="link" href="https://github.com/davidcarlisle/dpctex/tree/main/xmltex" target="_top" shape="rect">https://github.com/davidcarlisle/dpctex/tree/main/xmltex</a> (Accessed: May 30, 2023)</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="Chap4.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="Chap4.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="Sec2.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
