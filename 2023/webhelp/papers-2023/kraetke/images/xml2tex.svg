@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.5.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="531.6px" height="218.3px" viewBox="0 0 531.6 218.3" style="enable-background:new 0 0 531.6 218.3;" xml:space="preserve"
+	>
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_00000042010291779346922910000000224327554116171423_);fill:#FFFFFF;}
+	.st1{clip-path:url(#SVGID_00000042010291779346922910000000224327554116171423_);fill:none;stroke:#000000;}
+	.st2{font-family:'Helvetica';}
+	.st3{font-size:10px;}
+	.st4{fill:#FFFFFF;}
+	.st5{fill:none;stroke:#000000;}
+	.st6{clip-path:url(#SVGID_00000168805188770259008580000009161975763510850721_);fill:#FFFFFF;}
+	.st7{clip-path:url(#SVGID_00000168805188770259008580000009161975763510850721_);fill:none;stroke:#000000;}
+	.st8{fill:none;stroke:#000000;stroke-dasharray:4.172,4.172;}
+	.st9{fill:none;stroke:#000000;stroke-dasharray:4.577,4.577;}
+	.st10{clip-path:url(#SVGID_00000174598032656526858520000015664268954972790421_);fill:#FFFFFF;}
+	.st11{clip-path:url(#SVGID_00000174598032656526858520000015664268954972790421_);fill:none;stroke:#000000;}
+</style>
+<g>
+	<defs>
+		<rect id="SVGID_1_" x="4.2" y="9.2" width="520.6" height="193.4"/>
+	</defs>
+	<clipPath id="SVGID_00000129889693292154102190000007812742213418223538_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<path style="clip-path:url(#SVGID_00000129889693292154102190000007812742213418223538_);fill:#FFFFFF;" d="M191.3,10.8
+		c-6.6,0-12,5.4-12,12v37.4c0,6.6,5.4,12,12,12h61.6c6.6,0,12-5.4,12-12V22.8c0-6.6-5.4-12-12-12H191.3z"/>
+	<path style="clip-path:url(#SVGID_00000129889693292154102190000007812742213418223538_);fill:none;stroke:#000000;" d="
+		M191.3,10.8c-6.6,0-12,5.4-12,12v37.4c0,6.6,5.4,12,12,12h61.6c6.6,0,12-5.4,12-12V22.8c0-6.6-5.4-12-12-12H191.3z"/>
+</g>
+<text transform="matrix(1 0 0 1 204.8807 38.596)" class="st2 st3">xml2tex</text>
+<text transform="matrix(1 0 0 1 192.0907 50.596)" class="st2 st3">convert to tex</text>
+<polygon class="st4" points="172.9,119.5 172.9,176.2 215.4,176.2 215.4,132.4 202.6,119.5 "/>
+<polygon class="st5" points="172.9,119.5 172.9,176.2 215.4,176.2 215.4,132.4 202.6,119.5 "/>
+<line class="st5" x1="202.5" y1="119.5" x2="202.5" y2="132.6"/>
+<line class="st5" x1="202" y1="132.4" x2="215.5" y2="132.4"/>
+<text transform="matrix(1 0 0 1 181.6615 195.6195)" class="st2 st3">XSLT</text>
+<g>
+	<defs>
+		<rect id="SVGID_00000141437199686925097810000017720492554011623089_" x="4.2" y="9.2" width="520.6" height="193.4"/>
+	</defs>
+	<clipPath id="SVGID_00000017492723140511917400000017025662510986244491_">
+		<use xlink:href="#SVGID_00000141437199686925097810000017720492554011623089_"  style="overflow:visible;"/>
+	</clipPath>
+	<path style="clip-path:url(#SVGID_00000017492723140511917400000017025662510986244491_);fill:#FFFFFF;" d="M25.7,9.7
+		c-6.6,0-12,5.4-12,12v37.4c0,6.6,5.4,12,12,12h61.6c6.6,0,12-5.4,12-12V21.7c0-6.6-5.4-12-12-12H25.7z"/>
+	<path style="clip-path:url(#SVGID_00000017492723140511917400000017025662510986244491_);fill:none;stroke:#000000;" d="M25.7,9.7
+		c-6.6,0-12,5.4-12,12v37.4c0,6.6,5.4,12,12,12h61.6c6.6,0,12-5.4,12-12V21.7c0-6.6-5.4-12-12-12H25.7z"/>
+</g>
+<text transform="matrix(1 0 0 1 39.2269 38.596)" class="st2 st3">xml2tex</text>
+<text transform="matrix(1 0 0 1 25.327 50.596)" class="st2 st3">convert config</text>
+<line class="st5" x1="167.8" y1="41.8" x2="110.9" y2="41.8"/>
+<polygon points="173.3,41.8 166.3,39.3 166.3,44.4 "/>
+<polygon class="st4" points="237.6,119.1 237.6,175.7 280.1,175.7 280.1,131.9 267.2,119.1 "/>
+<polygon class="st5" points="237.6,119.1 237.6,175.7 280.1,175.7 280.1,131.9 267.2,119.1 "/>
+<line class="st5" x1="267.2" y1="119.1" x2="267.2" y2="132.2"/>
+<line class="st5" x1="266.7" y1="132" x2="280.1" y2="132"/>
+<text transform="matrix(1 0 0 1 248.5419 195.4076)" class="st2 st3">XML</text>
+<line class="st8" x1="158.7" y1="136.6" x2="102.6" y2="80.6"/>
+<polygon points="162.5,140.5 159.4,133.7 155.7,137.3 "/>
+<line class="st9" x1="56.8" y1="85.7" x2="56.8" y2="108.6"/>
+<polygon points="56.8,80.2 54.3,87.2 59.4,87.2 "/>
+<polygon class="st4" points="38.1,119.5 38.1,176.2 80.6,176.2 80.6,132.4 67.8,119.5 "/>
+<polygon class="st5" points="38.1,119.5 38.1,176.2 80.6,176.2 80.6,132.4 67.8,119.5 "/>
+<line class="st5" x1="67.7" y1="119.5" x2="67.7" y2="132.6"/>
+<line class="st5" x1="67.2" y1="132.4" x2="80.7" y2="132.4"/>
+<text transform="matrix(1 0 0 1 48.8241 195.6195)" class="st2 st3">CFG</text>
+<line class="st9" x1="192.6" y1="87.5" x2="192.6" y2="110.4"/>
+<polygon points="192.6,82 190.1,89 195.2,89 "/>
+<polygon class="st4" points="361.9,119.1 361.9,175.7 404.4,175.7 404.4,131.9 391.6,119.1 "/>
+<polygon class="st5" points="361.9,119.1 361.9,175.7 404.4,175.7 404.4,131.9 391.6,119.1 "/>
+<line class="st5" x1="391.5" y1="119.1" x2="391.5" y2="132.2"/>
+<line class="st5" x1="391" y1="132" x2="404.4" y2="132"/>
+<text transform="matrix(1 0 0 1 373.9681 195.1966)" class="st2 st3">TeX</text>
+<line class="st8" x1="333.4" y1="136.2" x2="277.4" y2="80.2"/>
+<polygon points="337.3,140.1 334.2,133.3 330.5,136.9 "/>
+<line class="st9" x1="380.6" y1="87.1" x2="380.6" y2="109.9"/>
+<polygon points="380.6,81.6 378,88.6 383.1,88.6 "/>
+<g>
+	<defs>
+		<rect id="SVGID_00000160898963928809596600000009402538258873386139_" x="4.2" y="9.2" width="520.6" height="193.4"/>
+	</defs>
+	<clipPath id="SVGID_00000000936872766115179380000008148544915089144455_">
+		<use xlink:href="#SVGID_00000160898963928809596600000009402538258873386139_"  style="overflow:visible;"/>
+	</clipPath>
+	<path style="clip-path:url(#SVGID_00000000936872766115179380000008148544915089144455_);fill:#FFFFFF;" d="M350.3,9.7
+		c-6.6,0-12,5.4-12,12v37.4c0,6.6,5.4,12,12,12h61.6c6.6,0,12-5.4,12-12V21.7c0-6.6-5.4-12-12-12H350.3z"/>
+	<path style="clip-path:url(#SVGID_00000000936872766115179380000008148544915089144455_);fill:none;stroke:#000000;" d="M350.3,9.7
+		c-6.6,0-12,5.4-12,12v37.4c0,6.6,5.4,12,12,12h61.6c6.6,0,12-5.4,12-12V21.7c0-6.6-5.4-12-12-12H350.3z"/>
+</g>
+<text transform="matrix(1 0 0 1 355.0131 43.4622)" class="st2 st3">TeX Engine</text>
+<line class="st5" x1="326.9" y1="40.7" x2="270" y2="40.7"/>
+<polygon points="332.3,40.7 325.3,38.1 325.3,43.2 "/>
+<polygon class="st4" points="472.7,12.3 472.7,69 515.2,69 515.2,25.1 502.4,12.3 "/>
+<polygon class="st5" points="472.7,12.3 472.7,69 515.2,69 515.2,25.1 502.4,12.3 "/>
+<line class="st5" x1="502.3" y1="12.3" x2="502.3" y2="25.4"/>
+<line class="st5" x1="501.8" y1="25.2" x2="515.2" y2="25.2"/>
+<text transform="matrix(1 0 0 1 483.9584 88.4027)" class="st2 st3">PDF</text>
+<line class="st9" x1="456.1" y1="40.4" x2="433.2" y2="40.4"/>
+<polygon points="461.6,40.4 454.6,37.8 454.6,42.9 "/>
+<line class="st9" x1="256.3" y1="87.5" x2="256.3" y2="110.4"/>
+<polygon points="256.3,82 253.7,89 258.8,89 "/>
+</svg>

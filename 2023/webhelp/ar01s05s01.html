@@ -1,0 +1,101 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The job ticket</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="ar01s05.html" title="Design pattern 1: Job tickets" /><link rel="prev" href="ar01s05.html" title="Design pattern 1: Job tickets" /><link rel="next" href="ar01s06.html" title="Design pattern 2: Command line wrappers" /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar01s05.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar01s06.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e141"><div class="titlepage"><div><div><h3 class="title">The job ticket</h3></div></div></div><p>Of course, to be able to process a job ticket, we first need to acquire it. Basically this means: find out
+        what needs to be done (for instance by inspecting the command-line arguments) and create it. In my case, it
+        worked like this: </p><div class="mediaobject"><img src="papers-2023/siegel/images/job-ticket-1.png" /></div><p>I created an overarching job ticket document that held tickets for several jobs, specified in some internal
+        Domain Specific Language (DSL). Here’s a simplified example, just to give you an impression (the details
+        and functionality do not matter here):</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;jobtickets</strong> <span class="hl-attribute" style="color: #F5844C">…</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;application</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"bgz"</span> <span class="hl-attribute" style="color: #F5844C">version</span>=<span class="hl-value" style="color: #993300">"2017"</span> <span class="hl-attribute" style="color: #F5844C">source-project-name</span>=<span class="hl-value" style="color: #993300">"zib2017-nl"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;setup</strong> <span class="hl-attribute" style="color: #F5844C">usecase</span>=<span class="hl-value" style="color: #993300">"kwalificatie"</span> <span class="hl-attribute" style="color: #F5844C">directory-id</span>=<span class="hl-value" style="color: #993300">"bgzkwal"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;retrieve</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"searchset.xml"</span> <span class="hl-attribute" style="color: #F5844C">url</span>=<span class="hl-value" style="color: #993300">"…"</span> <span class="hl-attribute" style="color: #F5844C">directory-id</span>=<span class="hl-value" style="color: #993300">"bgzkwal-instance"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;copy-project-schemas&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;include</strong> <span class="hl-attribute" style="color: #F5844C">glob</span>=<span class="hl-value" style="color: #993300">"*$USECASE.xsd"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/copy-project-schemas&gt;</strong>    
+      <strong class="hl-tag" style="color: #000096">&lt;/setup&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;build&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;stylesheet</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"../xsl/…"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;input-document</strong> <span class="hl-attribute" style="color: #F5844C">directory</span>=<span class="hl-value" style="color: #993300">"@bgzkwal-instance"</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"searchset.xml"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;output</strong> <span class="hl-attribute" style="color: #F5844C">directory</span>=<span class="hl-value" style="color: #993300">"@bgzkwal/wiki_instance"</span> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"wiki-bgz.txt"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;parameter</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"adaReleaseFilename"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"zib2017bbr-decor.xml"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/build&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/application&gt;</strong>
+  
+  <strong class="hl-tag" style="color: #000096">&lt;application</strong> <span class="hl-attribute" style="color: #F5844C">…</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+    …
+  <strong class="hl-tag" style="color: #000096">&lt;/application&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;/jobtickets&gt;</strong></pre><p>For a setup like this I would very strongly advocate the use of XML validation. Actually, my advice is to
+          <span class="emphasis"><em>always</em></span> create a schema for XML documents that are hand-edited, even when it’s
+        “just” an internal data file:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>When using a schema-aware editor (like oXygen), it helps you in creating and maintaining the
+            file.</p></li><li class="listitem"><p>Consider adding a Schematron schema as well for the more difficult rules (like, for instance, identifier
+            references). It’s really helpful when a minor typo in an obscure identifier get’s flagged
+            immediately.</p></li><li class="listitem"><p>XProc has several validation steps. In fact, validation has become so easy, it’s almost criminal
+            not to do it.</p></li></ul></div><p>A next step would be to filter the main document, based on the job that needs to be done. In my case I threw
+        everything away that didn’t belong to the application I was handling. Assume the name of this application
+        is in a variable (or option) <code class="code">$application</code>, then the code for this is a single line of XProc:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:delete</strong> <span class="hl-attribute" style="color: #F5844C">match</span>=<span class="hl-value" style="color: #993300">"/*/application[@name ne '{$application}']"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong></pre><p>The next step in processing the job ticket proved <span class="emphasis"><em>crucial</em></span> for the applicability of the
+        job ticket design pattern: job ticket need to be <span class="emphasis"><em>enhanced</em></span>. Enhancement here means:
+        everything you can do or calculate up-front must be done first, before the actual processing starts. </p><p>When file or directory names are involved, calculate their full absolute values up-front. For instance, in
+        my case, names sometimes depended on global parameters (some main directory), attribute values of the current
+        and parent elements (subdirectories) and some global settings made elsewhere (version numbers, etc.). All this
+        was tricky to compute. Also: absolute file and directory names <span class="emphasis"><em>must</em></span> be URIs (having
+          <code class="code">file:///</code> in front). You have to make sure this is the case before using them in XProc
+        steps.</p><p>XProc support the full XPath 3.1 language, so, yes, in theory, you could do these kinds of computations
+        directly in your XProc pipeline. However, this would lead to very complicated and overly long XPath expressions,
+        especially because XPath functions (which would help, a bit) are not (yet?) supported. I would recommend doing
+        all these up-front enhancements in XSLT, which is a language much more suited to these kinds of things.</p><p>Here is an example of a snippet of an enhanced job ticket:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;application</strong> <span class="hl-attribute" style="color: #F5844C">_target-dir</span>=<span class="hl-value" style="color: #993300">"file:///C:/.../lab/3.0.0"</span>
+             <span class="hl-attribute" style="color: #F5844C">_source-dir</span>=<span class="hl-value" style="color: #993300">"file:///C:/.../lab/3.0.0"</span>
+             <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"lab"</span>
+             <span class="hl-attribute" style="color: #F5844C">version</span>=<span class="hl-value" style="color: #993300">"3.0.0"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;setup</strong> <span class="hl-attribute" style="color: #F5844C">_target-dir</span>=<span class="hl-value" style="color: #993300">"file:///C:/.../lab/3.0.0/sturen_laboratoriumresultaten"</span>
+         <span class="hl-attribute" style="color: #F5844C">_source-dir</span>=<span class="hl-value" style="color: #993300">"file:///C:/.../lab/3.0.0/sturen_laboratoriumresultaten"</span>
+         <span class="hl-attribute" style="color: #F5844C">usecase</span>=<span class="hl-value" style="color: #993300">"sturen_laboratoriumresultaten"</span>
+         <span class="hl-attribute" style="color: #F5844C">directory-id</span>=<span class="hl-value" style="color: #993300">"slr"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+
+     <strong class="hl-tag" style="color: #000096">&lt;copy-data</strong> <span class="hl-attribute" style="color: #F5844C">_target-dir</span>=<span class="hl-value" style="color: #993300">"file:///C:/.../ada_instance_repo"</span>
+                <span class="hl-attribute" style="color: #F5844C">_source-dir</span>=<span class="hl-value" style="color: #993300">"file:///C:/.../sturen_laboratoriumresultaten/ada_instance_repo"</span>
+                <span class="hl-attribute" style="color: #F5844C">target-subdir</span>=<span class="hl-value" style="color: #993300">"ada_instance_repo"</span>
+                <span class="hl-attribute" style="color: #F5844C">source-subdir</span>=<span class="hl-value" style="color: #993300">"ada_instance_repo"</span>
+                <span class="hl-attribute" style="color: #F5844C">directory-id</span>=<span class="hl-value" style="color: #993300">"ada-instance-repo"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+
+        <strong class="hl-tag" style="color: #000096">&lt;include</strong> <span class="hl-attribute" style="color: #F5844C">_pattern</span>=<span class="hl-value" style="color: #993300">"\.xml$"</span>
+                 <span class="hl-attribute" style="color: #F5844C">glob</span>=<span class="hl-value" style="color: #993300">"*.xml"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+
+     <strong class="hl-tag" style="color: #000096">&lt;/copy-data&gt;</strong></pre><p>Target and source directories are computed at every level of the document (the <code class="code">__target-dir</code> and
+          <code class="code">_source-dir</code> attributes). When the job ticket processing wants to do something, based on one of
+        these elements, it can simply lift the URI from the applicable attribute.</p><p>Another enhancement here is that a UNIX-style glob was provided (the <code class="code">include/@glob</code> attribute).
+        However, XProc works with regular expressions with regards to including/excluding files, so this glob had to be
+        converted into an XPath regular expression. This was added in the <code class="code">_pattern</code> attribute.</p><p>One last thing about these kinds of data documents is that XProc makes it very easy to setup support for
+        includes. Create an include structure using XInclude <code class="code">&lt;xi:include href="…"/&gt;</code> elements (the
+        namespace prefix <code class="code">xi</code> is bound to the XInclude namespace
+        <code class="code">http://www.w3.org/2001/XInclude</code>). In XProc, the <code class="code">&lt;p:xinclude/&gt;</code> step does all the
+        work for you and flattens the document by resolving all the includes. That’s all there is to it.</p><p>When processing the resulting job ticket, we need take decisions about what to do, in my case based on
+        element names. In XSLT this would be rather simple: call <code class="code">&lt;xsl:apply-templates&gt;</code> and write a
+        template for all applicable elements. However, XProc does not have such a mechanism. You’ll,
+        unfortunately, have to write dispatching code like this:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:for-each&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:with-input</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"/*/*"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  
+  <strong class="hl-tag" style="color: #000096">&lt;p:choose&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:when</strong> <span class="hl-attribute" style="color: #F5844C">test</span>=<span class="hl-value" style="color: #993300">"/*/self::copy-data"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      …
+    <strong class="hl-tag" style="color: #000096">&lt;/p:when&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:when</strong> <span class="hl-attribute" style="color: #F5844C">test</span>=<span class="hl-value" style="color: #993300">"/*/self::copy-schemas"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      …
+    <strong class="hl-tag" style="color: #000096">&lt;/p:when&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:when</strong> <span class="hl-attribute" style="color: #F5844C">test</span>=<span class="hl-value" style="color: #993300">"/*/self::build"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      …
+    <strong class="hl-tag" style="color: #000096">&lt;/p:when&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;p:otherwise&gt;</strong>
+      … (error)
+    <strong class="hl-tag" style="color: #000096">&lt;/p:otherwise&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;p:choose&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;/p:for-each&gt;</strong></pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar01s05.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar01s05.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar01s06.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

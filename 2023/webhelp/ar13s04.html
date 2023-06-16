@@ -1,0 +1,58 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>A bold experiment. How much time/effort does it take?</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="ar13.html" title="A Dependency Management Approach for Document and Data Transformation Projects" /><link rel="prev" href="ar13s03.html" title="Starting with Arousa" /><link rel="next" href="ar13s05.html" title="Introducing the Arousa project structure" /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3750"><div class="titlepage"><div><div><h2 class="title" style="clear: both">A bold experiment. How much time/effort does it take?</h2></div></div></div><p>We are going to introduce Ivy and Arousa with a basic example. The purpose is to evaluate how easy it is to work with Arousa and how much effort involve manage dependencies with Ivy.
+    </p><p>The example will use a pair of external xslts, one that convert the text nodes to bold,
+      and other that wraps the content into html.</p><p>
+      <span class="inlinemediaobject"><img src="papers-2023/sanchez/diagrams/bold-experiment.png" /></span></p><p>We are going to open the bold experiment folder from the Arousa MARKUPUK23 examples and remove the bold-experiment subfolder.
+    </p><p>You can navigate now to the sample-bold-transformation folder and run:
+    </p><pre class="programlisting" xml:space="preserve">$ arousa publish-dependency</pre><p>At this point you probably have published the first ivy dependency. We are going to create now a project, using the default template, and name it “bold-experiment” with the following command.
+    </p><pre class="programlisting" xml:space="preserve">$ arousa template-project bold-experiment</pre><p>In this example we need to adjust the path of the repository (in order to use the previously published example dependencies). Modify the “demo.samples.repository.root” value of the conf/arousa-ivy-settings.xml to fit your location of the examples path, it should look similar to this:
+    </p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;property</strong> 
+        <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"demo.samples.repository.root"</span>	   
+        <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"C:/Users/john/arousaws/arousa-examples/
+                            bold experiment/repository"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong></pre><p>Now we are going to add the dependencies to the conf/arousa-ivy.xml file.
+    </p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;dependency</strong> <span class="hl-attribute" style="color: #F5844C">org</span>=<span class="hl-value" style="color: #993300">"org.markupuk.2x023.arousa.samples"</span> 
+              <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"sample-bold-transformation"</span> <span class="hl-attribute" style="color: #F5844C">rev</span>=<span class="hl-value" style="color: #993300">"1.0"</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"sample-bold-transformation"</span> 
+                <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"packaged"</span> <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+
+    <strong class="hl-tag" style="color: #000096">&lt;dependency</strong> <span class="hl-attribute" style="color: #F5844C">org</span>=<span class="hl-value" style="color: #993300">"net.vionta.templates.html"</span> 
+                          <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"html-essentials"</span> <span class="hl-attribute" style="color: #F5844C">rev</span>=<span class="hl-value" style="color: #993300">"1.0"</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"html-essentials"</span> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"packaged"</span> 
+                <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre><p>
+      You could instead just copy the file (from the commands notes folder).
+  </p><pre class="programlisting" xml:space="preserve">cp commands/arousa-ivy.xml bold-experiment/conf/arousa-ivy.xml</pre><p>
+   After adding the dependencies declaration, and setting the repository path, you can retrieve the dependencies with the following command.
+  </p><pre class="programlisting" xml:space="preserve">$ arousa update-dependencies</pre><p>
+  
+ You should see on the screen the Ivy report while it is retrieving the dependencies. At this point, the dependencies should show on the deps folder of your project. We are ready to add the Xslt steps to the build target of the build.xml. 
+</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;xslt</strong> <span class="hl-attribute" style="color: #F5844C">style</span>=<span class="hl-value" style="color: #993300">"deps/sample-bold-transformation/xsl/bold-demo.xsl"</span>
+      <span class="hl-attribute" style="color: #F5844C">basedir</span>=<span class="hl-value" style="color: #993300">"test/data"</span>
+      <span class="hl-attribute" style="color: #F5844C">destdir</span>=<span class="hl-value" style="color: #993300">"build"</span> 
+      <span class="hl-attribute" style="color: #F5844C">includes</span>=<span class="hl-value" style="color: #993300">"*.xml"</span>
+      <span class="hl-attribute" style="color: #F5844C">extension</span>=<span class="hl-value" style="color: #993300">".xml"</span><strong class="hl-tag" style="color: #000096">
+    /&gt;</strong>
+    
+<strong class="hl-tag" style="color: #000096">&lt;xslt</strong> <span class="hl-attribute" style="color: #F5844C">style</span>=<span class="hl-value" style="color: #993300">"deps/html-essentials/xsl/html-report-basic-structure.xsl"</span>
+      <span class="hl-attribute" style="color: #F5844C">basedir</span>=<span class="hl-value" style="color: #993300">"build"</span>
+      <span class="hl-attribute" style="color: #F5844C">destdir</span>=<span class="hl-value" style="color: #993300">"build"</span> 
+      <span class="hl-attribute" style="color: #F5844C">includes</span>=<span class="hl-value" style="color: #993300">"*.xml"</span>
+      <span class="hl-attribute" style="color: #F5844C">extension</span>=<span class="hl-value" style="color: #993300">".html"</span><strong class="hl-tag" style="color: #000096">
+    /&gt;</strong></pre><p>
+      Now we can add some test data to a file.
+        </p><pre class="programlisting" xml:space="preserve">$ mkdir -p <strong class="hl-keyword">test</strong>/data
+$ <strong class="hl-keyword">echo</strong> <strong class="hl-string"><em style="color:red">'&lt;div&gt;This text will be bold&lt;/div&gt;'</em></strong> &gt; <strong class="hl-keyword">test</strong>/data/basic_test.xml</pre><p>
+          And finally run the build target. 
+    </p><pre class="programlisting" xml:space="preserve">$ ant build</pre><p>
+      
+    And that’s all, we have prepared a small project, configured Ivy, declared and retrieved the dependencies and executed the transformations. 
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,45 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Starting with Arousa</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="ar13.html" title="A Dependency Management Approach for Document and Data Transformation Projects" /><link rel="prev" href="ar13s02.html" title="Introducing Apache Ivy" /><link rel="next" href="ar13s04.html" title="A bold experiment. How much time/effort does it take?" /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3739"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Starting with Arousa</h2></div></div></div><p>
+    Arousa is wrapped as a bundle, with a managing script and a set of ant template projects integrated with Ivy. You can add your templates taking the existing ones as an example. 
+  </p><p>
+    Arousa helps you during the creation and configuration of the Ant projects and eases certain calls but all the Arousa magic is made by standard Ant and Ivy capabilities. Once the projects are created, they are self contained Ant projects. You can invoke them with Arousa or directly using Ant commands. 
+    </p><p>
+    The Arousa configuration is done, in a similar way to a JVM or Ant, by setting its HOME installation path and adding the arousa script to the executable path. 
+  </p><pre class="programlisting" xml:space="preserve"><strong class="hl-keyword">export</strong> AROUSA_HOME=&lt;Your_Installaton_path&gt;
+<strong class="hl-keyword">export</strong> PATH=$PATH:$AROUSA_HOME</pre><p> Arousa main script require a bash environment (you may use Cygwin on Windows) Apache Ant
+      and Java. Depending on the specific project some internal variables may also need adjustment,
+      like the Xproc engine path for example. </p><p>After it is configured, you can run the Arousa script and print the list of available
+      options.</p><pre class="programlisting" xml:space="preserve">$arousa
+ Arousa Dependency Script
+ Syntax : arousa command argument1 argument2 ..
+
+ Arguments :
+
+ - template-project &lt;name&gt; : Builds a new project arguments 
+              &lt;template-project-name(optional)&gt; &lt;project-name&gt;
+
+ - template-project-content : gets the template project content
+
+ - template-project-list : prints a list of the templates
+
+ - update-dependencies : Updates dependencies
+
+ - publish-dependency : Publish the main dependency
+
+ - update-main-dependency : Get the repository version 
+                                        of the main dependency
+
+ - clean-cache : Cleans ivy project dependency cache
+
+ - template-project-<strong class="hl-keyword">for</strong>-dependency : Get a template project 
+                                  <strong class="hl-keyword">for</strong> the indicated dependency
+
+- update-arousa-configuration : Update arousa configuration files</pre><p> The following command, for example, prints the available project templates.</p><pre class="programlisting" xml:space="preserve">$ arousa template-project-list</pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

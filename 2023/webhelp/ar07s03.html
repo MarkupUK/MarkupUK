@@ -1,0 +1,35 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>What is CloudTop really?</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="ar07.html" title="Building a cloud-based visual operating system entirely based on XML" /><link rel="prev" href="ar07s02.html" title="Finding a cure to the chaotic software landscape" /><link rel="next" href="ar07s04.html" title="Changing the perception of a computer" /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1845"><div class="titlepage"><div><div><h2 class="title" style="clear: both">What is CloudTop really?</h2></div></div></div><p>CloudTop is a new cloud-based operating system and virtual desktop surface written in XML on top of XIOS/3 Edge Application Platform and the CloudBackend Singularity Database. It is delivered through any traditional web server without any server dependencies. It then runs within the web browser where the entire desktop surface is created from XML and additional applications are running as separate windows on top of that, all within a single web browser tab.</p><p>The type of virtual desktop provided by CloudTop is not a traditional operating system
+      virtualization technology like Citrix or Microsoft Terminal Server. Traditional virtual
+      desktop technologies run the host operating systems in the cloud on a server and then
+      screencast the desktop and applications into a web browser or dedicated native client. With CloudTop the OS and its
+      applications are all executing and running within the web browser thanks to the device edge
+      computing capabilties of XIOS/3. The cloud and server are, thanks to CloudBackend, transformed
+      into an authentication engine to load, save, and coordinate delta changes of XML documents for
+      collaboration purposes.</p><p>Applications built for CloudTop can run entirely within the browser if built in XML and
+      only using XML documents as its storage format. They can also interact with APIs in the cloud
+      like XML Web Services (SOAP) or REST APIs (JSON or XML). Having portions of the application
+      logic in the cloud behind an API will of course make the application more sensitive to disruptions and
+      introduce latency for waiting on server responses. However, all user interactions can be
+      quickly resolved and managed on the client, since the remaining application logic is written
+      in XML and executed within the web browser on the device.</p><p>CloudTop has things you normally associate with an operating system such as a file
+      system, processes, applications, security, users, command line interface, caches, user
+      interface rendering, SDK for software developers, and network communication. It does not
+      however include the lower levels of an OS like the kernel, BIOS, and things needed to make it
+      boot a computer. Thus CloudTop can be said to include the higher levels of a traditional
+      OS. Our reasoning here is that the most effect for end-users and developers is achieved at
+      the higher levels, software SDK and development tools, and communication with the outside
+      world. The lower levels can be reused from Linux, Android, Windows, or any operating system.
+      CloudTop only needs something that boots and opens a web browser like the open source WebKit
+      browser and then starts CloudTop in fullscreen mode. One implementation of such an environment
+      is the Google Chrome OS. The added benefit of this is that anyone with a web browser may run
+      CloudTop without installing anything. VPN and security protocols can also be added to the
+      lower-level boot OS, though relevant features are constantly added to the browser environment.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar07.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

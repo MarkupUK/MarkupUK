@@ -1,0 +1,88 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Configuration chains</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="ar13.html" title="A Dependency Management Approach for Document and Data Transformation Projects" /><link rel="prev" href="ar13s07.html" title="A Key difference with Maven" /><link rel="next" href="ar13s09.html" title="The Ivy Cycle." /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s07.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s09.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3819"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Configuration chains</h2></div></div></div><p> If you had doubts with dependency types, you may have the same doubts with
+      configurations. What should I use Ivy configurations for? </p><p>In a similar way as artifact types, anything that makes sense for you as configuration,
+      and obviously fit into something that can be managed with artifacts by Ivy, should be a valid
+      configuration for Ivy. </p><p>Ivy configurations are a powerful concept. Each component can have multiple configurations
+      that can be arranged using inheritance. But Ivy configurations don’t stop here, as each
+      configuration may depend on other configurations that can be adjusted for each artifact. The
+      Ivy capabilities to describe dependency configuration rules is outstanding.</p><p>We are going to illustrate how can we take advantage of Ivy configurations with a simple
+      example. We are going to take into consideration a report. A report that may have to be sent
+      on a timely basis from a ticketing system like Jira or Redmine. </p><p>On a functional level it may not be perceived as convenient as both solutions have their
+      own reporting capabilities, but at the end there may be roles that need visibility on the team
+      performance that usually don’t have access or don’t have time to access some platform on a
+      private VPN or DaaS. </p><p>The example will have the following key components, although there are some other smaller
+      ones not listed here.</p><p>- A graphical theme, with css files and icons.</p><p>- A Jira set of transformation stylesheets and utilities.</p><p>- The current data projects, where we are going to perform the Jira or Redmine issue list
+      analysis.</p><p><span class="inlinemediaobject"><img src="papers-2023/sanchez/diagrams/configuration_chains.png" /></span></p><p>At this point, a question may arise, should our report depend on a specific theme project
+      for each report style/colour set or should we use a specific project with several output
+      configurations? We are going to start with two different theme projects, a red one and a blue
+      one. </p><p>Both options are fine (one project with two configurations or two project managed with
+      configurations), and you may choose the strategy that best fits or describes your problem. We
+      will try to illustrate both strategies with the Jira report on our examples </p><p> The configuration-jira-report folder from our examples has two themes the
+      blue-theme-report and the red-report-theme. Both projects contain some graphic resources and
+      css that are used in the usual web folders. </p><p> The jira report project is going to depend on the theme projects but it’s not going to
+      use them directly. The Jira report project has two different configurations, not surprisingly
+      named red and blue report. We are going to use this project only to develop, test and evolve
+      the Jira Xslts and Xprocs. </p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;configurations&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;conf</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"default"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;conf</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"red-report"</span> <span class="hl-attribute" style="color: #F5844C">extends</span>=<span class="hl-value" style="color: #993300">"default"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;conf</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"blue-report"</span> <span class="hl-attribute" style="color: #F5844C">extends</span>=<span class="hl-value" style="color: #993300">"default"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/configurations&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;publications&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"jira-report"</span> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"transformations"</span> 
+              <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span> <span class="hl-attribute" style="color: #F5844C">conf</span>=<span class="hl-value" style="color: #993300">"*"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/publications&gt;</strong>
+  
+  <strong class="hl-tag" style="color: #000096">&lt;dependencies</strong> <span class="hl-attribute" style="color: #F5844C">defaultconf</span>=<span class="hl-value" style="color: #993300">"default"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;dependency</strong> <span class="hl-attribute" style="color: #F5844C">org</span>=<span class="hl-value" style="color: #993300">"org.markupuk.examples.arousa"</span> 
+                <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"blue-report-theme"</span> <span class="hl-attribute" style="color: #F5844C">rev</span>=<span class="hl-value" style="color: #993300">"1.0"</span> 
+                      <span class="hl-attribute" style="color: #F5844C">conf</span>=<span class="hl-value" style="color: #993300">"blue-report-&gt;default"</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"blue-report-theme"</span> 
+                <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"transformations"</span> <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;dependency</strong> <span class="hl-attribute" style="color: #F5844C">org</span>=<span class="hl-value" style="color: #993300">"org.markupuk.examples.arousa"</span> 
+                <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"red-report-theme"</span> <span class="hl-attribute" style="color: #F5844C">rev</span>=<span class="hl-value" style="color: #993300">"1.0"</span> 
+                <span class="hl-attribute" style="color: #F5844C">conf</span>=<span class="hl-value" style="color: #993300">"red-report-&gt;default"</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"red-report-theme"</span> 
+                <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"transformations"</span> <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;dependency</strong> <span class="hl-attribute" style="color: #F5844C">org</span>=<span class="hl-value" style="color: #993300">"org.markupuk.examples.arousa"</span> 
+                <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"html-essentials"</span> <span class="hl-attribute" style="color: #F5844C">rev</span>=<span class="hl-value" style="color: #993300">"1.0"</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"html-essentials"</span> 
+                <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"transformations"</span> <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/dependencies&gt;</strong></pre><p> Once we need to build the actual reports, retrieve the issue list from the Jira API,
+      select a part of the data, etc. we are going create a specific project. This type of projects
+      are going to depend on one of the possible configurations (red or blue). </p><p> We are going to call our example project company-a-report. The following lines show its
+      ivy dependency description file.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;ivy-module</strong> <span class="hl-attribute" style="color: #F5844C">version</span>=<span class="hl-value" style="color: #993300">"1.1"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;info</strong> <span class="hl-attribute" style="color: #F5844C">organisation</span>=<span class="hl-value" style="color: #993300">"org.markupuk.examples.arousa"</span>
+	<span class="hl-attribute" style="color: #F5844C">module</span>=<span class="hl-value" style="color: #993300">"companya-report"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;configurations&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;conf</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"default"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/configurations&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;publications&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"companya-report"</span> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"transformations"</span> 
+              <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span> <span class="hl-attribute" style="color: #F5844C">conf</span>=<span class="hl-value" style="color: #993300">"default"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/publications&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;dependencies</strong> <span class="hl-attribute" style="color: #F5844C">defaultconf</span>=<span class="hl-value" style="color: #993300">"default"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;dependency</strong> <span class="hl-attribute" style="color: #F5844C">org</span>=<span class="hl-value" style="color: #993300">"net.vionta.reports.jira"</span> 
+                <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"jira-report"</span> <span class="hl-attribute" style="color: #F5844C">rev</span>=<span class="hl-value" style="color: #993300">"1.0"</span> 
+                <span class="hl-attribute" style="color: #F5844C">conf</span>=<span class="hl-value" style="color: #993300">"default-&gt;red-report"</span><strong class="hl-tag" style="color: #000096"> &gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifact</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"jira-report"</span> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"transformations"</span> 
+                <span class="hl-attribute" style="color: #F5844C">ext</span>=<span class="hl-value" style="color: #993300">"zip"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependencies&gt;</strong>  
+<strong class="hl-tag" style="color: #000096">&lt;/ivy-module&gt;</strong></pre><p> You may notice the conf attribute (conf="default-&gt;red-report"). This attribute indicates
+      that this project default configuration depends on the jira report “red-report” configuration.
+      If you check on the “jira-report” project dependencies, the red report configuration depends
+      on the red report theme. Also the red report configuration extends the default configuration
+      which brings shared dependencies between both versions.</p><p> The example is a very simple demonstration of the Ivy configuration capabilities. Ivy can
+      be used to describe and manage really complex configuration interrelations.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar13s07.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar13.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar13s09.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
