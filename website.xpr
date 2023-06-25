@@ -939,6 +939,9 @@
                                             <field name="validationSchema">
                                                 <null/>
                                             </field>
+                                            <field name="validationAdvancedSettings">
+                                                <null/>
+                                            </field>
                                         </validationUnit>
                                     </list>
                                 </field>
