@@ -1,0 +1,189 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>h1.dtd summary</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2023 Proceedings" /><link rel="up" href="ar09s07.html" title="h1.dtd — Build your own prodoc" /><link rel="prev" href="ar09s07.html" title="h1.dtd — Build your own prodoc" /><link rel="next" href="ar10.html" title="Leveraging the Power of OpenAI and Schematron for Content Verification and Correction" /><!--  Generated with Oxygen version 24.0, build number 2021121511.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2021121511" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s07.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e3105"><div class="titlepage"><div><div><h3 class="title">h1.dtd summary</h3></div></div></div><pre class="programlisting" xml:space="preserve">&lt;!-- ==========================================================================
+                                                              dawkIns ....
+              dawk Summary            
+                                               
+    SPath:    D:\kc\xt\h1\                  
+    SFile:    h1.dtd                
+    Gen:      2023-05-30 22:12         
+    GenBy:    D:\kc\xt\bin\dawk.awk           
+    Target:   D:\kc\xt\bin\scratch\dawk_tgt.txt           
+    fileType: xml
+    chopCol:  79
+
+    Module:   h1.dtd
+              HTML 1 Document Type Declarations
+
+    Public Identifier:
+
+              -//SG//DTD h1//EN
+
+    Date:     2021.05.29
+
+    Version:  Released for testing
+ 
+    Contents:
+
+   175    Declaration constants (parameter entity declarations)
+   178   
+   179      Extensible element constants
+   182   
+   183        %divs; - infinitely-nesting wrapper elements
+   186                %h1.divs;           baseline hierarchical divisions
+   194                %sa.divs;           semantic authoring interface
+   198                %divs;              (roll-up)
+   203   
+   204        %heads; - top of div (metadata) elements
+   207                %h1.heads;          baseline heading containers
+   211                %sa.heads;          semantic authoring interface
+   215                %heads;             (roll-up)
+   220   
+   221        %blocks; - paragraph-level elements
+   224                %h1.blocks;         baseline blocks (email benchmark)
+   239                %sa.blocks;         semantic authoring interface
+   243                %blocks;            (roll-up)
+   248   
+   249        %spans; - inline elements
+   252                %h1.spans;          baseline spans
+   280                %sa.spans;          semantic authoring interface
+   284                %spans;             (roll-up)
+   289   
+   290      Attribute constants
+   293   
+   294        Semantic attribute entities
+   297                @alt                alternate (text for image)
+   301                @agent              acts or has the power to act
+   305                @artifact           physical or conceptual object
+   309                @author             agent responsible for writing text
+   313                @behavior           an agent's actions and decisions
+   317                @class              css classifications
+   321                @content            add @name for custom "attribute"
+   325                @created            when created
+   329                @href               hypetext reference
+   333                @id                 unique identifier
+   337                @idref              reference to a single identifier
+   341                @modified           when modified
+   345                @name               add @content for matching value
+   349                @src                media source
+   353                @status             relative ranking
+   357                @tags               #words that classify or categorize
+   361                @type               nature or genre
+   365                %sem.atl;           (roll-up)
+   385   
+   386        Enumerated attribute value sets for style attributes
+   389                %avs.align;         horizontal text alignment values
+   394                %avs.display        display property values
+   402                %avs.open.closed;   details open/closed switch values
+   406                %avs.valign;        vertical alignment values
+   412                %avs.vwhite         vertical whitespace
+   417                %avs.whitespace     text whitespace
+   422   
+   423        Style attribute entities
+   426                @align              horizontal text alignment
+   430                @bgcolor            background color
+   434                @border             (width style color)
+   438                @color              text color
+   442                @colspan            column span
+   446                @display            default display geometry is inline
+   450                %a.display.def;     defined default (e.g., "block")
+   454                @height             vertical size
+   458                @margin             whitespace ouside border
+   462                @open               open/close display &amp; displayblock
+   466                @padding            whitespace inside border
+   470                @rowspan            row span
+   474                @scale              scales font size
+   478                @style              inline css
+   482                @valign             vertical alignment
+   486                @white              text whitespace
+   490                @width              horizontal size
+   494                @xspace.pre         xml:space="preserve"
+   499                %style.atl;         (roll-up)
+   517   
+   518        %gatl; - extensible global attribute set
+   531                %sa.atl;            semantic authoring interface
+   535                %gatl;               (roll-up)
+   541   
+   542      Element content model constants
+   545                %div.model;         generalized content model for divs
+   549                %fig.model;         content model for figure element
+   553                %kitchen.sink;      merged content models
+   557                %mixed;             parsable character data and %spans;
+   561                %text;              parsable character data content model
+   565                %undefined;         text
+   569   
+   570    Element and attlist declarations
+   573   
+   574      %h1.divs; declarations
+   577                div                 nested, hierarchical division
+   583                h1                  H1 wrapper
+   589                hsa                 HTML for semantic authoring wrapper
+   595                hsg                 HTML for semantic generalization wrap
+   601                prodoc              prodoc wrapper
+   607   
+   608      %h1.heads; declarations
+   611                h                   heading
+   617   
+   618      %h1.blocks; declarations
+   621                block               generic block of text
+   627                codeblock           block of source code
+   634                figure              wrapper bordered content
+   639                hr                  horizontal rule, thematic break
+   644                ol                  ordered list wrapper
+   649                p                   paragraph
+   654                qblock              block formatting for quoted text
+   659                t                   text
+   665                table               tablular, matrix data
+   670                  tr                table row
+   675                tl                  text list
+   680                ul                  unordered list
+   685   
+   686      %h1.spans; declarations
+   689                a                   hyperlink anchor
+   694                agent               one who acts, that which acts
+   699                artifact            physical or conceptual object
+   704                b                   bold text
+   709                behavior            action, decision, patterns
+   714                big                 big text
+   719                br                  line break
+   724                details             @open="closed" hides all but summary
+   729                i                   italic text
+   734                img                 inline image
+   742                meta                meta-data
+   747                name                designates and references concept
+   752                nowrap              non-breaking text
+   757                q                   quotation
+   762                s                   strikeout
+   767                small               small text
+   772                source              origin, reference
+   777                span                generic inline, span of text
+   782                strong              important text
+   787                summary             visible heading for details element
+   792                target              goal, result, focus
+   797                td                  table data cell
+   802                th                  table header cell
+   807                u                   underline
+   812   
+   813    Document constants (general entity declarations)
+   816                &amp;bull;            • bullet
+   820                &amp;circle;          ∘ ring operator
+   824                &amp;emdash;          — emdash symbol
+   828                &amp;h1;                "h1" string
+   832                &amp;H1;                "H1" string
+   836                &amp;hsa;               "hsa" string
+   840                &amp;Hsa;               "Hsa" string
+   844                &amp;nbsp;              non-breaking space
+  1034   
+  1035    END  h1.dtd
+
+# 2023.05.30 22:12 # D:\kc\xt\h1\ # h1.dtd #
+
+                                                              dawkIns .....
+=========================================================================== --&gt;</pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar09s07.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar09s07.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar10.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
