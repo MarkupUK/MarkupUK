@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Each entry in this map corresponds to a page on the live site.
+    
+    The stylesheet ./build.xsl outputs a page to:
+    
+        ../{@id}.html
+        
+    using the source content at:
+    
+        ./{@id}.xhtml
+        
+    Items in the navbar will appear in the document order they occur 
+    in below.
+    
+    To add a new page to the navbar, add a new entry below, with 
+    corresponding XHTML content.
+    -->
+<map>
+    <page id='index'>Home</page>
+    <page id='registration'>Registration</page>
+    <page id='speakers'>Speakers</page>
+    <page id='venue'>Venue</page>
+    <page id='schedule'>Schedule</page>
+    <page id='committee'>About</page>
+</map>

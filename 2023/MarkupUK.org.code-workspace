@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveSassCompile.settings.formats": [
+			{
+				"format": "compact",
+				"extensionName": ".css",
+				"savePath": "/css"
+			}
+		],
+		"liveSassCompile.settings.showOutputWindow": false,
+		"liveServer.settings.fullReload": true
+	}
+
+
+}
