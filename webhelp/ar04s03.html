@@ -1,0 +1,139 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Converting the input XML to JSON</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s02.html" title="Selecting the case study" /><link rel="next" href="ar04s04.html" title="Serializing the parse tree" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1253"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Converting the input XML to JSON</h2></div></div></div><p>This was an opportunity to try out the new <code class="code">fn:element-to-map</code> function.
+    I described the basic design for this function in a paper at Balisage in 2023[<a class="citation" href="references.html#d5e1571" shape="rect"><span class="citation">Kay 2023</span></a>], 
+    
+    
+    and we had an implementation in Saxon ready to test.</p><p>The function doesn't convert lexical XML to lexical JSON: rather, it converts the XDM representation
+    of XML to the XDM representation of JSON (XDM being the X data model that underpins XSLT and XQuery).</p><p>The idea of the function is that it converts each element type in one of a dozen or so different ways,
+    depending on the content model. The content model can be inferred either from a schema, or from examination of
+    a sample collection of input documents, or from an individual element instance. I didn't try to do a schema-aware
+    conversion because (a) no schema was available, and (b) generating one wouldn't be particularly useful, because
+    of the way the particular XML vocabulary works. Specifically, a typical fragment of the XML 
+    (representing the Java code <code class="code">if (iter.next() != null) {iter.close(); return BooleanValue.FALSE}</code>)
+      looks like this:</p><pre class="programlisting" xml:space="preserve">
+ &lt;statement nodeType="IfStmt"&gt;
+    &lt;condition nodeType="BinaryExpr" operator="NOT_EQUALS"&gt;
+       &lt;left nodeType="MethodCallExpr" &gt;
+          &lt;name nodeType="SimpleName" identifier="next"/&gt;
+          &lt;scope nodeType="NameExpr"&gt;
+             &lt;name nodeType="SimpleName" identifier="iter"/&gt;
+          &lt;/scope&gt;
+       &lt;/left&gt;
+       &lt;right nodeType="NullLiteralExpr"/&gt;
+    &lt;/condition&gt;
+    &lt;thenStmt nodeType="BlockStmt"&gt;
+       &lt;statements&gt;
+          &lt;statement nodeType="ExpressionStmt"&gt;
+             &lt;expression nodeType="MethodCallExpr" &gt;
+                &lt;name nodeType="SimpleName" identifier="close"/&gt;
+                &lt;scope nodeType="NameExpr"&gt;
+                   &lt;name nodeType="SimpleName" identifier="iter"/&gt;
+                &lt;/scope&gt;
+             &lt;/expression&gt;
+          &lt;/statement&gt;
+          &lt;statement nodeType="ReturnStmt"&gt;
+             &lt;expression nodeType="FieldAccessExpr"&gt;
+                &lt;name nodeType="SimpleName" identifier="FALSE"/&gt;
+                &lt;scope nodeType="NameExpr"&gt;
+                   &lt;name nodeType="SimpleName" 
+                         identifier="BooleanValue"/&gt;
+                &lt;/scope&gt;
+             &lt;/expression&gt;
+          &lt;/statement&gt;
+       &lt;/statements&gt;
+    &lt;/thenStmt&gt;
+ &lt;/statement&gt;           
+      </pre><p>The element names here (<code class="code">left</code>, <code class="code">right</code>, <code class="code">condition</code>,
+    <code class="code">thenStmt</code>) tell you nothing about what kind of thing the element is (and therefore
+    what kind of structure its content has); rather it tells you about where it fits into the structure
+    of the parent element. It's the <code class="code">nodeType</code> attribute that tells you about the
+    content model: if <code class="code">nodeType="condition"</code> then there will be children named
+    <code class="code">left</code> and <code class="code">right</code>, while if <code class="code">nodeType="IfStmt"</code> then
+    there will be children named <code class="code">condition</code>, <code class="code">thenStmt</code>, and optionally
+    <code class="code">elseStmt</code>.</p><p>This design, as well as making it difficult to construct a schema, also makes it
+    difficult for the <code class="code">element-to-map</code> function to infer the right XML-to-JSON mapping
+    to use for each element name.</p><p>Another consequence of the design is that most of the transpiler consists of rules
+    of the form <code class="code">match="*[@nodeType='MethodCallExpr']"</code>: it is the <code class="code">nodeType</code>
+    attribute that drives the processing, not the element name.</p><p>The <code class="code">elements-to-maps()</code> function, as it was specified and implemented at the time,
+    had an option <code class="code">'uniform':true()</code> that caused the function to analyze the entire input
+    and infer a mapping for each element name that took into account all the elements encountered with
+    that name. By running this against the entire collection of 2100 input files, it ended up making quite
+    reasonable decisions, so far as one could tell. However, for constructs that only appeared 
+    very rarely, it might have made a poor choice, and I probably wouldn't have noticed because, in 
+    absence of a complete implementation of the transpiler, we didn't get as far as testing that
+    we were generating correct C# code at the end of the process.</p><p>It also became clear that examining all the structures that occur in the input to the function
+    doesn't necessarily give the right answer if you run the same conversion on a different set of
+    input files the following day. Because there is downstream code processing the JSON output,
+    it is vital that tomorrow's output is consistent with today's.</p><p>This experience led to a decision to make the choices made by the processor more visible and
+    open to scrutiny and adjustment. We split the function into two: <code class="code">element-to-map-plan()</code>
+    takes a corpus of XML documents and generates a conversion plan, specifically a so-called "layout"
+    to be used for each element name. The second function, <code class="code">element-to-map()</code>, accepts this
+    plan as input, and uses it to guide a specific conversion. The plan is designed so it can itself
+    be serialized as JSON, which means that (a) it can be modified by hand, and (b) the same plan can
+    be used consistently every time a conversion is run, even though the original data is no longer
+    available.</p><p>The JSON version of the XML fragment shown above ends up looking like this:</p><pre class="programlisting" xml:space="preserve">
+ {"_nodeType":"IfStmt",
+   "condition":{"_nodeType":"BinaryExpr",
+     "_operator":"NOT_EQUALS",
+     "left":{"_nodeType":"MethodCallExpr",
+       "name":{"_nodeType":"SimpleName",
+         "_identifier":"next"
+       },
+       "scope":{"_nodeType":"NameExpr",
+         "name":{"_nodeType":"SimpleName",
+           "_identifier":"iter"
+         }
+       }
+     },
+     "right":{"_nodeType":"NullLiteralExpr"
+     }
+   },
+   "thenStmt":{"_nodeType":"BlockStmt",
+     "statements":[{"_nodeType":"ExpressionStmt",
+         "expression":{"_nodeType":"MethodCallExpr",
+           "name":{"_nodeType":"SimpleName",
+             "_identifier":"close"
+           },
+           "scope":{"_nodeType":"NameExpr",
+             "name":{"_nodeType":"SimpleName",
+               "_identifier":"iter"
+             }
+           }
+         }
+       },
+       
+       {"_nodeType":"ReturnStmt",
+         "expression":{"_nodeType":"FieldAccessExpr",
+           "name":{"_nodeType":"SimpleName",
+             "_identifier":"FALSE"
+           },
+           "scope":{"_nodeType":"NameExpr",
+             "name":{"_nodeType":"SimpleName",
+               "_identifier":"BooleanValue"
+             }
+           }
+         }
+       }
+     ]
+   }
+ }      
+      </pre><p>I decided to use "_" rather than "@" as a prefix for JSON properties derived from XML attributes,
+    on the grounds that the result is a valid NCName and can therefore be more easily selected using
+    the XPath lookup operator, for example <code class="code">$node?_nodeType</code>. The <code class="code">element-to-map</code> function
+    allows any prefix (or none) to be used.</p><p>The fragments shown above illustrate the XML and JSON representations of the raw Java parse tree.
+    In practice the JavaParser product also has an option (the type solver) to decorate the parse tree
+    with additional attributes containing the inferred types of various constructs, and
+    their expanded names. For example the <code class="code">left</code> node of the first <code class="code">condition</code>
+    above has two additional properties: <code class="code">"_RETURN": "net.sf.saxon.value.AtomicValue"</code>,
+    and <code class="code">"_RESOLVED_TYPE": "com.saxonica.functions.qt4.DuplicateValues.DuplicatesIterator"</code>,
+    indicating that in the Java method call <code class="code">iter.next()</code>, the type of <code class="code">iter</code>
+    is <code class="code">com.saxonica.functions.qt4.DuplicateValues.DuplicatesIterator</code>, and the return
+    type of the method call is <code class="code">net.sf.saxon.value.AtomicValue</code>.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

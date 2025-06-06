@@ -1,0 +1,79 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="markupuk2025.html" title="Surfing the web with XProc" /><link rel="prev" href="markupuk2025.html" title="Surfing the web with XProc" /><link rel="next" href="ar07s02.html" title="Enter Selenium" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="markupuk2025.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e2102"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction</h2></div></div></div><p>Back in January, on the <code class="code">xproc-dev</code> mailing list, Andy Carver <a class="link" href="https://lists.w3.org/Archives/Public/xproc-dev/2025Jan/0063.html" target="_top" shape="rect">asked
+about</a> “grabbing web pages”. In
+principle, this is easy. XProc 3.1, like the web itself, supports an extensible
+set of document types identified by content type. All XProc implementations
+support XML, HTML, JSON, text, and binary types. Implementors may support
+additional content types; XML Calabash supports YAML and a variety of RDF
+content types, for example.</p><p>This means that an XProc pipeline can load those documents in a completely
+straightforward way. Consider this pipeline:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;p:declare-step</strong> <span class="hl-attribute" style="color: #F5844C">xmlns:p</span>=<span class="hl-value" style="color: #993300">"http://www.w3.org/ns/xproc"</span>&#xD;
+                <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"main"</span> <span class="hl-attribute" style="color: #F5844C">version</span>=<span class="hl-value" style="color: #993300">"3.1"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>&#xD;
+  <strong class="hl-tag" style="color: #000096">&lt;p:output</strong> <span class="hl-attribute" style="color: #F5844C">port</span>=<span class="hl-value" style="color: #993300">"result"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>&#xD;
+  <strong class="hl-tag" style="color: #000096">&lt;p:option</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"uri"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>&#xD;
+&#xD;
+  <strong class="hl-tag" style="color: #000096">&lt;p:load</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"{$uri}"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>&#xD;
+&#xD;
+<strong class="hl-tag" style="color: #000096">&lt;/p:declare-step&gt;</strong>&#xD;
+</pre><p>This pipeline simply loads a document and serializes it. For example:</p><pre class="programlisting" xml:space="preserve">$ bin/xmlcalabash.sh pipelines/document.xpl uri=https://testdata.xmlcalabash.com/index.xml</pre><p>Returns the XML document:</p><pre class="programlisting" xml:space="preserve">
+<span class="hl-directive" style="color: maroon">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><strong class="hl-tag" style="color: #000096">&lt;html</strong> <span class="hl-attribute" style="color: #F5844C">xmlns</span>=<span class="hl-value" style="color: #993300">"http://www.w3.org/1999/xhtml"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;head&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;meta</strong> <span class="hl-attribute" style="color: #F5844C">charset</span>=<span class="hl-value" style="color: #993300">"utf-8"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+…
+<strong class="hl-tag" style="color: #000096">&lt;/body&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/html&gt;</strong></pre><p>And:</p><pre class="programlisting" xml:space="preserve">$ bin/xmlcalabash.sh pipelines/document.xpl uri=https://testdata.xmlcalabash.com/index.html</pre><p>Returns an HTML document:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: blue">&lt;!DOCTYPE HTML&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;html</strong> <span class="hl-attribute" style="color: #F5844C">xmlns</span>=<span class="hl-value" style="color: #993300">"http://www.w3.org/1999/xhtml"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;head&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;meta</strong> <span class="hl-attribute" style="color: #F5844C">http-equiv</span>=<span class="hl-value" style="color: #993300">"Content-Type"</span> <span class="hl-attribute" style="color: #F5844C">content</span>=<span class="hl-value" style="color: #993300">"text/html; charset=UTF-8"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+…       
+      <strong class="hl-tag" style="color: #000096">&lt;/body&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/html&gt;</strong></pre><p>The document served on <code class="uri">https://testdata.xmlcalabash.com/index.html</code>
+begins like this:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: blue">&lt;!DOCTYPE html&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;html</strong> <span class="hl-attribute" style="color: #F5844C">xmlns</span>=<span class="hl-value" style="color: #993300">"http://www.w3.org/1999/xhtml"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;head&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;meta</strong> <span class="hl-attribute" style="color: #F5844C">charset</span>=<span class="hl-value" style="color: #993300">"utf-8"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;title&gt;</strong>Index<strong class="hl-tag" style="color: #000096">&lt;/title&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;link</strong> <span class="hl-attribute" style="color: #F5844C">rel</span>=<span class="hl-value" style="color: #993300">"stylesheet"</span> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"style.css"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/head&gt;</strong>
+…</pre><p>XProc has no trouble loading this “non-XML” document because it is served with an HTML
+content type. So far, everything is looking pretty good for surfing the web with XProc.</p><p>But Andy had run up against a real problem, one best illustrated by an example.
+Consider the web page shown in <a class="xref" href="ar07s01.html#city-table" title="Figure 1. A table of cities" shape="rect">Figure 1, “A table of cities”</a>.
+</p><div class="figure" id="city-table"><p class="title"><strong>Figure 1. A table of cities</strong></p><div class="figure-contents"><div class="mediaobject"><img src="papers-2025/10-tovey-walsh/img/city-table.png" width="720" alt="A table of cities" /></div></div></div><br class="figure-break" clear="none" /><p>This looks like a perfectly straightforward HTML page. But if we point our
+document pipeline at it, we get something (that might be) quite unexpected:</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: blue">&lt;!DOCTYPE HTML&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;html</strong> <span class="hl-attribute" style="color: #F5844C">xmlns</span>=<span class="hl-value" style="color: #993300">"http://www.w3.org/1999/xhtml"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;head&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;meta</strong> <span class="hl-attribute" style="color: #F5844C">http-equiv</span>=<span class="hl-value" style="color: #993300">"Content-Type"</span> <span class="hl-attribute" style="color: #F5844C">content</span>=<span class="hl-value" style="color: #993300">"text/html; charset=UTF-8"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;title&gt;</strong>Some cities in the UK<strong class="hl-tag" style="color: #000096">&lt;/title&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;script</strong> <span class="hl-attribute" style="color: #F5844C">defer</span> <span class="hl-attribute" style="color: #F5844C">src</span>=<span class="hl-value" style="color: #993300">"cities.js"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/script&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;link</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"../style.css"</span> <span class="hl-attribute" style="color: #F5844C">rel</span>=<span class="hl-value" style="color: #993300">"stylesheet"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;link</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"cities.css"</span> <span class="hl-attribute" style="color: #F5844C">rel</span>=<span class="hl-value" style="color: #993300">"stylesheet"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/head&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;body&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;p&gt;</strong>[<strong class="hl-tag" style="color: #000096">&lt;a</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"/"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>Home<strong class="hl-tag" style="color: #000096">&lt;/a&gt;</strong>]<strong class="hl-tag" style="color: #000096">&lt;/p&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;h1&gt;</strong>Some cities in the UK<strong class="hl-tag" style="color: #000096">&lt;/h1&gt;</strong>
+
+      <strong class="hl-tag" style="color: #000096">&lt;table&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/table&gt;</strong>
+
+      <strong class="hl-tag" style="color: #000096">&lt;p&gt;</strong>Load <strong class="hl-tag" style="color: #000096">&lt;button</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"more"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>More<strong class="hl-tag" style="color: #000096">&lt;/button&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/p&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;/body&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/html&gt;</strong></pre><p>Right where we expected the table, we get a <code class="sgmltag-element">table</code>.</p><p>A completely empty table.</p><p>The culprit here is the <code class="sgmltag-element">script</code> tag on line 7 that loads
+<code class="uri">cities.js</code>. When the <code class="sgmltag-element">p:load</code> step accesses pages on the web,
+it does so in much the same way that <span class="application">curl</span> does: it
+opens a connection to the page, pulls down the data sent by the web server, and
+hands that back to the processor.</p><p>Your browser does the same thing, but it also does a lot more. It
+downloads all of the linked resources: images, stylesheets, scripts, etc. Then
+it constructs a styled presentation of the page that includes the images. If
+scripts were downloaded, those are executed and the page is updated accordingly.
+Scripting allows a page to be interactive: clicking, selecting, scrolling, the
+browser supports a huge range of events all of which can cause more script
+execution and more updates to the page.</p><p>All of this is out of reach from the <code class="sgmltag-element">p:load</code> step. It wouldn’t
+be hard to extend our document pipeline to find and download linked images,
+stylesheets, and scripts, but we couldn’t <span class="emphasis"><em>execute</em></span> those
+scripts. We don’t have a browser sandbox to run them in.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="markupuk2025.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="markupuk2025.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

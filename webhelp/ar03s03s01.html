@@ -1,0 +1,72 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>XForms code</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar03s03.html" title="The proposed solution:" /><link rel="prev" href="ar03s03.html" title="The proposed solution:" /><link rel="next" href="ar03s03s02.html" title="JavaScript and CSS code" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s03s02.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1067"><div class="titlepage"><div><div><h3 class="title">XForms code</h3></div></div></div><p class="remark"><em><span class="remark">This is still experimental and will most likely change later</span></em></p><p>We have a main
+        stylesheet that
+        crawls
+        the whole source of Extended XForms
+        documents.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;xsl:template</strong> <span class="hl-attribute" style="color: #F5844C">match</span>=<span class="hl-value" style="color: #993300">"node()|@*"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;xsl:copy&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"@*|node()"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/xsl:copy&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/xsl:template&gt;</strong></pre><p>The
+        main stylesheet
+        does not alter
+        the actual code except for <code class="code">&lt;xhtml:head&gt;</code>. We output its existing content, and
+        then we add a link to our CSS
+        stylesheet and our
+        JavaScript
+        file.</p><p>We
+        then find the main
+        model and append a
+        new instance to it
+        that
+        will hold data managed by Extended XForms.</p><p><em><span class="remark">In the future, we will probably add a separate model specifically for Extended
+          XForms</span></em></p><p>We also apply templates with specific modes, more on this
+        later.</p><pre class="programlisting" xml:space="preserve"><em class="hl-comment" style="color: silver">&lt;!-- html --&gt;</em>
+<strong class="hl-tag" style="color: #000096">&lt;xsl:template</strong> <span class="hl-attribute" style="color: #F5844C">match</span>=<span class="hl-value" style="color: #993300">"xh:head"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;xsl:copy&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"@*"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xh:script</strong> <span class="hl-attribute" style="color: #F5844C">src</span>=<span class="hl-value" style="color: #993300">"/res/xx-forms.js"</span> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"text/javascript"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xh:link</strong> <span class="hl-attribute" style="color: #F5844C">href</span>=<span class="hl-value" style="color: #993300">"/res/xx-forms.css"</span> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"text/css"</span> <span class="hl-attribute" style="color: #F5844C">rel</span>=<span class="hl-value" style="color: #993300">"StyleSheet"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"node()"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"/"</span> <span class="hl-attribute" style="color: #F5844C">mode</span>=<span class="hl-value" style="color: #993300">"head"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"/"</span> <span class="hl-attribute" style="color: #F5844C">mode</span>=<span class="hl-value" style="color: #993300">"style"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/xsl:copy&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/xsl:template&gt;</strong>
+<em class="hl-comment" style="color: silver">&lt;!-- model --&gt;</em>
+<strong class="hl-tag" style="color: #000096">&lt;xsl:template</strong> <span class="hl-attribute" style="color: #F5844C">match</span>=<span class="hl-value" style="color: #993300">"xf:model[1]"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;xsl:copy&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"@*"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"node()"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xf:instance</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"xxforms"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;data&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"/"</span> <span class="hl-attribute" style="color: #F5844C">mode</span>=<span class="hl-value" style="color: #993300">"model"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/data&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/xf:instance&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;xsl:apply-templates</strong> <span class="hl-attribute" style="color: #F5844C">select</span>=<span class="hl-value" style="color: #993300">"/"</span> <span class="hl-attribute" style="color: #F5844C">mode</span>=<span class="hl-value" style="color: #993300">"events"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/xsl:copy&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/xsl:template&gt;</strong></pre><p>This alone
+        provides
+        custom CSS classes that can be used directly by the developer.
+        However,
+        most of these classes are meant to be used by Extended XForms. The rest of CSS classes are
+        mostly for theming.</p><p>It also
+        provides
+        low-level
+        JavaScript functions allowing:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>Setting XForms data, nodes and attributes.</p></li><li class="listitem"><p>Reading XForms data, also nodes or attributes.</p></li><li class="listitem"><p>Listening to data changes.</p></li></ul></div><p>The main stylesheet
+        includes
+        other stylesheets, each for a specific task (a feature, a component, a style, etc.). These
+        stylesheets use
+        the special modes to add their own styles, data, and events.</p><p>If
+        needed, the stylesheet can also add a template that matches a specific Extended XForms
+        syntax and replace it with XForms
+        code.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;xsl:template</strong> <span class="hl-attribute" style="color: #F5844C">match</span>=<span class="hl-value" style="color: #993300">"xxf:sidebar"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+...
+<strong class="hl-tag" style="color: #000096">&lt;/xsl:template&gt;</strong></pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar03s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar03s03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s03s02.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

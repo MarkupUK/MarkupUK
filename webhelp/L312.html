@@ -1,0 +1,64 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Example</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="modular-ixml.html" title="Modular ixml" /><link rel="prev" href="L256.html" title="Example" /><link rel="next" href="L403.html" title="Example" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L256.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L403.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="L312"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Example</h2></div></div></div><p>
+         Making the example slightly more complex, with rules like
+      </p><pre class="programlisting" xml:space="preserve">
+         result[1]=a1+b1+c1
+         result[2]=a2+b2+c2
+      </pre><p>
+         using this grammar:
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses expr from expr.ixml; identity from id.ixml
+         rules: rule+.
+          rule: identity, -"=", expr, -#a.
+      </pre><p>
+         Module <code class="literal">expr.ixml</code>
+      </p><pre class="programlisting" xml:space="preserve">
+         +shares expr
+            expr: operand++op.
+         operand: id; number.
+              id: [L], [L; Nd]*.
+              op: ["+-×÷"].
+          number: ["0"-"9"]+.
+      </pre><p>
+         Module <code class="literal">identity.ixml</code> has a clash with both
+         <code class="literal">id</code> and <code class="literal">number</code> from
+         <code class="literal">expr.ixml</code>:
+      </p><pre class="programlisting" xml:space="preserve">
+         +shares identity
+         identity: id; id, -"[", number, -"]".
+               id: [L]+.
+           number: digits, (".", digits)?.
+          -digits: [Nd]+.
+      </pre><p>
+         The invoking grammar never changes:
+      </p><pre class="programlisting" xml:space="preserve">
+         rules: rule+.
+          rule: identity, -"=", expr.
+      </pre><p>
+         In module <code class="literal">expr.ixml</code> nothing needs changing
+      </p><pre class="programlisting" xml:space="preserve">
+            expr: operand++op.
+         operand: id; number.
+              id: [L], [L; Nd]*.
+              op: ["+-×÷"].
+          number: ["0"-"9"]+.
+      </pre><p>
+         In <code class="literal">identity.ixml</code> both <code class="literal">id</code> and
+         <code class="literal">number</code> are renamed:
+      </p><pre class="programlisting" xml:space="preserve">
+               identity: id_; id_, -"[", number_, -"]".
+                 id_&gt;id: -"@", [L]+.
+         number_&gt;number: digits, ".", digits.
+                -digits: [Nd]+.
+      </pre><p>
+         The rules allow either or both to be renamed in
+         <code class="literal">expr.ixml</code> instead.
+      </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L256.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="modular-ixml.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L403.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

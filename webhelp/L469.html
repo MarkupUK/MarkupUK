@@ -1,0 +1,119 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>A Larger Example</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="modular-ixml.html" title="Modular ixml" /><link rel="prev" href="L403.html" title="Example" /><link rel="next" href="other-possible-approaches.html" title="Other Possible Approaches" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L403.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="other-possible-approaches.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="L469"><div class="titlepage"><div><div><h2 class="title" style="clear: both">A Larger Example</h2></div></div></div><p>
+         Imagine you were defining a textual format for XForms
+         [<a class="link" href="L648.html#xf" title="XForms 2.0" shape="rect">xf</a>]:
+      </p><pre class="programlisting" xml:space="preserve">
+         Example XForm
+         style xform.css
+
+         model M
+            instance data data.xml
+            submission save put:data.xml replace:none 
+
+         input name "What is your name?"
+         submit "OK"
+      </pre><p>
+         This is going to need definitions for CSS, URIs, XPath, and a lot
+         more. Furthermore, it would be worth modularising it into several
+         parts that are effectively independent, reflecting the
+         model-view-controller aspect of XForms: the model, the content,
+         and actions. This might result in a grammar like this (this is not
+         a complete example).
+      </p><p>
+         The top-level:
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses form from form.ixml
+         +uses content from content.ixml
+
+         xform&gt;html: h, form, content.
+           @h&gt;xmlns: +"http://www.w3.org/1999/xhtml".
+      </pre><p>
+         Module <code class="literal">form.ixml</code>:
+      </p><pre class="programlisting" xml:space="preserve">
+         +shares form
+         +uses css from css.ixml;
+         model from model.ixml;
+         iri from iri.ixml;
+         s from xforms-basics.ixml
+         
+              form&gt;head: title, styling?, model*.
+                  title: ~[" "; #a], ~[#a]+, -#a.
+               -styling: -"style", s, (style; stylelink).
+         stylelink&gt;link: csstype, cssrel, href.
+                  style: csstype, css.
+          @csstype&gt;type: +"text/css".
+            @cssrel&gt;rel: +"stylesheet".
+                  @href: -iri, s.
+      </pre><p>
+         Module <code class="literal">model.ixml</code>:
+      </p><pre class="programlisting" xml:space="preserve">
+         +shares model
+         +uses s, ref, xf from xforms-basics.ixml;
+         id, name from xml.ixml;
+         Action from action.ixml;
+         iri from iri.ixml
+
+              model: -"model", s, id, s, xf, -#a, 
+                        s, (instance; bind; submission; Action)+.
+
+           instance: -"instance", s, id, s, resource, s.
+          @resource: -iri.
+
+               bind: "bind", s, (id, s)?, ref, s, property*.
+           property: type {; readonly; relevant; required; etc}.
+               type: "type:", name, s.
+         
+         submission: -"submission", s, id, s, 
+                        (method, -":", resource, s)?, replace?.
+            @method: "get"; "put".
+           @replace: -"replace:", name, s.
+         {etc}
+      </pre><p>
+         Module <code class="literal">content.ixml</code>:
+      </p><pre class="programlisting" xml:space="preserve">
+         +shares content
+         +uses IDREF from xml.ixml;
+         xf, ref, string, s from xforms-basics.ixml
+
+         content&gt;body: group.
+
+                group: xf, control*.
+             -control: input; submit {more}.
+
+                input: -"input", s, ref, label.
+                label: string.
+
+               submit: -"submit", s, subid?, label?.
+    @subid&gt;submission: -"submission:", IDREF, s.
+      </pre><p>
+         and so on. Giving output like:
+      </p><pre class="programlisting" xml:space="preserve">
+	 &lt;html xmlns='http://www.w3.org/1999/xhtml'&gt;
+            &lt;head&gt;
+               &lt;title&gt;Example XForm&lt;/title&gt;
+               &lt;link type='text/css' rel='stylesheet' href='xform.css'/&gt;
+               &lt;model id='M' xmlns='http://www.w3.org/2002/xforms'&gt;
+		  &lt;instance id='data' resource='data.xml'/&gt;
+		  &lt;submission id='save' method='put' resource='data.xml' replace='none'/&gt;
+               &lt;/model&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+               &lt;group xmlns='http://www.w3.org/2002/xforms'&gt;
+		  &lt;input ref='name'&gt;
+		     &lt;label&gt;What is your name?&lt;/label&gt;
+		  &lt;/input&gt;
+		  &lt;submit&gt;
+		     &lt;label&gt;OK&lt;/label&gt;
+		  &lt;/submit&gt;
+               &lt;/group&gt;
+            &lt;/body&gt;
+         &lt;/html&gt;
+      </pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L403.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="modular-ixml.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="other-possible-approaches.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

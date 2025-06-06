@@ -1,0 +1,64 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Memory Usage and Speed</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar06.html" title="Design and Performance of a Corpus Scanner" /><link rel="prev" href="customizations.html" title="Implementation" /><link rel="next" href="ar06s05.html" title="Parsing Errors" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="customizations.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar06s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1978"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Memory Usage and Speed</h2></div></div></div><p>Gerrit Imsieke ran Saxon in profiling mode and discovered that, as
+      mentioned in the previous section, merging the list of seen attributes was
+      very slow. <span class="emphasis"><em>Not</em></span> merging them saved a lot of time but
+      produced wrong answers.</p><p>This is when the author started to suspect that the entire input was
+      being kept in memory. The Saxon <span class="emphasis"><em>uri-collection()</em></span>
+      function was being called with a <span class="emphasis"><em>stable=no</em></span> parameter,
+      which the documentation seemed to suggest would mean the documents would
+      not need to be kept in memory.</p><p>It appears, based on testing, that in fact
+        <span class="emphasis"><em>stable=no</em></span> simply means that calling
+        <span class="emphasis"><em>uri-collection()</em></span> multiple times in the same run
+      might not always return the same set of document URIs (filenames). It does
+        <span class="emphasis"><em>not</em></span> mean that the documents themselves are not
+      guaranteed to be stable, and hence does <span class="emphasis"><em>not</em></span> mean the
+      documents are not kept in memory.</p><p>In the end what worked was processing each input document in an
+      external stylesheet, called using the XPath 3
+        <span class="emphasis"><em>fn:transform()</em></span> function. Since each invocation of
+      XSLT was separate, it seemed memory was not retained between them, and
+      FreqX ran much faster.</p><pre class="programlisting" xml:space="preserve">xsl:sequence select="transform(
+  map {
+    'stylesheet-location' : $process-file-xsl,
+    'initial-template' : QName((), 'initial-template'),
+    'stylesheet-params' : map {
+        QName('http://www.delightfulcomputing.com/', 'freqx-control-doc') : $freqx-control-doc,
+        QName('http://www.delightfulcomputing.com/', 'freqx-input-uri') : $this?name
+    }
+  }
+)?output/*" /&gt;</pre><p>Performance can to some extent be measured using the builtin profiling
+      in Saxon; an alternative is to transform the XSLT style sheet to add
+        <code class="code">xsl:message</code> instructions at the start and end of each
+      template of interest, and then to analyze timestamps on the log
+      file.</p><p>Since XPath functions are deterministic, functions such as
+        <span class="emphasis"><em>fn:current-time()</em></span> always return the same value
+      within a single XSLT episode. Therefore the time for profiling must be
+      reported either with a Java native method call, or by using an external
+      tool such as the combination of <span class="emphasis"><em>ts</em></span> and
+        <span class="emphasis"><em>unbuffer</em></span> from the Linux more-utils package. The
+        <span class="emphasis"><em>ts</em></span> command adds timestamps to each line of input.
+      However, program standard output is buffered for efficiency and is
+      delivered in clumps when the buffer is full. The
+        <span class="emphasis"><em>unbuffer</em></span> command can be used to prevent that
+      buffering and get accurate timestamps.</p><p>Timings can also be obtained by separate runs of the external
+      stylesheet that would be called using <span class="emphasis"><em>fn:transform()</em></span>,
+      and memory can be measured, for example on Linux or Unix systems with
+        <span class="emphasis"><em>/usr/bin/time</em></span> (<span class="emphasis"><em>time</em></span> without
+      the path is a built-in in many shells, including
+      <span class="emphasis"><em>bash</em></span>, that gives less information).</p><p>People running timings need to keep overall system activity in mind,
+      as well as overall system memory usage.</p><p>In the case of FreqX, memory rose to over sixty gigabytes on a test
+      collection, and it became clear it was keeping all of the documents in
+      memory.</p><p>Changing FreqX to use fn:transform() on the result of doc($filename)
+      did not help.</p><p>Passing $filename as a parameter to the external stylesheet
+        <span class="emphasis"><em>did</em></span> help: runtime was reduced dramatically, as was
+      memory usage.</p><p>A further refinement was to keep namespace URIs as integer keys into a
+      map instead of strings, but the additional complexity of passing that back
+      from the external stylesheet did not seem justified; the author may return
+      to this in the future.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="customizations.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar06.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar06s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

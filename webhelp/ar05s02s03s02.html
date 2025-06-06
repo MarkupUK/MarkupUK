@@ -1,0 +1,35 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Execution Logic</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar05s02s03.html" title="Implementation and Execution" /><link rel="prev" href="ar05s02s03s01.html" title="Tools and Libraries" /><link rel="next" href="ar05s02s03s03.html" title="Reporting" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar05s02s03s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar05s02s03s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1730"><div class="titlepage"><div><div><h4 class="title">Execution Logic</h4></div></div></div><p>Once test cases have been defined, the validation suite can be used with any RELAX NG or XSD schema. The primary validation process is managed through XQuery functions, which allow users to address the following:</p><div class="example" id="d5e1733"><p class="title"><strong>Example 4. Map schemas to their corresponding test cases</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">declare variable $sch:schemas as map(*) := map { 
+  "bloomsbury-mods": map { 
+    "schema": "..\..\content-models\DocBook\schema\bloomsbury-mods.rnc", 
+    "test-cases": "bloomsbury-mods-tests" 
+  }, 
+  "vra-strict-bloomsbury": map { 
+    "schema": "..\..\content-models\VRA\schema\vra-strict-bloomsbury.xsd", 
+    "test-cases": "vra-strict-bloomsbury-tests" 
+  },  
+  "bmyTEI-tests": map { 
+    "schema": "..\..\content-models\TEI\schema\bmyTEI.rnc", 
+    "test-cases": "bmyTEI-tests" 
+  } 
+};</pre></div></div><br class="example-break" clear="none" /><div class="example" id="d5e1736"><p class="title"><strong>Example 5. Target a specific schema during the test suite validation process</strong></p><div class="example-contents"><pre class="programlisting" xml:space="preserve">declare function sch:options($userInput) { 
+  let $schema := $sch:schemas($userInput) 
+  return 
+  $schema 
+};</pre></div></div><br class="example-break" clear="none" /><p>Additionally, BaseX’s built-in XQuery validation functions are used to assess whether XML documents conform to their corresponding schemas.</p><div class="informalexample"><p><span class="bold"><strong>Function</strong></span>: <code class="function">validate:xsd-report()</code></p><p><span class="bold"><strong>Signature</strong></span>:</p><pre class="programlisting" xml:space="preserve">validate:xsd-report( 
+              $input    as item(), 
+              $schema   as xs:string?  := (), 
+              $options  as map(*)      := {} 
+            ) as element(report)</pre><p><span class="bold"><strong>Summary</strong></span>:</p><p>Validates the XML <code class="varname">$input</code> document against a <code class="varname">$schema</code> and returns warnings, errors and fatal errors as XML.</p></div><div class="informalexample"><p><span class="bold"><strong>Function</strong></span>: <code class="function">validate:rng-report()</code></p><p><span class="bold"><strong>Signature</strong></span>:</p><pre class="programlisting" xml:space="preserve">validate:rng-report( 
+               $input    as item(), 
+               $schema   as xs:string, 
+               $compact  as xs:boolean?  := {} 
+             ) as element(report)</pre><p><span class="bold"><strong>Summary</strong></span>:</p><p>Validates the XML <code class="varname">$input</code> document against a <code class="varname">$schema</code>, using the XML or <code class="varname">$compact</code> notation, and returns warnings, errors and fatal errors as XML.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar05s02s03s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar05s02s03.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar05s02s03s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

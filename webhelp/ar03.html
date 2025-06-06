@@ -1,0 +1,64 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>XForms Extended</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><meta name="description" content="The web scene has exploded in the last couple of decades, transitioning from static web pages to dynamic, responsive web applications. Facilitating that are frameworks like React, Vue, Svelte, and Angular that prioritize user experience, component-based architecture, and seamless integration with modern APIs, without sacrificing the developer experience. Meanwhile, XForms, while powerful for data-centric applications, has for the most part fallen behind. Its development has not caught up with these rapid changes, leaving a growing gap in terms of modern UI/UX capabilities, component flexibility, and integration with the wider web development ecosystem. This disparity is not just a matter of preference; it risks XForms becoming irrelevant. While the development of XForms 2.0 is ongoing, the progress has been undeniably slow, inviting a different approach to address these issues rather than waiting for the eventual arrival of XForms 2.0. The web is not waiting for XForms, and the momentum behind competing technologies continues to build. We think that leveraging existing web technologies to address the most pressing limitations of current XForms might be a more beneficial approach. The idea we came up with is to use a syntax similar to XForms (let's call it Extended XForms for now), which then will be converted to XForms code. This syntax will extend the original one in three ways:Style extension this makes minor or no changes to the XML code, but introduces new CSS styles, mostly for layouts, but also for theming when needed.Basic extension: the simple and concise syntax of Extended XForms is converted to regular XForms, which then can be used as any other XForms document. These extra functionalities can be done in pure XForms but will be complex and difficult to implement and maintain.This may also introduce extra JavaScript code for extra functionalities.Functional extension this provides additional functionality not currently in XForms, commonly to read data directly from XForms models, write data, and listen to changes.Functional extensions depend on the XForms renderer and will not work in the same way for all XForms implementations." /><meta name="keywords" content="XML, XForms, XSLTForms, JavaScript" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="prev" href="past-papers-on-ixml.html" title="Chronological List of Past Papers on Invisible XML" /><link rel="next" href="ar03s01.html" title="Introduction" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="past-papers-on-ixml.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s01.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div xml:lang="en" class="article" id="d5e975"><div class="titlepage"><div><div><h1 class="title">XForms Extended</h1></div><div><h3 class="subtitle"><em>for XSLTForms</em></h3></div><div><div class="author"><h3 class="author">Charafeddine Cheraa</h3><div class="affiliation"><span class="jobtitle">Senior frontend developer<br clear="none" /></span><span class="orgname">Muthabr<br clear="none" /></span></div><code class="email">&lt;<a class="email" href="mailto:ccheraa@gmail.com" shape="rect">ccheraa@gmail.com</a>&gt;</code><code class="email">&lt;<a class="email" href="mailto:ccheraa@muthabr.com" shape="rect">ccheraa@muthabr.com</a>&gt;</code></div></div><div><div class="abstract"><p class="title"><strong>Abstract</strong></p><p>The web scene has exploded in the last couple of decades, transitioning from static web
+        pages to dynamic, responsive web applications.
+        Facilitating
+        that
+        are
+        frameworks like React, Vue, Svelte, and Angular
+        that
+        prioritize user experience, component-based architecture, and seamless integration with
+        modern APIs, without sacrificing the developer experience.</p><p>Meanwhile, XForms, while powerful for data-centric applications, has for the most part
+        fallen
+        behind. Its development
+        has
+        not
+        caught
+        up with these rapid changes, leaving a growing gap in terms of modern UI/UX capabilities,
+        component flexibility, and integration with the wider web development ecosystem. This
+        disparity is not just a matter of preference; it risks XForms becoming irrelevant.</p><p>While the development of XForms 2.0 is
+        ongoing, the
+        progress has been undeniably slow,
+        inviting
+        a different approach to address
+        these issues
+        rather
+        than
+        waiting
+        for the eventual arrival of XForms 2.0. The web is not waiting for XForms,
+        and the momentum behind competing
+        technologies
+        continues to build.</p><p>We think that leveraging existing web technologies to address the most pressing
+        limitations of current
+        XForms might be a
+        more beneficial approach.</p><p>The idea we came up with is to use a syntax similar to XForms (let's call it Extended
+        XForms for now), which then will be converted to XForms code. This syntax will extend the
+        original one in three ways:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><span class="bold"><strong>Style extension</strong></span> this
+              makes
+              minor
+              or
+              no changes to the XML code, but
+              introduces
+              new CSS styles, mostly for layouts, but also for theming when needed.</p></li><li class="listitem"><p><span class="bold"><strong>Basic extension</strong></span>: the simple and concise syntax
+              of Extended XForms is converted to regular XForms, which then can be used as any other
+              XForms document.</p><p> These extra functionalities can be done in pure XForms but will be complex and
+              difficult to implement and maintain.</p><p>This may also introduce extra JavaScript code for extra functionalities.</p></li><li class="listitem"><p><span class="bold"><strong>Functional extension</strong></span> this provides
+              additional functionality
+              not
+              currently in
+              XForms,
+              commonly to read data directly from XForms models, write data, and
+              listen to
+              changes.</p><p>Functional
+              extensions depend on the XForms
+              renderer
+              and will not work
+              in
+              the same way for all XForms implementations.</p></li></ol></div></div></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="ar03s01.html" shape="rect">Introduction</a></span></dt><dt><span class="section"><a href="ar03s02.html" shape="rect">The problem</a></span></dt><dd><dl><dt><span class="section"><a href="ar03s02s01.html" shape="rect">Issue #1: Cumbersome layouts</a></span></dt><dt><span class="section"><a href="ar03s02s02.html" shape="rect">Issue #2: Complex logic</a></span></dt><dt><span class="section"><a href="ar03s02s03.html" shape="rect">Issue #3: The need for advanced JavaScript code</a></span></dt></dl></dd><dt><span class="section"><a href="ar03s03.html" shape="rect">The proposed solution:</a></span></dt><dd><dl><dt><span class="section"><a href="ar03s03s01.html" shape="rect">XForms code</a></span></dt><dt><span class="section"><a href="ar03s03s02.html" shape="rect">JavaScript and CSS code</a></span></dt><dt><span class="section"><a href="ar03s03s03.html" shape="rect">Extended XForms Components</a></span></dt></dl></dd><dt><span class="section"><a href="ar03s04.html" shape="rect">Weaknesses and Limitations</a></span></dt><dt><span class="section"><a href="ar03s05.html" shape="rect">What's next</a></span></dt><dt><span class="bibliography"><a href="references.html" shape="rect">Bibliography</a></span></dt></dl></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="past-papers-on-ixml.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"> </td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar03s01.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
