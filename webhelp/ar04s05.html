@@ -1,0 +1,227 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Generating the digest file</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s04.html" title="Serializing the parse tree" /><link rel="next" href="ar04s06.html" title="Refining the digest" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s04.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s06.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1373"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Generating the digest file</h2></div></div></div><p>Let's look at another stage of the transpilation process: generation of the digest file.
+    In the existing transpiler, this reads the entire collection of 2100 XML files produced by
+    the Java parser, and constructs a single XML file (the digest) containing summary details
+    of the classes, interfaces, and methods. Here is a short extract (the real thing is about
+    71,000 lines):</p><pre class="programlisting" xml:space="preserve">
+&lt;digest&gt;
+   &lt;module package="net.sf.saxon.tree"&gt;
+      &lt;class name="NamespaceNode"&gt;
+         &lt;implements name="net.sf.saxon.om.NodeInfo"/&gt;
+         &lt;constructor params="net.sf.saxon.om.NodeInfo|net.sf.saxon.om.NamespaceBinding|int"/&gt;
+         &lt;field name="element" type="net.sf.saxon.om.NodeInfo"/&gt;
+         &lt;field name="nsBinding" type="net.sf.saxon.om.NamespaceBinding"/&gt;
+         &lt;field name="position" type="int"/&gt;
+         &lt;field name="fingerprint" type="int"/&gt;
+         &lt;method name="getTreeInfo" returns="net.sf.saxon.om.TreeInfo"/&gt;
+         &lt;method name="head" returns="net.sf.saxon.om.NodeInfo" csReturns="net.sf.saxon.om.Item"/&gt;
+         &lt;method name="getNodeKind" returns="int"/&gt;
+         &lt;method name="equals" returns="boolean" sig="java.lang.Object" params="java.lang.Object"/&gt;
+         &lt;method name="hashCode" returns="int"/&gt;
+         &lt;method name="getSystemId" returns="java.lang.String"/&gt;
+         &lt;method name="getPublicId" returns="java.lang.String"/&gt;
+         &lt;method name="getBaseURI" returns="java.lang.String"/&gt;
+         &lt;method name="getLineNumber" returns="int"/&gt;
+         &lt;method name="getColumnNumber" returns="int"/&gt;
+         ...
+</pre><p>The JSON equivalent, which we will be generating here, mirrors this closely:</p><pre class="programlisting" xml:space="preserve">
+ { "digest":[
+    {
+      "package": "net.sf.saxon.tree",
+      "class": [
+        { "name":"NamespaceNode" },
+        { "implements":{ "name":"net.sf.saxon.om.NodeInfo" } },
+        { "constructor":{ "params":"net.sf.saxon.om.NodeInfo|net.sf.saxon.om.NamespaceBinding|int" } },
+        { "field":{ "name":"element", "type":"net.sf.saxon.om.NodeInfo" } },
+        { "field":{ "name":"nsBinding", "type":"net.sf.saxon.om.NamespaceBinding" } },
+        { "field":{ "name":"position", "type":"int" } },
+        { "field":{ "name":"fingerprint", "type":"int" } },
+        { "method":{ "name":"getTreeInfo", "returns":"net.sf.saxon.om.TreeInfo" } },
+        { "method":{ "name":"head", "returns":"net.sf.saxon.om.NodeInfo", "csReturns":"net.sf.saxon.om.Item" } },
+        { "method":{ "name":"getNodeKind", "returns":"int" } },
+        { "method":{ "name":"equals", "returns":"boolean", "sig":"java.lang.Object", "params":"java.lang.Object" } },
+        { "method":{ "name":"hashCode", "returns":"int" } },
+        { "method":{ "name":"getSystemId", "returns":"java.lang.String" } },
+        { "method":{ "name":"getPublicId", "returns":"java.lang.String" } },
+        { "method":{ "name":"getBaseURI", "returns":"java.lang.String" } },
+        { "method":{ "name":"getLineNumber", "returns":"int" } },
+        { "method":{ "name":"getColumnNumber", "returns":"int" } },     
+      </pre><p>Actually, what I'm showing here is the result of converting the XML digest to JSON using the
+    4.0 <code class="code">element-to-map()</code> function. In this stage of the case study, we're looking at the code
+    needed to generate this structure, but I didn't actually complete the exercise, partly because the
+    code uses features not yet implemented in Saxon.</p><p>The stylesheeet is fairly small (just 180 lines). It uses a mode with <code class="code">on-no-match="fail"</code> 
+    so there has to be an explicit template rule for every element of interest. The top two templates 
+    (in the XML version) are:</p><pre class="programlisting" xml:space="preserve">
+ &lt;xsl:template name="xsl:initial-template"&gt;
+    &lt;digest&gt;
+       &lt;xsl:apply-templates select="collection($xmlDir || 
+                             '?recurse=yes;select=*.xml')"/&gt;
+    &lt;/digest&gt;     
+ &lt;/xsl:template&gt;
+ 
+ &lt;xsl:template match="root"&gt;
+    &lt;module package="{f:qualifiedName(packageDeclaration/name)}"&gt;
+       &lt;xsl:apply-templates select="types/type"/&gt;
+    &lt;/module&gt;
+ &lt;/xsl:template&gt;      
+      </pre><p>So the entry-point template reads all the XML files in a directory whose name is supplied
+    as a parameter, and invokes a template to process each file independently; this selects
+    the only elements of interest, which are the type elements (a type being typically a class
+    or interface). These two templates translate in the JSON version to:</p><pre class="programlisting" xml:space="preserve">
+ &lt;xsl:template name="xsl:initial-template"&gt;
+    &lt;xsl:map&gt;
+       &lt;xsl:map-entry key="'digest'"&gt;
+          &lt;xsl:array&gt;
+             &lt;xsl:for-each select="(collection($jsonDir || 
+                           '?recurse=yes;select=*.json') ! pin(.)) ? *"&gt;
+                &lt;xsl:array-member&gt;
+                   &lt;xsl:map&gt;
+                      &lt;xsl:apply-templates select="."/&gt;
+                   &lt;/xsl:map&gt;
+                &lt;/xsl:array-member&gt;
+             &lt;/xsl:for-each&gt;
+          &lt;/xsl:array&gt;
+       &lt;/xsl:map-entry&gt; 
+    &lt;/xsl:map&gt;
+ &lt;/xsl:template&gt;
+ 
+ &lt;xsl:template match="?root"&gt;  &lt;!-- match=".[label(.)?key = 'root']" --&gt; 
+    &lt;xsl:map-entry key="'module'"&gt;
+       &lt;xsl:map&gt;
+          &lt;xsl:map-entry key="'_package'" 
+                         select="f:qualifiedName(?packageDeclaration?name)"/&gt;
+          &lt;xsl:apply-templates select="?types?type"/&gt;
+       &lt;/xsl:map&gt;
+    &lt;/xsl:map-entry&gt;
+ &lt;/xsl:template&gt;      
+      </pre><p>Observations:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The JSON version of the digest is a singleton map, with key <code class="code">"digest"</code>,
+        whose value is an array of maps. Constructing this top-level map-of-array-of-maps is
+        somewhat verbose, but straightforward enough.</p></li><li class="listitem"><p>The first template rule applies the <code class="code">pin()</code> function to each of the
+        2100 XML documents in the collection, before applying templates to the result. I'll have
+        more to say about the <code class="code">pin()</code> function in due course, what it does is to
+        create a copy of the tree of maps and arrays, with each item in the tree augmented
+        with a label carrying information about where it was found in the tree.</p><p>It's possible we may decide that when <code class="code">xsl:apply-templates</code>
+        selects a map or array, it should be pinned automatically. That decision hasn't been
+        made yet.</p></li><li class="listitem"><p>The second template rule is shown with two alternative forms of the match pattern.
+        The commented-out version works in Saxon today: it tests whether the label of the item
+        (created when it was pinned) has a <code class="code">key</code> property of <code class="code">root</code>.
+        The second form is a proposed contraction: <code class="code">match="?root"</code> is proposed
+        syntax equivalent to the first form. This would only work if the tree has been pinned,
+        because without this, a value in the tree knows nothing about its associated key.
+        (Contrast this with the XDM model for XML, where an element name is an intrinsic
+        property of an element node.)</p></li></ul></div><p>This stylesheet processes the input JSON by applying templates to the values found
+    in its arrays and maps: the default processing is <code class="code">&lt;xsl:apply-templates select="?*"/&gt;</code>.
+    This selects the values, not the key-value pairs. I have experimented with selecting key
+    value pairs instead, using <code class="code">&lt;xsl:apply-templates select="map:entries(.)"/&gt;</code>,
+    and there are some cases where this is a good solution, but I have usually found it causes
+    confusion. If the values are labelled with their associated key (by pinning the tree before
+    we start), then it turns out not to be necessary.</p><p>For many of the functions and templates in the stylesheet, the translation is fairly
+    direct. For example the XML version has a function to test whether a Java interface
+    has an annotation marking it as a functional interface
+      <a href="#ftn.d5e1406" class="footnote" shape="rect"><sup class="footnote" id="d5e1406">[5]</sup></a>:</p><pre class="programlisting" xml:space="preserve">
+ &lt;xsl:function name="f:isDelegate" as="xs:boolean"&gt;
+    &lt;xsl:param name="interfaceDecl" as="element()"/&gt;
+    &lt;xsl:choose&gt;
+       &lt;xsl:when test="$interfaceDecl/annotations/
+                       annotation/name/@identifier='CSharpDelegate'"&gt;
+          &lt;xsl:sequence select="$interfaceDecl/annotations/
+                       annotation[name/@identifier='CSharpDelegate']/
+                       memberValue/@value = 'true'"/&gt;
+       &lt;/xsl:when&gt;
+       &lt;xsl:otherwise&gt;
+          &lt;xsl:sequence select="exists($interfaceDecl
+                       [@nodeType='ClassOrInterfaceDeclaration']
+                       [@isInterface='true']
+                       [annotations/annotation/name/@identifier='FunctionalInterface']
+                       [count(members/member)=1])"/&gt;
+       &lt;/xsl:otherwise&gt;
+    &lt;/xsl:choose&gt;      
+ &lt;/xsl:function&gt;      
+      </pre><p>In the JSON version this becomes:</p><pre class="programlisting" xml:space="preserve">
+ &lt;xsl:function name="f:isDelegate" as="xs:boolean"&gt;
+    &lt;xsl:param name="interfaceDecl" as="item()"/&gt;
+    &lt;xsl:choose&gt;
+       &lt;xsl:when test="$interfaceDecl?annotations
+                       ?*?name?_identifier='CSharpDelegate'"&gt;
+          &lt;xsl:sequence select="$interfaceDecl?annotations
+                       ?*[?name?_identifier='CSharpDelegate']
+                       ?memberValue?_value = 'true'"/&gt;
+       &lt;/xsl:when&gt;
+       &lt;xsl:otherwise&gt;
+          &lt;xsl:sequence select="exists($interfaceDecl
+                       [?_nodeType='ClassOrInterfaceDeclaration']
+                       [?_isInterface='true']
+                       [?annotations?*?name?_identifier='FunctionalInterface']
+                       [count(?members?*)=1])"/&gt;
+       &lt;/xsl:otherwise&gt;
+    &lt;/xsl:choose&gt;      
+ &lt;/xsl:function&gt;      
+      </pre><p>which, although it might appear a little cryptic at first sight, is actually a very
+    direct translation.</p><p>Incidentally, both versions could take advantage of the new <code class="code">xsl:if</code> 
+      instruction in XSLT 4.0: the JSON version could be written:</p><pre class="programlisting" xml:space="preserve">
+&lt;xsl:function name="f:isDelegate" as="xs:boolean"&gt;
+    &lt;xsl:param name="interfaceDecl" as="item()"/&gt;
+    &lt;xsl:if test="$interfaceDecl?annotations
+                  ?*?name?_identifier='CSharpDelegate'"
+            then="$interfaceDecl?annotations
+                  ?*[?name?_identifier='CSharpDelegate']
+                  ?memberValue?_value = 'true'"
+            else="exists($interfaceDecl
+                  [?_nodeType='ClassOrInterfaceDeclaration']
+                  [?_isInterface='true']
+                  [?annotations?*?name?_identifier='FunctionalInterface']
+                  [count(?members?*)=1])"/&gt;     
+ &lt;/xsl:function&gt;             
+      </pre><p>This stylesheet outputs JSON, and it is therefore greatly concerned with constructing
+    maps and arrays. We've already seen in the top-level template that this can be rather verbose.
+    There's a lot of this kind of code:</p><pre class="programlisting" xml:space="preserve">
+ &lt;xsl:map&gt;
+    &lt;xsl:map-entry key="'name'" select="f:degenerify(?name?_identifier)"/&gt;
+    &lt;xsl:if test="f:isDelegate(.)"&gt;
+       &lt;xsl:map-entry key="'delegate'" select="1"/&gt;
+    &lt;/xsl:if&gt;
+    ...
+    &lt;xsl:map-entry key="'members'"&gt;
+       &lt;xsl:array&gt;
+          &lt;xsl:for-each select="?members?*[?_nodeType='MethodDeclaration']"&gt;
+             &lt;xsl:array-member&gt;
+                &lt;xsl:apply-templates select="."/&gt;
+             &lt;/xsl:array-member&gt;
+          &lt;/xsl:for-each&gt;
+       &lt;/xsl:array&gt;
+    &lt;/xsl:map-entry&gt;
+ &lt;/xsl:map&gt;      
+</pre><p>and it would be nice to reduce the verbosity if we can. One way of doing this is to do more
+    of the work in XPath expressions rather than XSLT instructions. A couple of new XSLT features are
+    designed to facilitate this: an <code class="code">xsl:select</code> instruction, which evaluates an XPath
+    expression held in its content, and an <code class="code">apply-templates</code> function, which does the same
+    thing as the <code class="code">xsl:apply-templates</code> instruction. With these enhancements, we can
+    almost replace the above code by:</p><pre class="programlisting" xml:space="preserve">
+  &lt;xsl:select&gt; {
+    'name' : f:degenerify(?name?_identifier),
+    'delegate' : xs:integer(f:isDelegate(.)),
+    ...
+    'members' : array:build(?members?*[?_nodeType='MethodDeclaration'],
+                            apply-templates#1)
+  } &lt;/xsl:select&gt;
+      </pre><p>The only ingredient missing here is that map constructors have no way to generate a map
+    entry (such as <code class="code">'delegate'</code>) conditionally. We're working on that one.</p><p>Another attempt to make map construction more concise is a new <code class="code">xsl:record</code>
+    instruction, allowing something like:</p><pre class="programlisting" xml:space="preserve">
+  &lt;xsl:record
+    name = "f:degenerify(?name?_identifier)"
+    delegate = "xs:integer(f:isDelegate(.))"
+    ...
+    members = "array:build(?members?*[?_nodeType='MethodDeclaration'],
+                            apply-templates#1)"/&gt;
+      </pre><p>Again, it offers no way to generate a map entry conditionally.</p><div class="footnotes"><br clear="none" /><hr style="width:100; text-align:left;margin-left: 0" /><div id="ftn.d5e1406" class="footnote"><p><a href="#d5e1406" class="para" shape="rect"><sup class="para">[5] </sup></a>In the Java source code, we use the annotation <code class="code">@CSharpDelegate</code>
+      to mark interfaces that should be transpiled to C# delegates. The JavaParser faithfully
+      copies this annotation into the XML syntax tree, and the transpiler picks it
+      up from there.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s04.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s06.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

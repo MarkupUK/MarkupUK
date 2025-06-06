@@ -1,0 +1,118 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The Structure of a Module</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="modular-ixml.html" title="Modular ixml" /><link rel="prev" href="L96.html" title="Naming and renaming" /><link rel="next" href="L1040.html" title="Semantics" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L96.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L1040.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="L150"><div class="titlepage"><div><div><h2 class="title" style="clear: both">The Structure of a Module</h2></div></div></div><p>
+         A module consists of an otherwise normal ixml grammar, preceded by
+         specifications of rules used from other modules and what is shared
+         for use from this module.
+      </p><p>
+         A specification of what to use from another module lists the rules
+         needed from each module it uses. Such a specification should be
+         recognisable as different from an ixml rule.
+      </p><p>
+         The character to signal such a specification has been chosen as
+         "+", though any character that doesn't start the first
+         ixml rule in a grammar could have been used in the design; ixml
+         rules can start with namestart characters, "-",
+         "^" (and "@" but it is not possible to start
+         the first rule of a grammar with that character):
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses css from css.ixml
+      </pre><p>
+         and
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses iri, url, uri, urn from uri.ixml
+      </pre><p>
+         This specifies which module to use, and which rules from that
+         module are intended to be used.
+      </p><p>
+         It is possible to combine them
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses css from css.ixml; iri, url, uri, urn from uri.ixml
+      </pre><p>
+         The specification of what is allowable to be used from a module is
+         similar:
+      </p><pre class="programlisting" xml:space="preserve">
+         +shares iri, url, uri, urn
+      </pre><p>
+         There are two main choices for a grammar for these. The first
+         literally recognises the structure as it is specified above:
+      </p><pre class="programlisting" xml:space="preserve">
+         module: s, (uses; shares)*, ixml.
+           uses: -"+uses", rs, from++(-";", s).
+         shares: -"+shares", rs, entries.
+           from: entries, rs, -"from", rs, location, s.
+       -entries: share++(-",", s).
+          share: @name, s.
+        @source: iri.
+      </pre><p>
+         where <code class="literal">s</code> is the regular ixml rule for optional
+         whitespace, <code class="literal">rs</code> for required whitespace,
+         <code class="literal">name</code> the rule for a rule name,
+         <code class="literal">ixml</code> the rule for an ixml grammar, and
+         <code class="literal">iri,</code> not defined here, representing an
+         internationalised URI [<a class="link" href="L648.html#iri" title="RFC 3987: Internationalized Resource Identifiers (IRIs)" shape="rect">iri</a>], allowing
+         the use of grammars from external sources, such as:
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses iri from https://example.com/ixml/modules/iri.ixml
+      </pre><p>
+         For a specification like
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses css from css.ixml; iri, url, uri, urn from uri.ixml
+      </pre><p>
+         this produces a resulting structure like
+      </p><pre class="programlisting" xml:space="preserve">
+         &lt;uses&gt;
+            &lt;from source='css.ixml'&gt;
+               &lt;share name='css'/&gt;
+            &lt;/from&gt;
+            &lt;from source='iri.ixml'&gt;
+               &lt;share name='iri'/&gt;
+               &lt;share name='url'/&gt;
+               &lt;share name='uri'/&gt;
+               &lt;share name='urn'/&gt;
+            &lt;/from&gt;
+         &lt;/uses&gt;
+      </pre><p>
+         Alternatively, the grammar could look like:
+      </p><pre class="programlisting" xml:space="preserve">
+            module: s, (multiuse; shares)*, ixml.
+         -multiuse: -"+uses", rs, uses++(-";", s).
+            shares: -"+shares", rs, entries.
+              uses: entries, rs, -"from", rs, from.
+          -entries: share++(-",", s).
+             share: @name, s.
+             @from: iri, s.
+      </pre><p>
+         where the resulting structure then looks like:
+      </p><pre class="programlisting" xml:space="preserve">
+         &lt;uses from='css.ixml'&gt;
+            &lt;share name='css'/&gt;
+         &lt;/uses&gt;
+         &lt;uses from='uri.ixml'&gt;
+            &lt;share name='iri'/&gt;
+            &lt;share name='url'/&gt;
+            &lt;share name='uri'/&gt;
+            &lt;share name='urn'/&gt;
+         &lt;/uses&gt;
+      </pre><p>
+         The advantage of the latter version is that processing is slightly
+         easier, since shallower, with a slight disadvantage with respect
+         to round-tripping, since the two forms
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses css from css.ixml; iri, url, uri, urn from uri.ixml
+      </pre><p>
+         and
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses css from css.ixml
+         +uses iri, url, uri, urn from uri.ixml
+      </pre><p>
+         are no longer distinguishable on roundtripping, since they produce
+         the same serialisation.
+      </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L96.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="modular-ixml.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L1040.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,32 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Enter Invisible XML</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="markupuk2025.html" title="Surfing the web with XProc" /><link rel="prev" href="ar07s02.html" title="Enter Selenium" /><link rel="next" href="ar07s04.html" title="cx:selenium" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e2153"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Enter Invisible XML</h2></div></div></div><p>The most practical thing seemed to be a little text-based scripting
+language. Armed with a small amount of experience using Selenium to test web
+applications and a Selenium reference guide, the plan was:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Invent a little bit of syntax.</p></li><li class="listitem"><p>Write a parser for it.</p></li><li class="listitem"><p>See if it works.</p></li><li class="listitem"><p>Repeat until done.</p></li></ol></div><p>Invisible XML fits perfectly here:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Writing parsers in iXML is easy.</p></li><li class="listitem"><p>My processor already supports Invisible XML,
+so parsing the users script with iXML is easy.</p></li><li class="listitem"><p>The output of a parse is an XML document.</p></li><li class="listitem"><p>In an XProc implementation, writing an interpreter for some XML is easy.</p></li></ol></div><p>Here’s how it started:</p><pre class="programlisting" xml:space="preserve">script version 0.2 .
+page "http://example.com" .</pre><p>We start with a version, so we can adapt as it evolves, and then we know
+we’re going to want to load a page. Next, we write a little bit of iXML to parse
+it:</p><pre class="programlisting" xml:space="preserve">ixml version "1.1-nineml" .
+
+script = versionDecl, s, page, s .
+
+-versionDecl = s, -"script version ", version, s, -"." .
+@version = "0.2" .
+
+@page = -"page", RS, string, s, -"." .
+</pre><p>(I’m eliding a few more lines of grammar needed to parse strings and
+whitespace. I probably didn’t write them for this purpose anyway, I probably
+copied them from some other grammar.)</p><p>Now we just add some more syntax, then some more iXML, and “repeat until done.”</p><p>It finished as 
+<a class="link" href="https://codeberg.org/xmlcalabash/xmlcalabash3/src/branch/main/xmlcalabash/src/main/resources/com/xmlcalabash/ext/selenium-grammar.ixml" target="_top" shape="rect">130ish lines</a> of iXML. It took a few evenings, but
+<a class="link" href="https://docs.xmlcalabash.com/reference/current/cx-selenium.html#selenium-scripting" target="_top" shape="rect">the
+resulting language</a> supports a healthy subset of the Selenium API, three
+kinds of conditional blocks, subroutines, variables, and XPath
+expressions.</p><p>(It is in many respects a very sloppy language with side effects and minimal 
+static checking. But it’s a proof-of-concept as much as anything.)</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar07s02.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="markupuk2025.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar07s04.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

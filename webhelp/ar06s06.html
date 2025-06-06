@@ -1,0 +1,61 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Extensibility</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar06.html" title="Design and Performance of a Corpus Scanner" /><link rel="prev" href="ar06s05.html" title="Parsing Errors" /><link rel="next" href="ar06s07.html" title="Future Work" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar06s05.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar06s07.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e2021"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Extensibility</h2></div></div></div><p>FreqX uses an array of maps to represent information about available
+      reports. In the following code listing, the <code class="code">dc:v()</code> function
+      produces a string, empty in the case of an empty sequence. This is needed
+      as otherwise an empty sequence in a comma-separated sequence would be
+      discarded, and the columns in the CSV files would not align. This is not
+      required for numbers, as zero values are not discarded. An alternative
+      design might have used an array, as these can contain empty sequences.
+      With XSLT 4, a record type would provide increased type safety.</p><pre class="programlisting" xml:space="preserve"><strong class="hl-tag" style="color: #000096">&lt;xsl:variable</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"</span><span class="bold"><strong>csv-makers</strong></span>" as="map(*)"
+  select="
+      (: <span class="emphasis"><em>This data structure drives the various different</em></span>
+       : <span class="emphasis"><em>comma-separated-value (CSV) reports.</em></span>
+       :)
+     map {
+      'elements' : map {
+        'what' : function($counts) { $counts/elements/* },
+        'headings' : 'Element,NS,Nocc,NDocs',
+        'attributes' : function($count as element(count)) {
+          (
+            dc:v($count/@name),
+            dc:v($count/@ns),
+            xs:string($count),
+            dc:v($count/@ndocs)
+          )
+        }
+     },
+     'element-parents' : map {
+       'what' : function($counts) { $counts/elements-parents/* },
+       'headings' : 'Element,NS,Parent,Parent NS,Nocc,NDocs',
+       'attributes' : function($count as element(count)) {
+         (
+            dc:v($count/@name),
+            dc:v($count/@ns),
+            dc:v($count/@parent-name),
+            dc:v($count/@parent-ns),
+            xs:string($count),
+            dc:v($count/@ndocs)
+         )
+       }
+     },</pre><p>The listing is incomplete: there are more entries in the actual XSLT
+      file for FreqX, and of course a new CSV report can be added by inserting a
+      new entry into the map. Entirely new formats, such as JSON, require a
+      separate new template, but the hardest part is deciding how to represent
+      the information in the report.</p><p>The report generator will apply the <span class="emphasis"><em>attributes</em></span>
+      function to each count element in turn, receive a sequence of strings in
+      return, and make them into one item of the report: one comma-separated
+      line, for example. The function examines the attributes of
+        <span class="emphasis"><em>count</em></span> elements to obtain information such as names,
+      namespaces, counts.</p><p>This architecture means that the representation of final counts as
+      count elements can be changed with only moderate effort, and the
+      representation of observations is entirely self-contained in the document
+      scanner. As a result it would be possible to experiment again with maps
+      instead of elements, for example.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar06s05.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar06.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar06s07.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

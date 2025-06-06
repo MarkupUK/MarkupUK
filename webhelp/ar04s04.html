@@ -1,0 +1,94 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Serializing the parse tree</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s03.html" title="Converting the input XML to JSON" /><link rel="next" href="ar04s05.html" title="Generating the digest file" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s03.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s05.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1301"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Serializing the parse tree</h2></div></div></div><p>In the real transpiler, the final stage of processing is to take each of the XML (now JSON)
+    documents representing the parse tree of a module, and, with the aid of information in the digest
+    file, to generate corresponding C# code. This combines two tasks: handling any differences between
+    Java and C#, and then serializing the result (with sufficient indentation and spacing to make it
+    legible, since we're going to need to debug it).</p><p>For the sake of the case study, I decided to skip the business logic of Java to C# conversion,
+    and simply re-serialize the parse tree as Java code. This mirrored the development approach I had used
+    for the transpiler, where I first wrote template rules to convert the parse tree back to Java, and then
+    incrementally modified the XSLT to handle cases where the C# needed to be different.</p><p>I didn't attempt to rewrite all the template rules, but converted a sufficient subset that several
+    of the larger Java modules could be successfully processed. I felt this would give us all the feedback
+    we needed on whether the task was feasible.</p><p>A typical (but very simple) template rule in the transpiler might look like this:</p><pre class="programlisting" xml:space="preserve">
+&lt;xsl:template match="*[@nodeType='ReturnStmt']"&gt;
+    &lt;xsl:call-template name="indent"/&gt;
+    &lt;xsl:text&gt;return &lt;/xsl:text&gt;
+    &lt;xsl:apply-templates select="*"/&gt;
+    &lt;xsl:text&gt;;{$NL}&lt;/xsl:text&gt;
+&lt;/xsl:template&gt;      
+      </pre><p>This rule processes an expression with <code class="code">@nodeType='ReturnStmt'</code> and outputs the
+    (Java or C#) text <code class="code">"return XXX;"</code> with suitable indentation, and followed by a newline.
+    The <code class="code">XXX</code> here is constructed by recursive application of template rules to the single
+    operand of the return statement (if any): <code class="code">select="*"</code> selects the operand, whatever
+    it might be, and processes it using its own template rule.</p><p>The rule doesn't need much changing to handle JSON instead of XML. It becomes:</p><pre class="programlisting" xml:space="preserve">
+&lt;xsl:template match=".[?_nodeType='ReturnStmt']"&gt;
+    &lt;xsl:call-template name="indent"/&gt;
+    &lt;xsl:text&gt;return &lt;/xsl:text&gt;
+    &lt;xsl:apply-templates select="?expression"/&gt;
+    &lt;xsl:text&gt;;{$NL}&lt;/xsl:text&gt;
+&lt;/xsl:template&gt;   
+      </pre><p>Some observations:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p><code class="code">match="."</code> matches anything. We could have written 
+        <code class="code">match="map(*)"</code> to indicate that we're only interested in matching
+        maps; or we could have written <code class="code">match="record(_nodeType, *)</code> to indicate
+        that we're only interested in matching maps having a <code class="code">"_nodeType</code> property.
+        I quite like the idea of combining that with the predicate to allow syntax
+        like <code class="code">match="record(_nodeType='ReturnStmt', *)"</code> but that's wishful thinking
+        for now.</p></li><li class="listitem"><p>The <code class="code">xsl:text</code> instruction produces a text node. The stylesheet as a whole
+          is producing a text file (Java or C# source code), and the traditional way of doing that
+          is to use the XSLT text output method, with a result tree consisting entirely of text nodes.
+          There's a lot of inbuilt XML legacy there, but it works.
+        </p><p>The variable <code class="code">{$NL}</code> is used in preference to a literal newline because
+        it doesn't disrupt the indentation of the code. This is purely a matter of personal style.</p><p>Using the latest features in the XSLT 4.0 spec, we could replace the last three lines
+        in the template body with <code class="code">&lt;xsl:text&gt;return {apply-templates(?expression)};{$NL}&lt;/xsl:text&gt;</code>,
+        which some people might prefer.</p></li><li class="listitem"><p>The original XSLT uses <code class="code">select="*"</code> in the <code class="code">apply-templates</code>
+        instruction to select all children; the revised XSLT uses <code class="code">select="?expression"</code>
+        to select only the <code class="code">expression</code> child. That is because the attributes and children
+        of the element node in the XML have all become named properties in the JSON, and <code class="code">?*</code>
+        would select them all. There's no convenient way with a lookup expression of saying something
+        like <code class="code">select="?* except ?_nodeType"</code> (the XPath <code class="code">except</code> operator
+        only works with nodes). We have an open issue on this.</p></li></ul></div><p>It turns out to be rather convenient that we can define the match patterns of template
+        rules based on the properties of a map in the JSON, rather than on the associated key. If
+    instead of <code class="code">"right":{"_nodeType":"NullLiteralExpr"}</code> we had to cope with
+    <code class="code">"NullLiteralExpr":{"_role":"right"}</code> (a design that could equally well have
+    been chosen), then the matching would become rather more complex, as we shall see.</p><p>While most of the template rules in this stylesheet match on the value of the
+    <code class="code">nodeType</code> attribute, this isn't true of all of them.</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>With the JSON tree, there's no obvious equivalent of <code class="code">match="/"</code>,
+        which matches the root of the tree. There's a good reason for this: the XDM model
+        for JSON doesn't include parent pointers, so a map or array that's at the top of
+        the tree produced by parsing JSON doesn't actually <span class="emphasis"><em>know</em></span>
+        that it's at the top of the tree.</p><p>With this example, we know that the JSON is in the form of a singleton map
+        with the key <code class="code">root</code>: that is, the JSON starts with:</p><pre class="programlisting" xml:space="preserve">
+    { "root":{
+        "_nodeType": "CompilationUnit",
+        "packageDeclaration": {          
+        </pre><p>and we can take advantage of this by using <code class="code">match="record(root)"</code>
+        to match the outermost map.</p></li><li class="listitem"><p>In other cases where the original stylesheet matched on element name, it was
+        usually possible to exploit redundancy in the data to match on properties instead.
+        For example the element with name <code class="code">packageDeclaration</code> always
+        has the attribute <code class="code">nodeType="packageDeclaration"</code>, and the element
+        with name <code class="code">imports</code> contains a sequence of elements each having the
+        attribute <code class="code">nodeType="importDeclaration"</code>.</p><p>In one or two cases a template rule that matched on an element name
+        (to handle a particular part of an expression, such a the <code class="code">finally</code>
+        clause of a try/catch) could simply be inlined into the calling template.</p></li></ul></div><p>The conclusion from this exercise was that the conversion to handle JSON rather than
+    XML input was straightforward — but that we had been lucky. The template rules all matched
+    on attribute values rather than element names; and none of them made use of features such as
+    XML node identity, or access to parents, ancestors, or siblings, that would be difficult
+    to replicate in the JSON world.</p><p>Also: I've glossed over the fact that in this phase, I was merely looking at the code
+    that serializes the parse tree back to Java, and skipped the “business logic” that does the
+    conversion from Java to C#. That code, from a fairly superficial examination, includes
+    a few things that are rather harder to deal with:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The template rules access information from the digest file using an <code class="code">xsl:key</code>
+        definition. The key definition is essentially the same as that described in the subsequent
+        section <span class="emphasis"><em>Refining the digest file</em></span>, and creates the same challenges.</p></li><li class="listitem"><p>There are a number of functions and templates that use the parent or attribute axis
+        to examine the context of an expression. For example there is a function <code class="code">isInterfaceMember</code>
+        that distinguishes methods defined in a class from methods defined in an interface, which it
+        does by searching the ancestor axis to see whether the containing type is a class or an interface.
+        With a JSON model there are always two ways of tackling this: the needed context information
+        (class or interface?) can be passed down the call tree as a tunnel parameter, or the mechanism
+        for pinning the tree can be used to expose an equivalent to the ancestor axis. This is discussed
+        further in a later section.</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s03.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s05.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,65 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Semantics</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="modular-ixml.html" title="Modular ixml" /><link rel="prev" href="L150.html" title="The Structure of a Module" /><link rel="next" href="L218.html" title="Processing" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L150.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L218.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="L1040"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Semantics</h2></div></div></div><p>
+         There are some semantic requirements:
+      </p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist compact" style=""><li class="listitem"><p>
+               all modules used must exist;
+            </p></li><li class="listitem"><p>
+               a module must share the rules mentioned to be used from that
+               module;
+            </p></li><li class="listitem"><p>
+               all names in <code class="literal">uses</code> and
+               <code class="literal">shares</code> specifications in a module must be
+               unique;
+            </p></li><li class="listitem"><p>
+               a module must not define a rule for any name that it
+               <code class="literal">uses</code>;
+            </p></li><li class="listitem"><p>
+               a module must define rules for all names it
+               <code class="literal">shares</code>.
+            </p></li></ul></div><p>
+         Modules are allowed to invoke each other: consider a programming
+         language where declarations can include procedures, and procedures
+         can include declarations, then the module for procedures would
+         have:
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses declaration from declaration.ixml
+         +shares procedure
+      </pre><p>
+         and the module for declarations would have:
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses procedure from procedure.ixml
+         +shares declaration
+      </pre><p>
+         This illustrates that a <code class="literal">uses</code> specification is
+         different from, for instance, a <code class="literal">#include</code>
+         statement in C preprocessing, since <code class="literal">uses</code> only
+         ensures that the module will be present in the final grammar.
+      </p><p>
+         Note that a module can only share rules it defines; it is not
+         permitted to share a rule from a different module like this:
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses x, y from z.ixml
+         +shares x
+      </pre><p>
+         So, having defined what a module looks like, we can now use it to
+         define itself:
+      </p><pre class="programlisting" xml:space="preserve">
+         +uses ixml, name, s, rs from ixml.ixml; iri from iri.ixml
+         +shares module
+
+            module: s, (multiuse; shares)*, ixml.
+         -multiuse: -"+uses", rs, uses++(-";", s).
+            shares: -"+shares", rs, entries.
+              uses: entries, rs, -"from", rs, from.
+          -entries: share++(-",", s).
+             share: @name, s.
+             @from: iri, s.
+      </pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L150.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="modular-ixml.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L218.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

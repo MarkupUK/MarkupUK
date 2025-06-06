@@ -1,0 +1,44 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="modular-ixml.html" title="Modular ixml" /><link rel="prev" href="L46.html" title="Contents" /><link rel="next" href="L112.html" title="Requirements" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L46.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L112.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="L48"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Introduction</h2></div></div></div><p>
+         Invisible XML, ixml for short [<a class="link" href="L648.html#ixml" title="Invisible XML Specification" shape="rect">ixml</a>],
+         is a notation and process that uses context-free grammars to
+         describe the format of textual documents, allowing documents to be
+         parsed into an abstract parse-tree, which can be processed in
+         various ways, but principally serialised into an XML document,
+         thus making the implicit structure of the textual document
+         explicit in the XML.
+      </p><p>
+         While most current ixml grammars are small (the grammar for ixml
+         itself for example is around 70 lines), it can be envisaged that
+         in the future large grammars will emerge containing subparts that
+         are authored by different people. As an example, there is an ixml
+         grammar for XPath 4 at around 350 lines
+         [<a class="link" href="L648.html#jwl" title="Invisible XML workbench" shape="rect">jwl</a>] which could be used by grammars
+         for languages that use XPath 4.
+      </p><p>
+         In [<a class="link" href="L648.html#vdb" title="Disambiguation Filters for Scannerless Generalized LR Parsers" shape="rect">vdb</a>], van den Brand <span class="emphasis"><em>et
+         al.</em></span> note the advantage of context-free generalised
+         parsing, which is used by ixml, over other restricted forms:
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="emphasis"><em>"the class of context-free grammars is closed
+            under union, in contrast with all proper subclasses of
+            context-free grammars. [...] The compositionality of
+            context-free grammars opens up the possibility of developing
+            modular syntax definition formalisms. Modularity in programming
+            languages and other formalisms is one of the key beneficial
+            software engineering concepts."</em></span>
+         </p></blockquote></div><p>
+         What this is saying, is that if you have, for instance, two LL1
+         grammars and merge them, the result may not still be LL1, but if
+         you merge two general context-free grammars, the result will still
+         be context-free, and this is one of the advantages of context-free
+         generalised parsing, that you can modularise them.
+      </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="L46.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="modular-ixml.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="L112.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>

@@ -1,0 +1,39 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Selecting the case study</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s01.html" title="Introduction" /><link rel="next" href="ar04s03.html" title="Converting the input XML to JSON" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+          
+          var prefix = "index.html";
+          
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s01.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s03.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1230"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Selecting the case study</h2></div></div></div><p>The two key criteria for selecting a case study were (a) that use of JSON (rather than XML)
+    should be a natural choice for the input and output data, and (b) that the data should be
+    recursive — because it's with recursive data structures that the recursive-descent processing
+    model becomes a necessary part of the solution.</p><p>The application that best fitted these requirements was the Java-to-C# transpiler, which
+    I described at Markup UK in 2021: [<a class="citation" href="references.html#d5e1561" shape="rect"><span class="citation">Kay 2021</span></a>]
+    This is an application that is written almost entirely in XSLT (with a small amount of control
+    logic in Java and Gradle). It is a live application, used internally by Saxonica on a daily basis
+    to transform our Java source code into C# source code, which is then used to build the SaxonCS
+    product. The application runs in several phases:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>We preprocess the Java code using a Java preprocessor to exclude parts of the code that are
+        are not needed in SaxonCS.</p><p>We run the open-source <code class="code">JavaParser</code> product to generate an XML representation
+        of the syntax tree of each (preprocessed) Java module in the Saxon product. This produces around
+        110Mb of XML across 2100 files.</p></li><li class="listitem"><p>We analyse these files to produce a digest file. The digest contains a list of classes,
+        interfaces, and methods across the product as a whole, in a single XML file. The digest is
+        around 4Mb.</p></li><li class="listitem"><p>We refine the digest file, producing a modified version with augmented information. The
+        main purpose of this process is to work out which Java methods are overridden, so that in the generated C#,
+        the can be suitably annotated with <code class="code">virtual</code> or <code class="code">override</code> modifiers,
+        something that is not possible by looking at each Java module in isolation.</p></li><li class="listitem"><p>We then transform each of the XML modules into a C# serialization, taking account of information
+        in the digest file. This stage is a pure recursive-descent rule-based transformation,
+        using around 350 template rules to handle each of the syntactic constructs identified by the Java
+        parser.</p></li></ol></div><p>As written, the application doesn't use JSON. But what if it did? It's convenient that the
+    JavaParser product generates XML, but it didn't have to be that way: JSON would work just as well.
+    There's no mixed content, which is the key feature that would give XML a natural advantage.</p><p>So the case study pretends that we're starting with a syntax tree in JSON rather than XML;
+    and furthermore, it explores the use of JSON (rather than XML) for the digest file. Rather than converting
+    the JavaParser to emit JSON, however, we start by converting the XML to JSON, which also gives us a chance
+    to test the new features in XSLT 4.0 for converting XML to JSON.</p><p>Some might argue that using XSLT for converting Java to C# is not exactly a typical use case for
+    XSLT. That's a fair criticism. However, I've seen XSLT used for many applications that you might not 
+    consider typical: for example, converting the output of a CAD tool into instructions controlling a 3-D printer.
+    Wherever complex data needs to be structurally transformed, XSLT is a possible solution.</p><p>Note that it wasn't an aim of the case study to produce a complete working application. Rather,
+    the aim was to identify whether this was likely to be feasible, and what difficulties might be encountered,
+    and how proposed new language features might mitigate any problems.</p><p>The remaining sections of the paper focus on what we learned examining each part of the application.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s01.html" shape="rect">Prev</a></span> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="u" href="ar04.html" shape="rect">Up</a></td><td width="40%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s03.html" shape="rect">Next</a></span></td></tr><tr><td width="40%" align="left" valign="top" rowspan="1" colspan="1"> </td><td width="20%" align="center" rowspan="1" colspan="1"><a accesskey="h" href="oxygen-main.html" shape="rect">Home</a></td><td width="40%" align="right" valign="top" rowspan="1" colspan="1"> </td></tr></table></div><div class="footer">Generated by<a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank" shape="rect">                            
+                            &lt;oXygen/&gt; XML WebHelp
+                        </a></div></body></html>
