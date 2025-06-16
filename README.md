@@ -21,3 +21,9 @@
 	- `sidebar.xhtml`
 	- `topnav.xhtml`
 Editing these will apply the changes globally.
+
+## Proceedings
+These are stored and managed in the MUK-proc repository.
+1. Add article XML for each paper and create an XInclude-ing wrapper, based on previous years.
+1. To generate the HTML output, run the built-in oXygen Webhelp Classic transformation scenario.
+1. When publishing, remember to link to the non-frames version of the main page (i.e. `index.html`), so that each paper's distinct URL is displayed in the browser.
