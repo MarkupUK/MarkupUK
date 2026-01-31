@@ -1,6 +1,11 @@
 var localization = new Array();
 
-localization["index.terms.page.title"]="Index Terms";
+localization["advanced_search_tooltip_title"]="Search Syntax Help";
+    localization["reset_search_filters"]="Reset";
+    localization["search_filters"]="Filters";
+    localization["indexing_in_progress"]="The indexing process is in progress. Try again later.";
+    localization["search_index_not_found"]="No content index found to execute the search query.";
+    localization["index.terms.page.title"]="Index Terms";
     localization["toggle.menu"]="Toggle menu";
     localization["label.cleditorControls"]="Insert your comment. Press Alt+S to submit your comment or Alt+` to discard it.";
     localization["label.closeDialog"]="Close dialog";

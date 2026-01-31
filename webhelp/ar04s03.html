@@ -1,12 +1,12 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Converting the input XML to JSON</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s02.html" title="Selecting the case study" /><link rel="next" href="ar04s04.html" title="Serializing the parse tree" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Converting the input XML to JSON</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s02.html" title="Selecting the case study" /><link rel="next" href="ar04s04.html" title="Serializing the parse tree" /><!--  Generated with Oxygen version 26.0, build number 2023110909.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1253"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Converting the input XML to JSON</h2></div></div></div><p>This was an opportunity to try out the new <code class="code">fn:element-to-map</code> function.
-    I described the basic design for this function in a paper at Balisage in 2023[<a class="citation" href="references.html#d5e1571" shape="rect"><span class="citation">Kay 2023</span></a>], 
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2023110909" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s02.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s04.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1253"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Converting the input XML to JSON</h2></div></div></div><p>This was an opportunity to try out the new <code class="code">fn:element-to-map</code> function.
+    I described the basic design for this function in a paper at Balisage in 2023[<a class="citation" href="bi04.html#d5e1571" shape="rect"><span class="citation">Kay 2023</span></a>], 
     
     
     and we had an implementation in Saxon ready to test.</p><p>The function doesn't convert lexical XML to lexical JSON: rather, it converts the XDM representation
@@ -16,40 +16,38 @@
     conversion because (a) no schema was available, and (b) generating one wouldn't be particularly useful, because
     of the way the particular XML vocabulary works. Specifically, a typical fragment of the XML 
     (representing the Java code <code class="code">if (iter.next() != null) {iter.close(); return BooleanValue.FALSE}</code>)
-      looks like this:</p><pre class="programlisting" xml:space="preserve">
- &lt;statement nodeType="IfStmt"&gt;
-    &lt;condition nodeType="BinaryExpr" operator="NOT_EQUALS"&gt;
-       &lt;left nodeType="MethodCallExpr" &gt;
-          &lt;name nodeType="SimpleName" identifier="next"/&gt;
-          &lt;scope nodeType="NameExpr"&gt;
-             &lt;name nodeType="SimpleName" identifier="iter"/&gt;
-          &lt;/scope&gt;
-       &lt;/left&gt;
-       &lt;right nodeType="NullLiteralExpr"/&gt;
-    &lt;/condition&gt;
-    &lt;thenStmt nodeType="BlockStmt"&gt;
-       &lt;statements&gt;
-          &lt;statement nodeType="ExpressionStmt"&gt;
-             &lt;expression nodeType="MethodCallExpr" &gt;
-                &lt;name nodeType="SimpleName" identifier="close"/&gt;
-                &lt;scope nodeType="NameExpr"&gt;
-                   &lt;name nodeType="SimpleName" identifier="iter"/&gt;
-                &lt;/scope&gt;
-             &lt;/expression&gt;
-          &lt;/statement&gt;
-          &lt;statement nodeType="ReturnStmt"&gt;
-             &lt;expression nodeType="FieldAccessExpr"&gt;
-                &lt;name nodeType="SimpleName" identifier="FALSE"/&gt;
-                &lt;scope nodeType="NameExpr"&gt;
-                   &lt;name nodeType="SimpleName" 
-                         identifier="BooleanValue"/&gt;
-                &lt;/scope&gt;
-             &lt;/expression&gt;
-          &lt;/statement&gt;
-       &lt;/statements&gt;
-    &lt;/thenStmt&gt;
- &lt;/statement&gt;           
-      </pre><p>The element names here (<code class="code">left</code>, <code class="code">right</code>, <code class="code">condition</code>,
+      looks like this:</p><pre class="programlisting" xml:space="preserve"><strong xmlns="" class="hl-tag">&lt;statement</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"IfStmt"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+    <strong xmlns="" class="hl-tag">&lt;condition</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"BinaryExpr"</span> <span xmlns="" class="hl-attribute">operator</span>=<span xmlns="" class="hl-value">"NOT_EQUALS"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+       <strong xmlns="" class="hl-tag">&lt;left</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"MethodCallExpr"</span><strong xmlns="" class="hl-tag"> &gt;</strong>
+          <strong xmlns="" class="hl-tag">&lt;name</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"SimpleName"</span> <span xmlns="" class="hl-attribute">identifier</span>=<span xmlns="" class="hl-value">"next"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+          <strong xmlns="" class="hl-tag">&lt;scope</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"NameExpr"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+             <strong xmlns="" class="hl-tag">&lt;name</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"SimpleName"</span> <span xmlns="" class="hl-attribute">identifier</span>=<span xmlns="" class="hl-value">"iter"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+          <strong xmlns="" class="hl-tag">&lt;/scope&gt;</strong>
+       <strong xmlns="" class="hl-tag">&lt;/left&gt;</strong>
+       <strong xmlns="" class="hl-tag">&lt;right</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"NullLiteralExpr"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+    <strong xmlns="" class="hl-tag">&lt;/condition&gt;</strong>
+    <strong xmlns="" class="hl-tag">&lt;thenStmt</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"BlockStmt"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+       <strong xmlns="" class="hl-tag">&lt;statements&gt;</strong>
+          <strong xmlns="" class="hl-tag">&lt;statement</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"ExpressionStmt"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+             <strong xmlns="" class="hl-tag">&lt;expression</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"MethodCallExpr"</span><strong xmlns="" class="hl-tag"> &gt;</strong>
+                <strong xmlns="" class="hl-tag">&lt;name</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"SimpleName"</span> <span xmlns="" class="hl-attribute">identifier</span>=<span xmlns="" class="hl-value">"close"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+                <strong xmlns="" class="hl-tag">&lt;scope</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"NameExpr"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+                   <strong xmlns="" class="hl-tag">&lt;name</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"SimpleName"</span> <span xmlns="" class="hl-attribute">identifier</span>=<span xmlns="" class="hl-value">"iter"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+                <strong xmlns="" class="hl-tag">&lt;/scope&gt;</strong>
+             <strong xmlns="" class="hl-tag">&lt;/expression&gt;</strong>
+          <strong xmlns="" class="hl-tag">&lt;/statement&gt;</strong>
+          <strong xmlns="" class="hl-tag">&lt;statement</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"ReturnStmt"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+             <strong xmlns="" class="hl-tag">&lt;expression</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"FieldAccessExpr"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+                <strong xmlns="" class="hl-tag">&lt;name</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"SimpleName"</span> <span xmlns="" class="hl-attribute">identifier</span>=<span xmlns="" class="hl-value">"FALSE"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+                <strong xmlns="" class="hl-tag">&lt;scope</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"NameExpr"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+                   <strong xmlns="" class="hl-tag">&lt;name</strong> <span xmlns="" class="hl-attribute">nodeType</span>=<span xmlns="" class="hl-value">"SimpleName"</span> 
+                         <span xmlns="" class="hl-attribute">identifier</span>=<span xmlns="" class="hl-value">"BooleanValue"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+                <strong xmlns="" class="hl-tag">&lt;/scope&gt;</strong>
+             <strong xmlns="" class="hl-tag">&lt;/expression&gt;</strong>
+          <strong xmlns="" class="hl-tag">&lt;/statement&gt;</strong>
+       <strong xmlns="" class="hl-tag">&lt;/statements&gt;</strong>
+    <strong xmlns="" class="hl-tag">&lt;/thenStmt&gt;</strong>
+ <strong xmlns="" class="hl-tag">&lt;/statement&gt;</strong></pre><p>The element names here (<code class="code">left</code>, <code class="code">right</code>, <code class="code">condition</code>,
     <code class="code">thenStmt</code>) tell you nothing about what kind of thing the element is (and therefore
     what kind of structure its content has); rather it tells you about where it fits into the structure
     of the parent element. It's the <code class="code">nodeType</code> attribute that tells you about the
@@ -77,53 +75,51 @@
     plan as input, and uses it to guide a specific conversion. The plan is designed so it can itself
     be serialized as JSON, which means that (a) it can be modified by hand, and (b) the same plan can
     be used consistently every time a conversion is run, even though the original data is no longer
-    available.</p><p>The JSON version of the XML fragment shown above ends up looking like this:</p><pre class="programlisting" xml:space="preserve">
- {"_nodeType":"IfStmt",
-   "condition":{"_nodeType":"BinaryExpr",
-     "_operator":"NOT_EQUALS",
-     "left":{"_nodeType":"MethodCallExpr",
-       "name":{"_nodeType":"SimpleName",
-         "_identifier":"next"
+    available.</p><p>The JSON version of the XML fragment shown above ends up looking like this:</p><pre class="programlisting" xml:space="preserve">{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"IfStmt"</span>,
+   <span xmlns="" class="hl-string">"condition"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"BinaryExpr"</span>,
+     <span xmlns="" class="hl-string">"_operator"</span>:<span xmlns="" class="hl-string">"NOT_EQUALS"</span>,
+     <span xmlns="" class="hl-string">"left"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"MethodCallExpr"</span>,
+       <span xmlns="" class="hl-string">"name"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"SimpleName"</span>,
+         <span xmlns="" class="hl-string">"_identifier"</span>:<span xmlns="" class="hl-string">"next"</span>
        },
-       "scope":{"_nodeType":"NameExpr",
-         "name":{"_nodeType":"SimpleName",
-           "_identifier":"iter"
+       <span xmlns="" class="hl-string">"scope"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"NameExpr"</span>,
+         <span xmlns="" class="hl-string">"name"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"SimpleName"</span>,
+           <span xmlns="" class="hl-string">"_identifier"</span>:<span xmlns="" class="hl-string">"iter"</span>
          }
        }
      },
-     "right":{"_nodeType":"NullLiteralExpr"
+     <span xmlns="" class="hl-string">"right"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"NullLiteralExpr"</span>
      }
    },
-   "thenStmt":{"_nodeType":"BlockStmt",
-     "statements":[{"_nodeType":"ExpressionStmt",
-         "expression":{"_nodeType":"MethodCallExpr",
-           "name":{"_nodeType":"SimpleName",
-             "_identifier":"close"
+   <span xmlns="" class="hl-string">"thenStmt"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"BlockStmt"</span>,
+     <span xmlns="" class="hl-string">"statements"</span>:[{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"ExpressionStmt"</span>,
+         <span xmlns="" class="hl-string">"expression"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"MethodCallExpr"</span>,
+           <span xmlns="" class="hl-string">"name"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"SimpleName"</span>,
+             <span xmlns="" class="hl-string">"_identifier"</span>:<span xmlns="" class="hl-string">"close"</span>
            },
-           "scope":{"_nodeType":"NameExpr",
-             "name":{"_nodeType":"SimpleName",
-               "_identifier":"iter"
+           <span xmlns="" class="hl-string">"scope"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"NameExpr"</span>,
+             <span xmlns="" class="hl-string">"name"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"SimpleName"</span>,
+               <span xmlns="" class="hl-string">"_identifier"</span>:<span xmlns="" class="hl-string">"iter"</span>
              }
            }
          }
        },
        
-       {"_nodeType":"ReturnStmt",
-         "expression":{"_nodeType":"FieldAccessExpr",
-           "name":{"_nodeType":"SimpleName",
-             "_identifier":"FALSE"
+       {<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"ReturnStmt"</span>,
+         <span xmlns="" class="hl-string">"expression"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"FieldAccessExpr"</span>,
+           <span xmlns="" class="hl-string">"name"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"SimpleName"</span>,
+             <span xmlns="" class="hl-string">"_identifier"</span>:<span xmlns="" class="hl-string">"FALSE"</span>
            },
-           "scope":{"_nodeType":"NameExpr",
-             "name":{"_nodeType":"SimpleName",
-               "_identifier":"BooleanValue"
+           <span xmlns="" class="hl-string">"scope"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"NameExpr"</span>,
+             <span xmlns="" class="hl-string">"name"</span>:{<span xmlns="" class="hl-string">"_nodeType"</span>:<span xmlns="" class="hl-string">"SimpleName"</span>,
+               <span xmlns="" class="hl-string">"_identifier"</span>:<span xmlns="" class="hl-string">"BooleanValue"</span>
              }
            }
          }
        }
      ]
    }
- }      
-      </pre><p>I decided to use "_" rather than "@" as a prefix for JSON properties derived from XML attributes,
+ }</pre><p>I decided to use "_" rather than "@" as a prefix for JSON properties derived from XML attributes,
     on the grounds that the result is a valid NCName and can therefore be more easily selected using
     the XPath lookup operator, for example <code class="code">$node?_nodeType</code>. The <code class="code">element-to-map</code> function
     allows any prefix (or none) to be used.</p><p>The fragments shown above illustrate the XML and JSON representations of the raw Java parse tree.

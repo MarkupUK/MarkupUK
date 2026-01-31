@@ -100,6 +100,11 @@ var booleanSearch = false;
  */
 var defaultOperator = "or";
 
+/**
+ * It is true when the label support is enabled.
+ * @type {boolean}
+ */
+var isLabelSupportEnabled = true;
 
 /**
  * List of all known operators.
@@ -189,7 +194,6 @@ function performSearch(searchQuery) {
     debug("searchQuery", searchQuery);
     init();
 
-    var initialSearchExpression = searchQuery;
     var phraseSearch = false;
     searchQuery = searchQuery.trim();
     if (searchQuery.length > 2 && !useCJKTokenizing) {
@@ -199,12 +203,10 @@ function performSearch(searchQuery) {
             (firstChar == "'" || firstChar == '"') &&
             (lastChar == "'" || lastChar == '"');
         if(phraseSearch) {
-       		initialSearchExpression = initialSearchExpression.substring(1,initialSearchExpression.length-1);
+       		searchQuery = searchQuery.substring(1, searchQuery.length-1);
        	}
     }
-
-    // Remove ' and " characters
-    searchQuery = searchQuery.replace(/"/g, " ").replace(/'/g, " ")
+    var initialSearchExpression = searchQuery;
 
     var errorMsg;
     try {
@@ -233,7 +235,7 @@ function performSearch(searchQuery) {
         var rpnExpression = convertToRPNExpression(searchQuery);
 
         // Perform search with RPN expression
-        var res = calculateRPN(rpnExpression);
+        var res = calculateRPN(rpnExpression, phraseSearch);
         var sRes = res.value;
 
         if (searchWordCount == 1) {
@@ -241,7 +243,7 @@ function performSearch(searchQuery) {
             if(!singleWordExactMatch && !doStem && !useCJKTokenizing) {
                 // Perform exact match first
                 singleWordExactMatch = true;
-                var exactMatchRes = calculateRPN(rpnExpression);
+                var exactMatchRes = calculateRPN(rpnExpression, phraseSearch);
                 addSearchResultCategory(exactMatchRes.value);
 
                 // Add other results with lower priority
@@ -521,6 +523,11 @@ function filterOriginalSearchExpression(searchTextField) {
  */
 function preprocessSearchQuery(query, phraseSearch){
     var searchTextField = trim(query);
+    
+    // WH-3188 Fallback when the label support is active so that the search will still work.
+    if(isLabelSupportEnabled && query.indexOf("label:") === 0) {
+      searchTextField = query.replace(/^label:/, '');
+    }
 
     /** 
       * Validate brackets
@@ -840,9 +847,10 @@ function convertToRPNExpression(search) {
 /**
  * @description Compute results from a RPN expression
  * @param {string} rpn Expression in Reverse Polish notation
+ * @param {boolean} 'true' for a phrease search, 'false' if not a phrase search. 
  * @return {Page} An object that contains the search result.
  */
-function calculateRPN(rpn) {
+function calculateRPN(rpn, phraseSearch) {
     debug("calculate(" + rpn + ")");
     var lastResult1, lastResult2;
     var rpnTokens = trim(rpn);
@@ -856,7 +864,7 @@ function calculateRPN(rpn) {
         var token = rpnTokens[i];
 
         if (isTerm(token)) {
-            result = searchSingleWord(token);
+            result = searchSingleWord(token, phraseSearch);
 
             debug(token, " -- single word search result -- ", result);
             realSearchWords.push(token);
@@ -939,9 +947,10 @@ function inArray(needle, haystack) {
  * Search for a single word/term.
  *
  * @param {String} wordToFind A single search term to search for.
+ * @param {boolean} 'true' for a phrease search, 'false' if not a phrase search. 
  * @return {[ResultPerFile]} Array with the resulted pages and indices.
  */
-function searchSingleWord(wordToFind) {
+function searchSingleWord(wordToFind, phraseSearch) {
     debug('searchSingleWord("' + wordToFind + '")');
 
     wordToFind = trim(wordToFind);
@@ -1001,7 +1010,9 @@ function searchSingleWord(wordToFind) {
                         if (searchInsideFilePath) {
                             listOfWordsStartWith = wordsContains(searchedValue);
                         } else {
-                            listOfWordsStartWith = wordsStartsWith(searchedValue);
+                        	if(!phraseSearch) {
+                            	listOfWordsStartWith = wordsStartsWith(searchedValue);
+                        	}
                         }
 
                     }
