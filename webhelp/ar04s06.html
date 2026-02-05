@@ -1,11 +1,11 @@
 
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Refining the digest</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s05.html" title="Generating the digest file" /><link rel="next" href="ar04s07.html" title="Conclusions" /><!--  Generated with Oxygen version 24.0, build number 2022011710.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Refining the digest</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.2" /><link rel="home" href="oxygen-main.html" title="Markup UK 2025 Proceedings" /><link rel="up" href="ar04.html" title="Processing JSON with Template Rules" /><link rel="prev" href="ar04s05.html" title="Generating the digest file" /><link rel="next" href="ar04s07.html" title="Conclusions" /><!--  Generated with Oxygen version 26.0, build number 2023110909.  --><link rel="stylesheet" type="text/css" href="oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><script type="text/javascript" xml:space="preserve"><!--
           
           var prefix = "index.html";
           
-          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2022011710" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s05.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s07.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1429"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Refining the digest</h2></div></div></div><p>The final part of the transpiler to be examined in this case study is the stylesheet
+          --></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery-3.5.1.min.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.cookie.js" xml:space="preserve"><!----></script><script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.highlight-3.js" xml:space="preserve"><!----></script><script type="text/javascript" charset="utf-8" src="oxygen-webhelp/resources/js/webhelp_topic.js?buildId=2023110909" xml:space="preserve"><!----></script></head><body onload="highlightSearchTerm()" class="frmBody"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td colspan="3" rowspan="1"><form name="searchForm" id="searchForm" action="javascript:void(0)" onsubmit="parent.tocwin.SearchToc(this);" method="get" enctype="application/x-www-form-urlencoded"><!----><input type="text" id="textToSearch" name="textToSearch" class="textToSearch" size="30" placeholder="Search" /><!----></form></td></tr><tr><td width="20%" align="left" rowspan="1" colspan="1"><span class="navprev"><a accesskey="p" href="ar04s05.html" shape="rect">Prev</a></span> </td><th width="60%" align="center" rowspan="1" colspan="1"> </th><td width="20%" align="right" rowspan="1" colspan="1"> <span class="navnext"><a accesskey="n" href="ar04s07.html" shape="rect">Next</a></span></td></tr></table><hr /></div><div class="section" id="d5e1429"><div class="titlepage"><div><div><h2 class="title" style="clear: both">Refining the digest</h2></div></div></div><p>The final part of the transpiler to be examined in this case study is the stylesheet
     that refines the digest. This is concerned with adding attributes to the information about
     classes and methods: the most obvious example is to annotate C# methods as <code class="code">virtual</code>
     if they are overridden in a subclass, or as <code class="code">override</code> if they are overriding
@@ -13,33 +13,29 @@
     a superclass method with a wider return type: when we wrote the transpiler, C# did not allow
     covariant return types, and it still imposes restrictions that are more severe than those in Java
     (for example for methods defined in interfaces).</p><p>By its nature, this stylesheet is often following links from the usage of a class to the
-    definition of the class, and this is achieved using an XSLT key definition:</p><pre class="programlisting" xml:space="preserve">
- &lt;xsl:key name="classKey"  
-          match="class | interface"  
-          use="ancestor::module/@package || '.' || 
+    definition of the class, and this is achieved using an XSLT key definition:</p><pre class="programlisting" xml:space="preserve"><strong xmlns="" class="hl-xsl">&lt;xsl:key</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"classKey"</span>  
+          <span xmlns="" class="hl-attribute">match</span>=<span xmlns="" class="hl-value">"class | interface"</span>  
+          <span xmlns="" class="hl-attribute">use</span>=<span xmlns="" class="hl-value">"ancestor::module/@package || '.' || 
                  string-join(ancestor-or-self::*
-                         [self::class|self::interface]/@name, '.')"/&gt;     
-    </pre><p>This indexes every class or interface by a key that represents the full hierarchic
-    name of the class or interface. For example, given this structure:</p><pre class="programlisting" xml:space="preserve">
- &lt;module package="net.sf.saxon.tree.iter"&gt;
-      &lt;class name="EmptyIterator"&gt;
-         &lt;implements name="net.sf.saxon.om.SequenceIterator"/&gt;
-         &lt;implements name="net.sf.saxon.tree.iter.ReversibleIterator"/&gt;
+                         [self::class|self::interface]/@name, '.')"</span><strong xmlns="" class="hl-xsl">/&gt;</strong></pre><p>This indexes every class or interface by a key that represents the full hierarchic
+    name of the class or interface. For example, given this structure:</p><pre class="programlisting" xml:space="preserve"><strong xmlns="" class="hl-tag">&lt;module</strong> <span xmlns="" class="hl-attribute">package</span>=<span xmlns="" class="hl-value">"net.sf.saxon.tree.iter"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+      <strong xmlns="" class="hl-tag">&lt;class</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"EmptyIterator"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+         <strong xmlns="" class="hl-tag">&lt;implements</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"net.sf.saxon.om.SequenceIterator"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+         <strong xmlns="" class="hl-tag">&lt;implements</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"net.sf.saxon.tree.iter.ReversibleIterator"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
          ...
-         &lt;field name="theInstance" 
-                type="net.sf.saxon.tree.iter.EmptyIterator" 
-                static="1"/&gt;
-         &lt;method name="getInstance" 
-                 returns="net.sf.saxon.tree.iter.EmptyIterator" 
-                 static="1"/&gt;
-         &lt;method name="nextAtomizedValue" 
-                 returns="net.sf.saxon.om.AtomicSequence"/&gt;
+         <strong xmlns="" class="hl-tag">&lt;field</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"theInstance"</span> 
+                <span xmlns="" class="hl-attribute">type</span>=<span xmlns="" class="hl-value">"net.sf.saxon.tree.iter.EmptyIterator"</span> 
+                <span xmlns="" class="hl-attribute">static</span>=<span xmlns="" class="hl-value">"1"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+         <strong xmlns="" class="hl-tag">&lt;method</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"getInstance"</span> 
+                 <span xmlns="" class="hl-attribute">returns</span>=<span xmlns="" class="hl-value">"net.sf.saxon.tree.iter.EmptyIterator"</span> 
+                 <span xmlns="" class="hl-attribute">static</span>=<span xmlns="" class="hl-value">"1"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+         <strong xmlns="" class="hl-tag">&lt;method</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"nextAtomizedValue"</span> 
+                 <span xmlns="" class="hl-attribute">returns</span>=<span xmlns="" class="hl-value">"net.sf.saxon.om.AtomicSequence"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
          ...
-         &lt;class name="OfNodes"&gt;
-            &lt;extends name="net.sf.saxon.tree.iter.EmptyIterator"/&gt;
-            &lt;implements name="net.sf.saxon.tree.iter.AxisIterator"/&gt;
-         ...   
-      </pre><p>it indexes the class <code class="code">OfNodes</code> with the key 
+         <strong xmlns="" class="hl-tag">&lt;class</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"OfNodes"</span><strong xmlns="" class="hl-tag">&gt;</strong>
+            <strong xmlns="" class="hl-tag">&lt;extends</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"net.sf.saxon.tree.iter.EmptyIterator"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+            <strong xmlns="" class="hl-tag">&lt;implements</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"net.sf.saxon.tree.iter.AxisIterator"</span><strong xmlns="" class="hl-tag">/&gt;</strong>
+         ...</pre><p>it indexes the class <code class="code">OfNodes</code> with the key 
       <code class="code">net.sf.saxon.tree.iter.EmptyIterator.OfNodes</code>.</p><p>XSLT keys work only with nodes, not with maps and arrays, and we have no intention
     of changing that. Instead, the preferred approach is to construct a map that can act as an index.
     Often it will be appropriate for this map to be held in a global variable. How should we construct it?
@@ -49,58 +45,56 @@
       <a href="#ftn.d5e1445" class="footnote" shape="rect"><sup class="footnote" id="d5e1445">[6]</sup></a>. 
       This case is more difficult, because with 
     a tree of maps and arrays built from JSON, there is no ancestor axis to play with.</p><p>I experimented with several ways of constructing the index as a map. The first approach
-    uses recursive descent template rules with tunnel parameters:</p><pre class="programlisting" xml:space="preserve">
-   &lt;xsl:mode name="build-index" on-no-match="deep-skip"/&gt;
-   &lt;xsl:output method="json" indent="yes"/&gt;
+    uses recursive descent template rules with tunnel parameters:</p><pre class="programlisting" xml:space="preserve"><strong xmlns="" class="hl-xsl">&lt;xsl:mode</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"build-index"</span> <span xmlns="" class="hl-attribute">on-no-match</span>=<span xmlns="" class="hl-value">"deep-skip"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+   <strong xmlns="" class="hl-xsl">&lt;xsl:output</strong> <span xmlns="" class="hl-attribute">method</span>=<span xmlns="" class="hl-value">"json"</span> <span xmlns="" class="hl-attribute">indent</span>=<span xmlns="" class="hl-value">"yes"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
    
-   &lt;xsl:template match="record(package, *)" 
-                 mode="build-index" priority="2"&gt;
-      &lt;xsl:message&gt;Processing package {?package}&lt;/xsl:message&gt;
-      &lt;xsl:next-match&gt;
-          &lt;xsl:with-param name="full-name" 
-                          select="?package" tunnel="yes"/&gt;
-      &lt;/xsl:next-match&gt;
-   &lt;/xsl:template&gt;
+   <strong xmlns="" class="hl-xsl">&lt;xsl:template</strong> <span xmlns="" class="hl-attribute">match</span>=<span xmlns="" class="hl-value">"record(package, *)"</span> 
+                 <span xmlns="" class="hl-attribute">mode</span>=<span xmlns="" class="hl-value">"build-index"</span> <span xmlns="" class="hl-attribute">priority</span>=<span xmlns="" class="hl-value">"2"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:message&gt;</strong>Processing package {?package}<strong xmlns="" class="hl-xsl">&lt;/xsl:message&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:next-match&gt;</strong>
+          <strong xmlns="" class="hl-xsl">&lt;xsl:with-param</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"full-name"</span> 
+                          <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"?package"</span> <span xmlns="" class="hl-attribute">tunnel</span>=<span xmlns="" class="hl-value">"yes"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;/xsl:next-match&gt;</strong>
+   <strong xmlns="" class="hl-xsl">&lt;/xsl:template&gt;</strong>
    
-   &lt;xsl:template match="record(class, *)" mode="build-index"&gt;
-      &lt;xsl:param name="full-name" tunnel="yes"/&gt;
-      &lt;xsl:variable name="full-class-name" 
-                    select="`{$full-name}.{?class?*?name}`"/&gt;
-      &lt;xsl:message&gt;Processing class {$full-class-name}&lt;/xsl:message&gt;      
-      &lt;xsl:map-entry key="$full-class-name" 
-                     select="{'class': ?class}"/&gt;
-      &lt;xsl:apply-templates select="?class?*[. instance of (record(class, *)
-                                                          |record(interface, *))]" 
-                           mode="#current"&gt;
-          &lt;xsl:with-param name="full-name" 
-                          select="$full-class-name" 
-                          tunnel="yes"/&gt;
-      &lt;/xsl:apply-templates&gt;
-   &lt;/xsl:template&gt;
+   <strong xmlns="" class="hl-xsl">&lt;xsl:template</strong> <span xmlns="" class="hl-attribute">match</span>=<span xmlns="" class="hl-value">"record(class, *)"</span> <span xmlns="" class="hl-attribute">mode</span>=<span xmlns="" class="hl-value">"build-index"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:param</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"full-name"</span> <span xmlns="" class="hl-attribute">tunnel</span>=<span xmlns="" class="hl-value">"yes"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:variable</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"full-class-name"</span> 
+                    <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"`{$full-name}.{?class?*?name}`"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:message&gt;</strong>Processing class {$full-class-name}<strong xmlns="" class="hl-xsl">&lt;/xsl:message&gt;</strong>      
+      <strong xmlns="" class="hl-xsl">&lt;xsl:map-entry</strong> <span xmlns="" class="hl-attribute">key</span>=<span xmlns="" class="hl-value">"$full-class-name"</span> 
+                     <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"{'class': ?class}"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:apply-templates</strong> <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"?class?*[. instance of (record(class, *)
+                                                          |record(interface, *))]"</span> 
+                           <span xmlns="" class="hl-attribute">mode</span>=<span xmlns="" class="hl-value">"#current"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+          <strong xmlns="" class="hl-xsl">&lt;xsl:with-param</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"full-name"</span> 
+                          <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"$full-class-name"</span> 
+                          <span xmlns="" class="hl-attribute">tunnel</span>=<span xmlns="" class="hl-value">"yes"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;/xsl:apply-templates&gt;</strong>
+   <strong xmlns="" class="hl-xsl">&lt;/xsl:template&gt;</strong>
    
-   &lt;xsl:template match="record(interface, *)" mode="build-index"&gt;
-      &lt;xsl:param name="full-name" tunnel="yes"/&gt;
-      &lt;xsl:variable name="full-class-name" 
-                    select="`{$full-name}.{?interface?*?name}`"/&gt;
-      &lt;xsl:message&gt;Processing interface {$full-class-name}&lt;/xsl:message&gt;
-      &lt;xsl:map-entry key="$full-class-name" 
-                     select="{'interface': ?interface}"/&gt;
-      &lt;xsl:apply-templates select="?class?*[. instance of (record(class, *)
-                                                          |record(interface, *))]" 
-                           mode="#current"&gt;
-          &lt;xsl:with-param name="full-name" 
-                          select="$full-class-name" 
-                          tunnel="yes"/&gt;
-      &lt;/xsl:apply-templates&gt;
-   &lt;/xsl:template&gt;
+   <strong xmlns="" class="hl-xsl">&lt;xsl:template</strong> <span xmlns="" class="hl-attribute">match</span>=<span xmlns="" class="hl-value">"record(interface, *)"</span> <span xmlns="" class="hl-attribute">mode</span>=<span xmlns="" class="hl-value">"build-index"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:param</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"full-name"</span> <span xmlns="" class="hl-attribute">tunnel</span>=<span xmlns="" class="hl-value">"yes"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:variable</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"full-class-name"</span> 
+                    <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"`{$full-name}.{?interface?*?name}`"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:message&gt;</strong>Processing interface {$full-class-name}<strong xmlns="" class="hl-xsl">&lt;/xsl:message&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:map-entry</strong> <span xmlns="" class="hl-attribute">key</span>=<span xmlns="" class="hl-value">"$full-class-name"</span> 
+                     <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"{'interface': ?interface}"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:apply-templates</strong> <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"?class?*[. instance of (record(class, *)
+                                                          |record(interface, *))]"</span> 
+                           <span xmlns="" class="hl-attribute">mode</span>=<span xmlns="" class="hl-value">"#current"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+          <strong xmlns="" class="hl-xsl">&lt;xsl:with-param</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"full-name"</span> 
+                          <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"$full-class-name"</span> 
+                          <span xmlns="" class="hl-attribute">tunnel</span>=<span xmlns="" class="hl-value">"yes"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;/xsl:apply-templates&gt;</strong>
+   <strong xmlns="" class="hl-xsl">&lt;/xsl:template&gt;</strong>
    
-   &lt;xsl:template name="xsl:initial-template"&gt;
-      &lt;xsl:map&gt;
-         &lt;xsl:apply-templates select="?digest?*" 
-                              mode="build-index"/&gt;
-      &lt;/xsl:map&gt;
-   &lt;/xsl:template&gt;
-      </pre><p>The tunnel parameter <code class="code">full-name</code> is used to build up the concatenated name as
+   <strong xmlns="" class="hl-xsl">&lt;xsl:template</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"xsl:initial-template"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:map&gt;</strong>
+         <strong xmlns="" class="hl-xsl">&lt;xsl:apply-templates</strong> <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"?digest?*"</span> 
+                              <span xmlns="" class="hl-attribute">mode</span>=<span xmlns="" class="hl-value">"build-index"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;/xsl:map&gt;</strong>
+   <strong xmlns="" class="hl-xsl">&lt;/xsl:template&gt;</strong></pre><p>The tunnel parameter <code class="code">full-name</code> is used to build up the concatenated name as
     we descend the hierarchy; when we get to the leaf nodes, we can create a map entry using this
     name, so there is no need to access ancestor information. This works, but it's a lot of work
     to replicate a fairly simple <code class="code">xsl:key</code> declaration. The <code class="code">xsl:message</code>
@@ -117,26 +111,24 @@
     but instead of passing tunnel parameters down with each call, it relied on the ability in a pinned
     tree of maps and arrays to access ancestor information. This worked, but it demonstrated no benefits
     over the first approach.</p><p>My third attempt used the <code class="code">map:build</code> function, again processing a pinned
-      tree of maps and arrays to make ancestor information. Here it is:</p><pre class="programlisting" xml:space="preserve">
- &lt;xsl:function name="f:fullClassName"&gt;
-      &lt;xsl:param name="c" as="(record(class, *)|record(interface, *))"/&gt;
-      &lt;xsl:variable name="upper" 
-                    select="label($c)?parent ! label(.)?parent"/&gt;
-      &lt;xsl:variable name="prefix" select="
+      tree of maps and arrays to make ancestor information. Here it is:</p><pre class="programlisting" xml:space="preserve"><strong xmlns="" class="hl-xsl">&lt;xsl:function</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"f:fullClassName"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:param</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"c"</span> <span xmlns="" class="hl-attribute">as</span>=<span xmlns="" class="hl-value">"(record(class, *)|record(interface, *))"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:variable</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"upper"</span> 
+                    <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"label($c)?parent ! label(.)?parent"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:variable</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"prefix"</span> <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"
          if ($c instance of record(package, *))
          then $c?package
-         else f:fullClassName($upper)"/&gt;
-      &lt;xsl:sequence select="$prefix ||  '.' || $c?('class','interface')?*?name"/&gt;     
-   &lt;/xsl:function&gt;
+         else f:fullClassName($upper)"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:sequence</strong> <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"$prefix ||  '.' || $c?('class','interface')?*?name"</span><strong xmlns="" class="hl-xsl">/&gt;</strong>     
+   <strong xmlns="" class="hl-xsl">&lt;/xsl:function&gt;</strong>
      
-   &lt;xsl:template name="xsl:initial-template"&gt;
-      &lt;xsl:sequence select="
+   <strong xmlns="" class="hl-xsl">&lt;xsl:template</strong> <span xmlns="" class="hl-attribute">name</span>=<span xmlns="" class="hl-value">"xsl:initial-template"</span><strong xmlns="" class="hl-xsl">&gt;</strong>
+      <strong xmlns="" class="hl-xsl">&lt;xsl:sequence</strong> <span xmlns="" class="hl-attribute">select</span>=<span xmlns="" class="hl-value">"
          map:build(
             pin(?digest)??~(record(class, *)|record(interface, *)),
             f:fullClassName#1)    
-         "/&gt;
-   &lt;/xsl:template&gt;     
-      </pre><p>I've cheated a little here, because it uses constructs that aren't yet implemented in Saxon,
+         "</span><strong xmlns="" class="hl-xsl">/&gt;</strong>
+   <strong xmlns="" class="hl-xsl">&lt;/xsl:template&gt;</strong></pre><p>I've cheated a little here, because it uses constructs that aren't yet implemented in Saxon,
     so I had to use workarounds to make it work. But it's only using features that are defined
     in the status-quo 4.0 specification.</p><p>Some observations:</p><div xmlns:svg="http://www.w3.org/2000/svg" class="itemizedlist"><ul class="itemizedlist" style=""><li class="listitem"><p>The construct <code class="code">??</code> is a deep lookup operator: it does the same for maps and arrays
           as <code class="code">//</code> does for node trees. It can be qualified by a type, so <code class="code">??~record(method)</code>
